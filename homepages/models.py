@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 
 class Nutrient(models.Model):
-    nutrients_macro = models.BooleanField
+    nutrient_is_macro = models.BooleanField
     nutrient_name = models.CharField(max_length=50)
 
     def __str__(self):
