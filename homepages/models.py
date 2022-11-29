@@ -34,8 +34,8 @@ class FoodGroup(models.Model):
 class Food(models.Model):
     food_name = models.CharField(max_length=50)
     nutrient = models.ManyToManyField(Nutrient, through='Nutrient_In_Food', blank=False)
-    food_group = models.ManyToManyField(FoodGroup, on_delete=models.CASCADE)
-    meal_category = models.ManyToManyField(MealCategory, on_delete=models.CASCADE)  
+    food_group = models.ManyToManyField(FoodGroup, blank=False)
+    meal_category = models.ManyToManyField(MealCategory, blank=False)  
 
     def __str__(self):
         return (self.food_name)
@@ -54,8 +54,8 @@ class Measurement(models.Model):
         db_table = "measurement"
 
 class Nutrient_In_Food(models.Model):
-    nutrient = models.ForeignKey(Nutrient, blank=False)
-    food = models.ForeignKey(Food, blank=False)
+    nutrient = models.ForeignKey(Nutrient, on_delete=models.CASCADE)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
     measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
     amount = models.FloatField(null=False, blank=False, default=0.0)
     
