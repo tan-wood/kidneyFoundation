@@ -92,7 +92,7 @@ class Condition(models.Model) :
 
 class Patient_Condition(models.Model) :
     class Meta :
-        db_table = 'patient_condtion'
+        db_table = 'patient_condition'
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     condition = models.ForeignKey(Condition, on_delete=models.CASCADE)
     date_diagnosed = models.DateField()
@@ -108,7 +108,7 @@ class Alert_Type(models.Model) :
     description = models.CharField(max_length=25)
 
     class Meta :
-        db_table = 'patient_condtion'
+        db_table = 'alert_type'
 
 
 class Alert(models.Model) :
@@ -117,5 +117,5 @@ class Alert(models.Model) :
     patient = models.ForeignKey(Patient, null=False, on_delete=models.CASCADE)
 
     class Meta :
-        db_table = 'patient_condtion'
+        db_table = 'alert'
 
