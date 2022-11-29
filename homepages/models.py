@@ -34,8 +34,8 @@ class FoodGroup(models.Model):
 class Food(models.Model):
     food_name = models.CharField(max_length=50)
     nutrient = models.ManyToManyField(Nutrient, through='Nutrient_In_Food', blank=False)
-    food_group = models.ManyToManyField(FoodGroup, on_delete=models.CASCADE)
-    meal_category = models.ManyToManyField(MealCategory, on_delete=models.CASCADE)  
+    food_group = models.ManyToManyField(FoodGroup)
+    meal_category = models.ManyToManyField(MealCategory)  
 
     def __str__(self):
         return (self.food_name)
