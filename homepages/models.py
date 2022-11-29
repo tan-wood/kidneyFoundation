@@ -158,6 +158,5 @@ class Alert(models.Model) :
     def __str__(self):
         return_string = self.patient + ': ' + self.condition
         return (return_string)
-
     class Meta :
         db_table = 'alert'
