@@ -3,5 +3,6 @@ from .views import indexPageView, LandingPageView, LoginPageView
 
 urlpatterns = [
     path("", indexPageView, name="index"),
-    path('landing', ) 
+    path('landing/', LandingPageView, name='landing' ),
+    path('login/', LoginPageView, name = 'login') 
 ]      
