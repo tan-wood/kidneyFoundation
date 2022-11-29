@@ -8,7 +8,31 @@ class Food(models.Model):
     food_name = models.CharField(max_length=50)
     
     def __str__(self):
+        return (self.food_name)
+    
+    class Meta:
+        db_table = "food"
+
+class Nutrient(models.Model):
+    nutrients_macro = models.BooleanField
+    nutrient_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return (self.nutrient_name)
+    
+    class Meta:
+        db_table = "nutrient"
+
+class Measurement(models.Model):
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
         return (self.description)
+    
+    class Meta:
+        db_table = "measurement"
+
+
 
 
 # class TripCategory(models.Model):
@@ -53,22 +77,3 @@ class Food(models.Model):
 #         self.first_name = self.first_name.upper()
 #         self.last_name = self.last_name.upper()
 #         super(Customer, self).save()
-
-
-
-
-
-
-
-class Patient(models.Model):
-    # CASCADE deletes all the linked records if that record is deleted
-    trip_category = models.OneToOneField(TripCategory, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
-    days = models.IntegerField(default=0)
-    cost = models.DecimalField(max_digits=8, decimal_places=2)
-    main_photo = models.ImageField(upload_to='photos')
-    is_active = models.BooleanField(default=True)
-    leave_data = models.DateField(default=datetime.today, blank=True)
-
-    def __str__(self):
-        return(self.title)
