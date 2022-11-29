@@ -103,7 +103,7 @@ class Patient_Logs_Food (models.Model):
     quantity = models.IntegerField(null=False, blank=False, default=0.0)
     
     def __str__(self):
-        return_string = self.patient + ': ' + self.food
+        return_string = self.patient.first_name + ': ' + self.food.food_name
         return (return_string)
 
     class Meta:
