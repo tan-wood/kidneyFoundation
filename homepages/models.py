@@ -44,14 +44,6 @@ class Nutrient_In_Food(models.Model):
     class Meta:
         db_table = "nutrient_in_food"
 
-
-<<<<<<< HEAD
-=======
-
-
-
-
-
 class Patient(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -83,6 +75,13 @@ class Patient(models.Model):
         self.last_name = self.last_name.upper()
         super(Patient, self).save()
 
+class Patient_Logs_Food (models.Model):
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
+    quantity = models.IntegerField(null=False, blank=False, default=0.0)
+    class Meta:
+        db_table = "patient_logs_food"
 
 class Condition(models.Model) :
     description = models.CharField(max_length=25)
@@ -108,4 +107,3 @@ class Diet(models.Model) :
 # class Alert(models.Model) :
 #     date_time = models.DateTimeField()
 #     alert_type = models.
->>>>>>> 1dad2b5c39b393953b780c40eaec361ef0cdea9f
