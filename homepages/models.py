@@ -45,3 +45,67 @@ class Nutrient_In_Food(models.Model):
         db_table = "nutrient_in_food"
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+class Patient(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    age = models.IntegerField(default=0)
+    weight = models.FloatField(default=0)
+    height = models.FloatField(default=0)
+    email = models.EmailField(max_length=100)
+    phone = models.CharField(max_length=13, blank=True)
+    address1 = models.CharField(max_length=20)
+    address2 = models.CharField(max_length=20)
+    city = models.CharField(max_length=20)
+    state = models.CharField(max_length=2)
+    zip = models.CharField(max_length=9)
+
+    class Meta:
+        db_table = "patient"
+
+    def __str__(self) :
+        return (self.full_name)
+    
+    @property
+    def full_name(self) :
+        return '%s %s' % (self.first_name, self.last_name)
+
+    def save(self) :
+        self.first_name = self.first_name.upper()
+        self.last_name = self.last_name.upper()
+        super(Patient, self).save()
+
+
+class Condition(models.Model) :
+    description = models.CharField(max_length=25)
+    patients = models.ManyToManyField(Patient, through='Patient_Condition', blank=True)
+
+    class Meta:
+        db_table = "condition"
+
+class Patient_Condition(models.Model) :
+    class Meta :
+        db_table = 'patient_condtion'
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    condition = models.ForeignKey(Condition, on_delete=models.CASCADE)
+    date_diagnosed = models.DateField()
+
+class Diet(models.Model) :
+    description = models.CharField(max_length=25)
+    patients = models.ManyToManyField(Patient, blank=False)
+    class Meta :
+        db_table = "diet"
+
+
+# class Alert(models.Model) :
+#     date_time = models.DateTimeField()
+#     alert_type = models.
+>>>>>>> 1dad2b5c39b393953b780c40eaec361ef0cdea9f
