@@ -60,7 +60,7 @@ class Nutrient_In_Food(models.Model):
     amount = models.FloatField(null=False, blank=False, default=0.0)
     
     def __str__(self):
-        return_string = self.food + ': ' + self.nutrient
+        return_string = self.food.food_name + ': ' + self.nutrient.nutrient_name
         return (return_string)
     class Meta:
         db_table = "nutrient_in_food"
@@ -125,7 +125,7 @@ class Patient_Condition(models.Model) :
     date_diagnosed = models.DateField()
 
     def __str__(self):
-        return_string = self.patient + ': ' + self.condition
+        return_string = self.patient.first_name + ': ' + self.condition.description
         return (return_string)
 
     class Meta :
@@ -156,7 +156,7 @@ class Alert(models.Model) :
     patient = models.ForeignKey(Patient, null=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        return_string = self.patient + ': ' + self.condition
+        return_string = self.patient.first_name + ': ' + self.alert_type.description
         return (return_string)
     class Meta :
         db_table = 'alert'
