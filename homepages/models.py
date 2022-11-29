@@ -54,8 +54,8 @@ class Measurement(models.Model):
         db_table = "measurement"
 
 class Nutrient_In_Food(models.Model):
-    nutrient = models.ForeignKey(Nutrient, on_delete=models.CASCADE)
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    nutrient = models.ForeignKey(Nutrient, blank=False)
+    food = models.ForeignKey(Food, blank=False)
     measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
     amount = models.FloatField(null=False, blank=False, default=0.0)
     
