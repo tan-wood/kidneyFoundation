@@ -102,7 +102,8 @@ class Diet(models.Model) :
     patients = models.ManyToManyField(Patient, blank=False)
     class Meta :
         db_table = "diet"
-        
+
+
 class Alert_Type(models.Model) :
     description = models.CharField(max_length=25)
 
@@ -117,3 +118,4 @@ class Alert(models.Model) :
 
     class Meta :
         db_table = 'patient_condtion'
+
