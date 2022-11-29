@@ -3,8 +3,6 @@ from datetime import datetime, timedelta
 
 # Create your models here.
 
-
-
 class Nutrient(models.Model):
     nutrients_macro = models.BooleanField
     nutrient_name = models.CharField(max_length=50)
@@ -35,6 +33,12 @@ class Measurement(models.Model):
     class Meta:
         db_table = "measurement"
 
+class FoodGroup(models.Model):
+    description = models.CharField(max_length=30)
+    foods = models.ManyToManyField(Food, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "foodgroup"
 
 class Nutrient_In_Food(models.Model):
     nutrient = models.ForeignKey(Nutrient, on_delete=models.CASCADE)
@@ -118,4 +122,13 @@ class Alert(models.Model) :
 
     class Meta :
         db_table = 'alert'
+class MealCategory(models.Model):
+    description = models.CharField(max_length=30)
+    foods = models.ManyToManyField(Food, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (self.description)
+
+    class Meta:
+        db_table = "mealcategory"
 
