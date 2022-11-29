@@ -32,8 +32,25 @@ class Measurement(models.Model):
     class Meta:
         db_table = "measurement"
 
+class FoodGroup(models.Model):
+    description = models.CharField(max_length=30)
+    foods = models.ManyToManyField(Food, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return (self.description)
 
+    class Meta:
+        db_table = "foodgroup"
+
+class MealCategory(models.Model):
+    description = models.CharField(max_length=30)
+    foods = models.ManyToManyField(Food, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (self.description)
+
+    class Meta:
+        db_table = "mealcategory"
 
 # class TripCategory(models.Model):
 #     description = models.CharField(max_length=20)
