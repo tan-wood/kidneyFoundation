@@ -113,6 +113,18 @@ class Diet(models.Model) :
         db_table = "diet"
 
 
-# class Alert(models.Model) :
-#     date_time = models.DateTimeField()
-#     alert_type = models.
+class Alert_Type(models.Model) :
+    description = models.CharField(max_length=25)
+
+    class Meta :
+        db_table = 'patient_condtion'
+
+
+class Alert(models.Model) :
+    date_time = models.DateTimeField()
+    alert_type = models.ForeignKey(Alert_Type, null=False, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, null=False, on_delete=models.CASCADE)
+
+    class Meta :
+        db_table = 'patient_condtion'
+
