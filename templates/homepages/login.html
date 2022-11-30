@@ -137,7 +137,7 @@
             {%else%}
                 <p>{{ errors }}</p>
             {% endif %}
-            <form name="loginform" method="post" action="{% url 'login' method="loginform" %}">
+            <form method="post" action="{% url 'login' method="loginform" %}">
                 {% csrf_token %}
                 <label for="username">User Name:</label>
                     <input

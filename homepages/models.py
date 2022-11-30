@@ -45,6 +45,7 @@ class Nutrient_In_Food(models.Model):
     class Meta:
         db_table = "nutrient_in_food"
 
+# make height ft and height inches
 class Patient(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
