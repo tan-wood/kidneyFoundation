@@ -81,6 +81,7 @@ class Patient_Logs_Food (models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     measurement = models.ForeignKey(Measurement, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0.0)
+    date_time = models.DateTimeField(default=datetime.now, blank=True)
     
     def __str__(self):
         return_string = self.patient.first_name + ': ' + self.food.food_name
