@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food
+from homepages.models import Food, Nutrient
 
 def indexPageView(request):
     return render(request,'homepages/index.html')
@@ -26,9 +26,23 @@ def apiJSONView(request) :
     response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
     return JsonResponse(response)
 
+
+# also this will return the searched_food description (name) too
 def apiPageView(request) :
-    food_names = {}
-    searchedFoods = {}
+    all_food_data = {}
+    searched_food = {}
+    food_nutrients = {}
+
+    nutrientList = [
+        'Protein',
+        'Potassium, K',
+        'Carbohydrate, by difference',
+        'Sodium, Na',
+        'Water',
+        'Phosphorus, P',
+    ]
+
+
     # maybe put in some logic for a blank search
     if 'name' in request.GET:
         if request.GET['name'] != '' :
@@ -36,13 +50,30 @@ def apiPageView(request) :
             name = request.GET['name']
             response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
             data = response.json()
-            searchedFoods = data['foods'][0]
+            searched_food = data['foods'][0]
+
+            
+            
+            # food_nutrients = searched_food['foodNutrients'][0]
+            for nutrient in searched_food['foodNutrients'] :
+                food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+
+                if nutrient['nutrientName'] in nutrientList :
+                    nutrient_data = Nutrient(
+                        # this will have some logic to decide if macro or micro
+                        # alsooo it doesn't like it?
+                        nutrient_name = nutrient['nutrientName'],
+                    )
+
+                    nutrient_data.save()
+
+
 
 
     
 
             food_data = Food(
-                food_name = searchedFoods['description']
+                food_name = searched_food['description']
 
                 # i don't need these?... weird!
                 # food_group = 'dairy',
@@ -56,14 +87,18 @@ def apiPageView(request) :
                 # measurement
                 # quantity
 
+            # nutrition_data = Nutrient(
+            #     # this will have some logic to decide if macro or micro
+            #     nutrient_is_macro = 'True'
+            #     nutrient_name = searched_food
 
-            # nutrition_data =
+            # )
 
             # nutrient_in_food_data = 
 
 
             food_data.save()
-            searchedFoods = Food.objects.all()
+            searched_food = Food.objects.all()
 
         
 
@@ -74,8 +109,8 @@ def apiPageView(request) :
     # something = Food.objects.something?
 
 
-    return render (request, 'homepages/apitest.html', { "food_names": 
-    food_names} )
+    return render (request, 'homepages/apitest.html', { "food_nutrients": 
+    food_nutrients} )
 
 
 
