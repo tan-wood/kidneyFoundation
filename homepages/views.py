@@ -37,6 +37,8 @@ def apiPageView(request) :
             response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
             data = response.json()
             searchedFoods = data['foods'][0]
+
+
     
 
             food_data = Food(
@@ -47,12 +49,23 @@ def apiPageView(request) :
                 # meal_category = 'breakfast',
             )
 
+            # patient_logs_food_data = 
+                # patient
+                # food
+                # time
+                # measurement
+                # quantity
+
+
             # nutrition_data =
+
+            # nutrient_in_food_data = 
+
 
             food_data.save()
             searchedFoods = Food.objects.all()
 
-    
+        
 
 
     # send it to the database when clicked!
