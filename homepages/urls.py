@@ -3,7 +3,7 @@ from .views import indexPageView, LandingPageView, LoginPageView, AboutPageView,
 
 urlpatterns = [
     path("home/", indexPageView, name="home"),
-    path("login/", LoginPageView, name="login"),
+    path("login/<str:method>/", LoginPageView, name="login"),
     path("about/", AboutPageView, name="about"),
     path("apitest/", apiPageView, name="apitest" ),
     path("apiJSON/", apiJSONView, name="apiJSON" ),

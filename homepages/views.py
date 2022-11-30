@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient
+from homepages.models import Food, Nutrient, Patient
 
 def indexPageView(request):
     return render(request,'homepages/index.html')
@@ -11,8 +11,82 @@ def indexPageView(request):
 def LandingPageView(request):
     return render(request,'homepages/landingpage.html')
 
-def LoginPageView(request):
-    return render(request, 'homepages/login.html')
+def LoginPageView(request, method):
+
+    if request.method == 'POST' and method == "form":
+        email = request.POST['email']
+        username = request.POST['username']
+        errors = ""
+
+        data = Patient.objects.all()
+
+        for patient in data:
+            if email == patient.email:
+                errors += "This email has already been registered <br>"
+            if username == patient.username:
+                errors += "This username is already taken <br>"
+        
+        if errors != "":
+            context = {
+                    "display" : "create",
+                    "errors" : errors
+                }
+            return render(request, 'homepages/login.html', context)
+        else:
+            patient = Patient()
+
+            patient.first_name = request.POST['first_name']
+            patient.last_name = request.POST['last_name']
+            patient.username = request.POST['username']
+            patient.password = request.POST['password']
+            patient.age = request.POST['age']
+            patient.weight = request.POST['weight']
+            patient.height = request.POST['height']
+            patient.address1 = request.POST['address1']
+            patient.address2 = request.POST['address2']
+            patient.city = request.POST['city']
+            patient.state = request.POST['state']
+            patient.zip = request.POST['zip']
+            patient.email = request.POST['email']
+            patient.phone = request.POST['phone']
+
+            patient.save()
+            
+            return indexPageView(request)
+
+    elif request.method == 'POST' and method == "loginform":
+        
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        data = Patient.objects.all()
+
+        for patient in data:
+            if username == patient.username and password == patient.password:
+                return indexPageView(request)
+            else :
+                context = {
+                    "display" : "login",
+                    "errors" : "The username or password are incorrect"
+                }
+                return render(request, 'homepages/login.html', context)
+    else:
+
+        if method == "landing" :
+            context = {
+                "display" : "original"
+            }
+        elif method == "create":
+            context = {
+                "display" : "create"
+            }
+        else :
+            context = {
+                "display" : "login",
+                "errors" : ""
+            }
+
+        return render(request, 'homepages/login.html', context)
 
 def AboutPageView(request):
     return render(request, 'homepages/about.html')

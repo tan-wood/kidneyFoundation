@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{%block content%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,20 +21,147 @@
             <h1 style="color: #ec995a">KidneyWatch</h1>
         </div>
 
-        <section style="display: grid; grid-template-rows: auto auto; gap: 20px;">
-            <div style="display: grid; place-items: center;">
-                <a href="{% url 'home' %}">
-                    <button class="login-button">Sign In</button>
-                </a>    
+        {% if display == "original"%}
+            <section style="display: grid; grid-template-rows: auto auto; gap: 20px;">
+                <div style="display: grid; place-items: center;">
+                    <a href="{% url 'login' method="login" %}">
+                        <button class="login-button">Sign In</button>
+                    </a>    
+                </div>
+                <div style="display: grid; place-items: center;">
+                    <a href="{% url 'login' method="create"%}">
+                        <button class="login-button" style="background-color: #ec995a; color: #ffffff;">
+                            Create an Account
+                        </button>
+                    </a>
+                    
+                </div>
+            </section>
+        {% elif display == "create"%}
+
+            {% if errors == ""%}
+            {%else%}
+                <p>{{ errors }}</p>
+            {% endif %}
+
+            <div class="container">
+                <div class="text-left">
+                <h2 class="section-heading text-uppercase">Sign Up</h2>
+                </div>
+                <br />
+                <form name="form" method="post" action="{%url 'login' method="form" %}">
+                    {% csrf_token %} 
+                    <label for="first_name">First name:</label>
+                    <input
+                        type="text"
+                        name="first_name"
+                        id="first_name"
+                        autofocus
+                        required
+                    />
+                    <br /><br />
+                
+                    <label for="last_name">Last name:</label>
+                    <input
+                        type="text"
+                        name="last_name"
+                        id="last_name"
+                        required
+                    />
+                    <br /><br />
+
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" required/>
+                    <br /><br />
+                
+                    <label for="phone">Phone:</label>
+                    <input type="text" name="phone" id="phone" required/>
+                    <br /><br />
+
+                    <label for="weight">Weight:</label>
+                    <input type="number" name="weight" id="weight" required/>
+                    <br /><br />
+
+                    <label for="height">Height:</label>
+                    <input type="number" name="height" id="height" required/>
+                    <br /><br />
+
+                    <label for="age">Age:</label>
+                    <input type="number" name="age" id="age" required/>
+                    <br /><br />
+
+                    <label for="address1">Address 1:</label>
+                    <input type="text" name="address1" id="address1" required/>
+                    <br /><br />
+
+                    <label for="address2">Address 2:</label>
+                    <input type="text" name="address2" id="address2"/>
+                    <br /><br />
+
+                    <label for="city">City:</label>
+                    <input type="text" name="city" id="city" required/>
+                    <br /><br />
+
+                    <label for="state">State:</label>
+                    <input type="text" name="state" id="state" required/>
+                    <br /><br />
+
+                    <label for="zip">Zip:</label>
+                    <input type="text" name="zip" id="zip" required/>
+                    <br /><br />
+                
+                    <label for="username">User Name:</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        required
+                    />
+                    <br /><br />
+                
+                    <label for="password">Password:</label>
+                    <input
+                        type="text"
+                        name="password"
+                        id="password"
+                        required
+                    />
+                    <br /><br />
+                    <button type="submit">Create Account</button>
+                </form>
             </div>
-            <div style="display: grid; place-items: center;">
-                <button class="login-button" style="background-color: #ec995a; color: #ffffff;">
-                    Create an Account
-                </button>
-            </div>
-        </section>
+        
+        {% else %}
+
+            {% if errors == ""%}
+            {%else%}
+                <p>{{ errors }}</p>
+            {% endif %}
+            <form name="loginform" method="post" action="{% url 'login' method="loginform" %}">
+                {% csrf_token %}
+                <label for="username">User Name:</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        required
+                    />
+                    <br /><br />
+                
+                    <label for="password">Password:</label>
+                    <input
+                        type="text"
+                        name="password"
+                        id="password"
+                        required
+                    />
+                    <br /><br />
+                    <button type="submit">Sign In</button>
+            </form>
+        {% endif %}
     </section>
 
 </body>
 
 </html>
+{% endblock %}
