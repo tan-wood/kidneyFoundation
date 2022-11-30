@@ -1,0 +1,123 @@
+{% load static %}
+{%url 'about'%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidneyWatch</title>
+    <link href="{% static 'css/about.css' %}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <section class="main-landing">
+        <section class="header">
+            <div class="header-cell">
+                <h1 style="color: #ec995a">KidneyWatch</h1>
+            </div>
+            <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                <a href='{% url "landing" %}'>
+                Home
+                </a>
+        </div>
+            <div style="text-align: right;">
+                <a href='{% url "login" %}' style="text-decoration: none;">
+                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                        <h4>Login</h4>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- <img src="{% static 'img/family-dinner.jpg' %}"> -->
+
+        <!-- <div style="min-height: 700px; color: #ffffff; font-size: 30px;"></div> -->
+        <div style="min-height: 700px; position: relative;">
+            <h4 class="landing-text">The Start</h4>
+            <h4 class="landing-text" style="margin-top: 310px;">to a Brighter Future</h4>
+        </div>
+
+    </section>
+
+    <section style="min-height: 800px; background-color: #ffffff;">
+        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
+            <h1 style="font-size: 52px; color: #ec995a">What is KidneyWatch?</h1>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2>In the US, 1 in 7 adults are estimated to have Chronic Kidney Disease (CKD) </h2>
+            <h2>
+            That means that life 
+                for apporximately 37 million Americans includes high blood pressure, heart disease, and stroke caused by CKD
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> <span style="color: #ec995a">Still, there is hope</span>
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> Studies have shown nutrition plays a large part in the health of those battling CKD
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> The DASH diet in particular has been found to <span style="color: #ec995a">decrease the risk of stroke, cancer, kidney stones, and high blood pressure </span>
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> KidneyWatch helps users impliment the DASH diet into their life with tools such as personalized meal suggestions and real-time notifications
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+                <span style="color: #ec995a">At KidneyWatch, your health is our number one priority</span>
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+            Join now and watch what KidneyWatch will do for you!
+            </h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: auto auto; padding: 40px 5vw 0 5vw;">
+            <div style="display: grid; place-items: center;">
+                <a href='https://www.kidney.org/atoz/content/Dash_Diet'>
+                <img src="{% static 'img/kidneyFoundationAboutFood.jpeg' %}" class="three-steps">
+                </a>
+                <h4>DASH Diet Info</h4>
+            </div>
+            <div style="display: grid; place-items: center;">
+                <a href='{% url "login" %}' >
+                <img src="{% static 'img/kidneyFoundationAboutRun.png' %}" class="three-steps">
+                </a>
+                <h4>Sign Up</h4>
+            </div>
+            
+        </div>
+        
+    
+
+    </section>
+
+    <section
+        style="min-height: 100px; background-color: #ec995a; display: grid; grid-template-rows: 80px 10px 10px; gap: 20px; padding: 30px 30px 50px 30px;">
+        <div>
+            <h1 style="color: #ffffff;">KidneyWatch</h1>
+        </div>
+        <div>
+            <p style="color: #ffffff; font-size: 11px;">Trey Jackson, Tanner Funk, Tanner Woodrum, Adam Norton</p>
+        </div>
+        <div>
+            <p style="color: #ffffff; font-size: 11px;">Copyright 2022</p>
+        </div>
+    </section>
+
+</body>
+
+</html>
