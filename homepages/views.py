@@ -1,15 +1,23 @@
+from multiprocessing import context
 from django.shortcuts import render
 from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient
+from homepages.models import Food, Nutrient, Patient, Nutrient_In_Food
 
 loggedIn = False
 
 def indexPageView(request):
+
+    data = Nutrient_In_Food.objects.all()
+
+    context = {
+        'data':data,
+    }
+
     if loggedIn:
-        return render(request,'homepages/index.html')
+        return render(request,'homepages/index.html', context)
     else:
         return LandingPageView(request)
 
