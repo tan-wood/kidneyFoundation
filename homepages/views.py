@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
+from homepages.models import Food
 
 def indexPageView(request) :
     return render(request,'homepages/index.html')
@@ -20,15 +21,17 @@ def apiJSONView(request) :
 
 def apiPageView(request) :
     food_names = {}
+    global searchedFoods
+    # maybe put in some logic for a blank search
     if 'name' in request.GET:
         name = request.GET['name']
         response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=8&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
         data = response.json()
+        searchedFoods = data['foods']
  
-        for idx, food in enumerate(data['foods']) :
+        for idx, food in enumerate(searchedFoods) :
             food_names['food_name' + str(idx+1)] = food['description']
     
-
     # send it to the database when clicked!
     # not sure if that's in this view or not.. i think it is
     # food_name = WHAT BUTTON THEY CLICKED
@@ -37,4 +40,20 @@ def apiPageView(request) :
 
     return render (request, 'homepages/apitest.html', { "food_names": 
     food_names} )
+
+
+def recordNutrientInfo() :
+    # food_info = {}
+    for food in searchedFoods[0] :
+        food_data = Food(
+            food_name = food['description'],
+            food_group = 'dairy',
+            meal_category = 'breakfast',
+        )
+
+    food_data.save(update_fields='food_name')
+    # food_info = Food.objects.all()
+
+
+
 
