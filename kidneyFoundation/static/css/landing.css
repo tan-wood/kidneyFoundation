@@ -23,18 +23,18 @@ a {
 .header {
     background-color: #ffffff;
     min-height: 60px;
-    min-width: 93%;
+    min-width: 100%;
     position: fixed;
     top: 0;
     left: 0;
 
-    padding: 0 80px 0 20px;
+    padding: 0px;
 
     box-shadow: 0 10px 15px #00000020;
 
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 40px;
+    grid-template-columns: auto auto 1fr auto;
+    /* gap: 40px; */
 
     z-index: 9999999;
 }
@@ -105,10 +105,8 @@ a {
 } */
 
 .main-landing {
-    /* background-image: url("{% static 'img/family-dinner.jpg' %}"); */
+    /* background-image: url("{% static 'img/KidneyWatchFamily50.png' %}"); */
     background-image: url("../img/KidneyWatchFamily50.png");
-    /* background-image: url("../img/KidneyWatchFamily25.png"); */
-    /* background-image: url("../img/family-dinner.jpg"); */
     background-color: #cccccc; /* Used if the image is unavailable */
     background-position: center;
     background-repeat: no-repeat;

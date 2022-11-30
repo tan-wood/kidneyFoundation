@@ -61,7 +61,52 @@ a {
 .big-white-box {
     background-color: #ffffff;
     border-radius: 45px;
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     box-shadow: 0 10px 40px #00000020;
+
+    display: grid; 
+    grid-template-columns: 48% 48%;
+    gap: 30px;
+    padding: 30px;
+}
+
+.micronutrient-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.micronutrient-container {
+    background-color: #eee6de;
+    border-radius: 18px;
+    min-height: 150px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+}
+
+.nutrient-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #4d2d0e60;
+}
+
+.suggestion-grid {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.suggestion-container {
+    background-color: #eaeaea;
+    border-radius: 18px;
+    min-height: 100px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
 }

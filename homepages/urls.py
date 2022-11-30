@@ -1,8 +1,11 @@
 from django.urls import path
-from .views import indexPageView, LandingPageView, LoginPageView, AboutPageView, apiPageView, apiJSONView
+from .views import indexPageView, LandingPageView, LoginPageView, AboutPageView, apiPageView, apiJSONView, AlertsPageView, DiaryPageView, AccountPageView
 
 urlpatterns = [
     path("home/", indexPageView, name="home"),
+    path("alerts/", AlertsPageView, name="alerts"),
+    path("diary/", DiaryPageView, name="diary"),
+    path("account/", AccountPageView, name="account"),
     path("login/", LoginPageView, name="login"),
     path("about/", AboutPageView, name="about"),
     path("apitest/", apiPageView, name="apitest" ),

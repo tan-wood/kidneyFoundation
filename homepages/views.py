@@ -8,6 +8,15 @@ from homepages.models import Food
 def indexPageView(request):
     return render(request,'homepages/index.html')
 
+def AlertsPageView(request):
+    return render(request, 'homepages/alerts.html')
+
+def DiaryPageView(request):
+    return render(request, 'homepages/diary.html')
+
+def AccountPageView(request):
+    return render(request, 'homepages/account.html')
+
 def LandingPageView(request):
     return render(request,'homepages/landingpage.html')
 

@@ -23,24 +23,56 @@
         </div>
         <div
             style="border: 1px solid #00000010; display: grid; grid-template-rows: auto auto auto 1fr auto auto; padding: 40px;">
-            <div class="sidebar-button">
-                <h4>Home</h4>
-            </div>
-            <div class="sidebar-button">
-                <h4>Alerts</h4>
-            </div>
-            <div class="sidebar-button">
-                <h4>Diary</h4>
-            </div>
+            <a href="{% url 'home' %}">
+                {% if 'home' in request.path %}
+                <div class="sidebar-button" style="color: #ec995a;">
+                    <h4>Home</h4>
+                </div>
+                {% else %}
+                <div class="sidebar-button">
+                    <h4>Home</h4>
+                </div>
+                {% endif %}
+            </a>
+            <a href="{% url 'alerts' %}">
+                {% if 'alerts' in request.path %}
+                <div class="sidebar-button" style="color: #ec995a;">
+                    <h4>Alerts</h4>
+                </div>
+                {% else %}
+                <div class="sidebar-button">
+                    <h4>Alerts</h4>
+                </div>
+                {% endif %}
+            </a>
+            <a href="{% url 'diary' %}">
+                {% if 'diary' in request.path %}
+                <div class="sidebar-button" style="color: #ec995a;">
+                    <h4>Diary</h4>
+                </div>
+                {% else %}
+                <div class="sidebar-button">
+                    <h4>Diary</h4>
+                </div>
+                {% endif %}
+            </a>
             <div style="min-height: 60px;"></div>
             <a href="{% url 'landing' %}">
                 <div class="sidebar-button">
                     <h4>Back to Landing Page</h4>
                 </div>
             </a>
-            <div class="sidebar-button">
-                <h4>Account</h4>
-            </div>
+            <a href="{% url 'account' %}">
+                {% if 'account' in request.path %}
+                <div class="sidebar-button" style="color: #ec995a;">
+                    <h4>Account</h4>
+                </div>
+                {% else %}
+                <div class="sidebar-button">
+                    <h4>Account</h4>
+                </div>
+                {% endif %}
+            </a>
         </div>
     </section>
 
