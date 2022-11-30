@@ -13,29 +13,9 @@ class Nutrient(models.Model):
     class Meta:
         db_table = "nutrient"
 
-class MealCategory(models.Model):
-    description = models.CharField(max_length=30)
-
-    def __str__(self):
-        return (self.description)
-
-    class Meta:
-        db_table = "mealcategory"
-
-class FoodGroup(models.Model):
-    description = models.CharField(max_length=30)
-
-    def __str__(self):
-        return (self.description)
-
-    class Meta:
-        db_table = "foodgroup"
-
 class Food(models.Model):
     food_name = models.CharField(max_length=50)
     nutrient = models.ManyToManyField(Nutrient, through='Nutrient_In_Food', blank=False)
-    food_group = models.ManyToManyField(FoodGroup, blank=False)
-    meal_category = models.ManyToManyField(MealCategory, blank=False)  
 
     def __str__(self):
         return (self.food_name)
@@ -76,7 +56,7 @@ class Patient(models.Model):
     email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=13, blank=True)
     address1 = models.CharField(max_length=20)
-    address2 = models.CharField(max_length=20)
+    address2 = models.CharField(max_length=20, blank=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2)
     zip = models.CharField(max_length=9)
@@ -141,7 +121,7 @@ class Diet(models.Model) :
         db_table = "diet"
 
 
-class Alert_Type(models.Model) :
+class Alert_Type(models.Model):
     description = models.CharField(max_length=25)
 
     def __str__(self):
