@@ -3,9 +3,10 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient
+from homepages.models import Food, Nutrient, Patient, Alert
 
 loggedIn = False
+global_username = ""
 
 def indexPageView(request):
     if loggedIn:
@@ -20,7 +21,17 @@ def SignOutPageView(request):
 
 def AlertsPageView(request):
     if loggedIn:
-        return render(request,'homepages/alerts.html')
+        data = Alert.objects.all()
+        user_alerts = []
+        for alert in data:
+            if alert.patient.username == global_username:
+                user_alerts.append(alert)
+        
+        context = {
+            "alerts": user_alerts
+        }
+
+        return render(request,'homepages/alerts.html', context)
     else:
         return LandingPageView(request)
     
@@ -105,6 +116,8 @@ def LoginPageView(request, method):
         for patient in data:
             if username == patient.username and password == patient.password:
                 loggedIn = True
+                global global_username
+                global_username = patient.username
                 return indexPageView(request)
             else :
                 found = True
