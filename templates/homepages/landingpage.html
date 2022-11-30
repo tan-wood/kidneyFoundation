@@ -26,9 +26,11 @@
                 <h4>About</h4>
             </div>
             <div style="text-align: right;">
-                <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
-                    <h4>Login</h4>
-                </div>
+                <a href='{% url "login" %}' style="text-decoration: none;">
+                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                        <h4>Login</h4>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -36,10 +38,10 @@
 
         <!-- <div style="min-height: 700px; color: #ffffff; font-size: 30px;"></div> -->
         <div style="min-height: 700px; position: relative;">
-            <h4 class="landing-text">Eat what you want.</h4>
-            <h4 class="landing-text" style="margin-top: 310px;">We'll do the rest.</h4>
+            <h4 class="landing-text">Take the stress</h4>
+            <h4 class="landing-text" style="margin-top: 310px;">out of eating.</h4>
             <div class="landing-button button">
-                <h3>See How</h3>
+                <h3>Learn More</h3>
             </div>
         </div>
 
@@ -81,12 +83,13 @@
             <div class="button sign-up-button">
                 <h4 style="margin: 0;">Sign Me Up!</h4>
             </div>
-            
+
         </div>
 
     </section>
 
-    <section style="min-height: 100px; background-color: #ec995a; display: grid; grid-template-rows: 80px 10px 10px; gap: 20px; padding: 30px 30px 50px 30px;">
+    <section
+        style="min-height: 100px; background-color: #ec995a; display: grid; grid-template-rows: 80px 10px 10px; gap: 20px; padding: 30px 30px 50px 30px;">
         <div>
             <h1 style="color: #ffffff;">KidneyWatch</h1>
         </div>

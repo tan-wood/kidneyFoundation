@@ -6,13 +6,18 @@ h1, h2 {
     font-family: 'Playfair Display', serif;
 }
 
-h3, h4, h5, p {
+h3, h4, h5, p, button {
     font-family: 'Noto Sans JP', sans-serif;
 }
 
 h1 {
     font-size: 32px;
     margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
 }
 
 .header {
@@ -120,4 +125,21 @@ h1 {
 .button:hover {
     background-color: #ec995a;
     color: #ffffff;
+}
+
+.login-button {
+    background-color: #efefef;
+    border: 0 solid transparent;
+
+    min-width: 300px;
+    min-height: 50px;
+    max-width: 300px;
+    max-height: 50px;
+
+    color: #a8a8a8;
+    cursor: pointer;
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
 }
