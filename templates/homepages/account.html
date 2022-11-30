@@ -25,18 +25,18 @@
             </section>
             <section>
                 <h1>Patient Info</h1>
-                <p>{{patientData.first_name}}</p>
-                <p>{{patientData.last_name}}</p>
-                <p>{{patientData.age}}</p>
-                <p>{{patientData.weight}}</p>
-                <p>{{patientData.height}}</p>
-                <p>{{patientData.email}}</p>
-                <p>{{patientData.phone}}</p>
-                <p>{{patientData.address1}}</p>
-                <p>{{patientData.address2}}</p>
-                <p>{{patientData.city}}</p>
-                <p>{{patientData.state}}</p>
-                <p>{{patientData.zip}}</p>
+                <p>First Name: {{patientData.first_name}}</p>
+                <p>Last Name: {{patientData.last_name}}</p>
+                <p>Age: {{patientData.age}}</p>
+                <p>Weight: {{patientData.weight}} lbs</p>
+                <p>Height: {{patientData.height}} inches</p>
+                <p>Email: {{patientData.email}}</p>
+                <p>Phone Number: {{patientData.phone}}</p>
+                <p>Address 1: {{patientData.address1}}</p>
+                <p>Address 2: {{patientData.address2}}</p>
+                <p>City: {{patientData.city}}</p>
+                <p>State: {{patientData.state}}</p>
+                <p>Zip: {{patientData.zip}}</p>
                 <a href="{% url 'account' method="editPatient"%}">
                     <button >Edit Patient Info</button>
                 </a>
