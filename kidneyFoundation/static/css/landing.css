@@ -141,3 +141,58 @@ a {
     font-size: 13px;
     font-weight: 500;
 }
+
+.login-submit-button {
+    background-color: #ec995a;
+    border: 0 solid transparent;
+
+    min-width: 300px;
+    min-height: 50px;
+    max-width: 300px;
+    max-height: 50px;
+
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.form {
+    display: grid;
+    place-items: center;
+}
+
+.form-input-list {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    row-gap: 10px;
+    column-gap: 20px;
+    padding: 30px 100px 60px 100px;
+}
+
+input {
+    background-color: #eeeeee;
+    border: 0px solid transparent;
+    min-width: 120px;
+    min-height: 30px;
+    max-width: 300px;
+    max-height: 30px;
+
+    padding: 10px;
+
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+label {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #00000050;
+}
+
+.form-input {
+    display: grid;
+    grid-template-rows: auto auto;
+    place-items: center;
+}
