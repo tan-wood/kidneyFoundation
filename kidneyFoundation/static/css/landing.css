@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+h3, h4, h5, p {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+.header {
+    background-color: #ffffff;
+    min-height: 60px;
+    min-width: 93%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 0 80px 0 20px;
+
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 40px;
+}
+
+.header-cell {
+    background-color: #ffffff;
+    display: grid;
+    place-items: center;
+    /* border: 3px solid #f41010; */
+    padding: 0 15px 0 15px;
+    min-width: auto;
+    max-width: 300px;
+}
+
+/* img {
+    position: fixed;
+    top: 60px;
+    left: 0px;
+    width: 100%;
+    height: 500px;
+} */
+
+.main-landing {
+    /* background-image: url("{% static 'img/family-dinner.jpg' %}"); */
+    background-image: url("../img/family-dinner.jpg");
+    background-color: #cccccc; /* Used if the image is unavailable */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    /* background: url("/static/img/family-dinner.jpg") 50% 0 no-repeat fixed; */
+}
+
+.button {
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+
+.button:hover {
+    background-color: #ec995a;
+    color: #ffffff;
+}

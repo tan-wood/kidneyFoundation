@@ -76,7 +76,7 @@ class Patient(models.Model):
     email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=13, blank=True)
     address1 = models.CharField(max_length=20)
-    address2 = models.CharField(max_length=20)
+    address2 = models.CharField(max_length=20, blank=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2)
     zip = models.CharField(max_length=9)
