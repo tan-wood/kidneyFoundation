@@ -30,7 +30,7 @@
             <div style="background-color: transparent; min-width: 1px;"></div>
             
             <div style="text-align: right;">
-                <a href='{% url "login" %}' style="text-decoration: none;">
+                <a href="{% url "login" method="landing" %}" style="text-decoration: none;">
                     <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
                         <h4>Login</h4>
                     </div>
@@ -84,7 +84,7 @@
         </div>
 
         <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
-            <a href='{% url "login" %}' style="text-decoration: none;">
+            <a href="{% url "login" method="create" %}" style="text-decoration: none;">
                 <div class="button sign-up-button">
                     <h4 style="margin: 0;">Sign Me Up!</h4>
                 </div>

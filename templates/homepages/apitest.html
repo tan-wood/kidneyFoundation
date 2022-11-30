@@ -11,21 +11,33 @@
         <input type='text' name = "name" placeholder = "Search...">
         <button type='submit'>Search Food</button>
     </form>
+
+    {% comment %} <p> {{ food_nutrients }} </p> {% endcomment %}
+
+    {% for nutrient, amount in food_nutrients.items %}
+        {% if nutrient in 'Protein,Potassium, K,Carbohydrate, by difference,Sodium, Na,Water,Phosphorus, P' %}
+            <p>{{ nutrient }} : {{ amount }}</p>
+        {% endif %}
+    {% endfor %}
     
 </body>
 </html>
+
+
+{% comment %} 
 {% if food_names %}
-    <div style="background-color: grey; width: 35%">
-        {% comment %} <form method="POST"> {% endcomment %}
-            {% comment %} {% csrf_token %} {% endcomment %}
-            {% for food_name in food_names.values %}
-            <br>
-            <button type='submit' onClick="recordNutrientInfo()">{{ food_name }}</button>
-            <br>
-            {% endfor %}
-        {% comment %} </form> {% endcomment %}
-    </div>
-{% endif %}
+<div style="background-color: grey; width: 35%"> {% endcomment %}
+    {% comment %} <form method="POST"> {% endcomment %}
+        {% comment %} {% csrf_token %} {% endcomment %}
+        {% comment %} {% for food_name in food_names.values %}
+        <br>
+        <button type='submit' onClick="recordNutrientInfo()">{{ food_name }}</button>
+        <br>
+        {% endfor %} {% endcomment %}
+    {% comment %} </form> {% endcomment %}
+{% comment %} </div>
+{% endif %}  {% endcomment %}
+
 
 {% comment %} {% if food_names %}
 <br>

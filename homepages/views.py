@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food
+from homepages.models import Food, Nutrient, Patient
 
 def indexPageView(request):
     return render(request,'homepages/index.html')
@@ -20,8 +20,82 @@ def AccountPageView(request):
 def LandingPageView(request):
     return render(request,'homepages/landingpage.html')
 
-def LoginPageView(request):
-    return render(request, 'homepages/login.html')
+def LoginPageView(request, method):
+
+    if request.method == 'POST' and method == "form":
+        email = request.POST['email']
+        username = request.POST['username']
+        errors = ""
+
+        data = Patient.objects.all()
+
+        for patient in data:
+            if email == patient.email:
+                errors += "This email has already been registered <br>"
+            if username == patient.username:
+                errors += "This username is already taken <br>"
+        
+        if errors != "":
+            context = {
+                    "display" : "create",
+                    "errors" : errors
+                }
+            return render(request, 'homepages/login.html', context)
+        else:
+            patient = Patient()
+
+            patient.first_name = request.POST['first_name']
+            patient.last_name = request.POST['last_name']
+            patient.username = request.POST['username']
+            patient.password = request.POST['password']
+            patient.age = request.POST['age']
+            patient.weight = request.POST['weight']
+            patient.height = request.POST['height']
+            patient.address1 = request.POST['address1']
+            patient.address2 = request.POST['address2']
+            patient.city = request.POST['city']
+            patient.state = request.POST['state']
+            patient.zip = request.POST['zip']
+            patient.email = request.POST['email']
+            patient.phone = request.POST['phone']
+
+            patient.save()
+            
+            return indexPageView(request)
+
+    elif request.method == 'POST' and method == "loginform":
+        
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        data = Patient.objects.all()
+
+        for patient in data:
+            if username == patient.username and password == patient.password:
+                return indexPageView(request)
+            else :
+                context = {
+                    "display" : "login",
+                    "errors" : "The username or password are incorrect"
+                }
+                return render(request, 'homepages/login.html', context)
+    else:
+
+        if method == "landing" :
+            context = {
+                "display" : "original"
+            }
+        elif method == "create":
+            context = {
+                "display" : "create"
+            }
+        else :
+            context = {
+                "display" : "login",
+                "errors" : ""
+            }
+
+        return render(request, 'homepages/login.html', context)
 
 def AboutPageView(request):
     return render(request, 'homepages/about.html')
@@ -35,9 +109,23 @@ def apiJSONView(request) :
     response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
     return JsonResponse(response)
 
+
+# also this will return the searched_food description (name) too
 def apiPageView(request) :
-    food_names = {}
-    searchedFoods = {}
+    all_food_data = {}
+    searched_food = {}
+    food_nutrients = {}
+
+    nutrientList = [
+        'Protein',
+        'Potassium, K',
+        'Carbohydrate, by difference',
+        'Sodium, Na',
+        'Water',
+        'Phosphorus, P',
+    ]
+
+
     # maybe put in some logic for a blank search
     if 'name' in request.GET:
         if request.GET['name'] != '' :
@@ -45,13 +133,30 @@ def apiPageView(request) :
             name = request.GET['name']
             response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
             data = response.json()
-            searchedFoods = data['foods'][0]
+            searched_food = data['foods'][0]
+
+            
+            
+            # food_nutrients = searched_food['foodNutrients'][0]
+            for nutrient in searched_food['foodNutrients'] :
+                food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+
+                if nutrient['nutrientName'] in nutrientList :
+                    nutrient_data = Nutrient(
+                        # this will have some logic to decide if macro or micro
+                        # alsooo it doesn't like it?
+                        nutrient_name = nutrient['nutrientName'],
+                    )
+
+                    nutrient_data.save()
+
+
 
 
     
 
             food_data = Food(
-                food_name = searchedFoods['description']
+                food_name = searched_food['description']
 
                 # i don't need these?... weird!
                 # food_group = 'dairy',
@@ -65,14 +170,18 @@ def apiPageView(request) :
                 # measurement
                 # quantity
 
+            # nutrition_data = Nutrient(
+            #     # this will have some logic to decide if macro or micro
+            #     nutrient_is_macro = 'True'
+            #     nutrient_name = searched_food
 
-            # nutrition_data =
+            # )
 
             # nutrient_in_food_data = 
 
 
             food_data.save()
-            searchedFoods = Food.objects.all()
+            searched_food = Food.objects.all()
 
         
 
@@ -83,8 +192,8 @@ def apiPageView(request) :
     # something = Food.objects.something?
 
 
-    return render (request, 'homepages/apitest.html', { "food_names": 
-    food_names} )
+    return render (request, 'homepages/apitest.html', { "food_nutrients": 
+    food_nutrients} )
 
 
 
