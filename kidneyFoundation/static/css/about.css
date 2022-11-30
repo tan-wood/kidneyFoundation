@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+h3, h4, h5, p, button {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.header {
+    background-color: #ffffff;
+    min-height: 60px;
+    min-width: 93%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 0 80px 0 20px;
+
+    box-shadow: 0 10px 15px #00000020;
+
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 40px;
+
+    z-index: 9999999;
+}
+
+.header-cell {
+    background-color: #ffffff;
+    display: grid;
+    place-items: center;
+    /* border: 3px solid #f41010; */
+    padding: 0 15px 0 15px;
+    min-width: auto;
+    max-width: 300px;
+}
+
+.landing-text {
+    font-weight: 500;
+    position: absolute;
+    margin-top: 230px;
+    margin-left: 140px;
+    color:black;
+    font-size: 44px;
+}
+
+.landing-button {
+    position: absolute;
+    margin-top: 410px;
+    margin-left: 140px;
+    min-height: 60px;
+    min-width: 180px;
+    background-color: #ec995a;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+
+    transition: 0.1s ease-in-out;
+}
+
+.sign-up-button {
+    background-color: #ec995a;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    min-width: 180px;
+
+    transition: 0.1s ease-in-out;
+}
+
+.landing-button:hover {
+    transform: scale(1.05);
+}
+
+.sign-up-button:hover {
+    transform: scale(1.05);
+}
+
+.three-steps {
+    max-width: 260px;
+    max-height: 260px;
+}
+
+/* img {
+    position: fixed;
+    top: 60px;
+    left: 0px;
+    width: 100%;
+    height: 500px;
+} */
+
+.main-landing {
+    /* background-image: url("{% static 'img/family-dinner.jpg' %}"); */
+    background-image: url("../img/kidneyFoundationAbout1.jpeg");
+    /* background-image: url("../img/KidneyWatchFamily25.png"); */
+    /* background-image: url("../img/family-dinner.jpg"); */
+    background-color: #cccccc; /* Used if the image is unavailable */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    /* background: url("/static/img/family-dinner.jpg") 50% 0 no-repeat fixed; */
+}
+
+.button {
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+
+.button:hover {
+    background-color: #ec995a;
+    color: #ffffff;
+}
+
+.login-button {
+    background-color: #efefef;
+    border: 0 solid transparent;
+
+    min-width: 300px;
+    min-height: 50px;
+    max-width: 300px;
+    max-height: 50px;
+
+    color: #a8a8a8;
+    cursor: pointer;
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+}
