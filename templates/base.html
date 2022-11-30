@@ -63,7 +63,7 @@
                     <h4>Back to Landing Page</h4>
                 </div>
             </a>
-            <a href="{% url 'account' %}">
+            <a href="{% url 'account' method='homeAccount' %}">
                 {% if 'account' in request.path %}
                 <div class="sidebar-button" style="color: #ec995a;">
                     <h4>Account</h4>

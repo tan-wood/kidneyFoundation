@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.shortcuts import render
 from django.http import JsonResponse
 import requests
@@ -7,14 +6,18 @@ import json
 from homepages.models import Food, Nutrient, Patient, Nutrient_In_Food
 
 loggedIn = False
+loggedInPatientId = None
 
 def indexPageView(request):
+    global loggedInPatientId
+    if loggedInPatientId != None:
+        data = Nutrient_In_Food.objects.all()
+        patientData = Patient.objects.get(id = loggedInPatientId)
 
-    data = Nutrient_In_Food.objects.all()
-
-    context = {
-        'data':data,
-    }
+        context = {
+            'data':data,
+            'patientData' : patientData,
+        }
 
     if loggedIn:
         return render(request,'homepages/index.html', context)
@@ -23,7 +26,9 @@ def indexPageView(request):
 
 def SignOutPageView(request):
     global loggedIn
+    global loggedInPatientId
     loggedIn = False
+    loggedInPatientId = None
     return LandingPageView(request)
 
 def AlertsPageView(request):
@@ -39,9 +44,27 @@ def DiaryPageView(request):
     else:
         return LandingPageView(request)
 
-def AccountPageView(request):
+def AccountPageView(request, method):
+    if loggedInPatientId != None:
+        patientData = Patient.objects.get(id = loggedInPatientId)
+        
+        if method == "homeAccount":
+            context = {
+                'patientData' : patientData,
+                'display': "homeAccount",
+            }
+        elif method == "editPatient":
+            context = {
+                'patientData' : patientData,
+                'display': "editPatient",
+            }
+        else:
+            context = {
+                'patientData' : patientData,
+                'display': "changeLoginInfo",
+            }
     if loggedIn:
-        return render(request,'homepages/account.html')
+        return render(request,'homepages/account.html', context)
     else:
         return LandingPageView(request)
 
@@ -60,6 +83,7 @@ def LandingPageView(request):
 
 def LoginPageView(request, method):
     global loggedIn
+    global loggedInPatientId
     if request.method == 'POST' and method == "form":
         email = request.POST['email']
         username = request.POST['username']
@@ -99,6 +123,7 @@ def LoginPageView(request, method):
             patient.save()
 
             loggedIn = True
+            loggedInPatientId = patient.id
             
             return indexPageView(request)
 
@@ -106,18 +131,19 @@ def LoginPageView(request, method):
         
         username = request.POST['username']
         password = request.POST['password']
-        found = False
+        notFound = False
 
         data = Patient.objects.all()
 
         for patient in data:
             if username == patient.username and password == patient.password:
                 loggedIn = True
+                loggedInPatientId = patient.id
                 return indexPageView(request)
             else :
-                found = True
+                notFound = True
             
-        if found:
+        if notFound:
             context = {
                 "display" : "login",
                 "errors" : "The username or password are incorrect"
