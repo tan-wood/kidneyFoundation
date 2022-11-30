@@ -16,14 +16,14 @@
 </html>
 {% if food_names %}
     <div style="background-color: grey; width: 35%">
-        <form method="POST">
-            {% csrf_token %}
+        {% comment %} <form method="POST"> {% endcomment %}
+            {% comment %} {% csrf_token %} {% endcomment %}
             {% for food_name in food_names.values %}
             <br>
             <button type='submit' onClick="recordNutrientInfo()">{{ food_name }}</button>
             <br>
             {% endfor %}
-        </form>
+        {% comment %} </form> {% endcomment %}
     </div>
 {% endif %}
 
