@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API TESTING</title>
+</head>
+<body>
+    <form method="GET">
+        <input type='text' name = "name" placeholder = "Search...">
+        <button type='submit'>Search Food</button>
+    </form>
+    
+</body>
+</html>
+{% if food_names %}
+    <div style="background-color: grey; width: 35%">
+        {% comment %} <form method="POST"> {% endcomment %}
+            {% comment %} {% csrf_token %} {% endcomment %}
+            {% for food_name in food_names.values %}
+            <br>
+            <button type='submit' onClick="recordNutrientInfo()">{{ food_name }}</button>
+            <br>
+            {% endfor %}
+        {% comment %} </form> {% endcomment %}
+    </div>
+{% endif %}
+
+{% comment %} {% if food_names %}
+<br>
+        <select name="food_names_options">
+            {% for food_name in food_names.values %}
+            <option value="{{ food_name }}"> {{ food_name }}</option>
+            {% endfor %}
+{% endif %} {% endcomment %}
