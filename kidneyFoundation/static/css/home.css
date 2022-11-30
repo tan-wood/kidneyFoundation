@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+h3, h4, h5, p, button {
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.sidebar-button {
+    min-height: 60px;
+    display: grid;
+    place-items: center;
+
+    color: #00000060;
+
+    transition: 0.1s ease-in-out;
+}
+
+.sidebar-button:hover {
+    background-color: #f1f1f170;
+    color: #00000080;
+}
+
+.navbar-button {
+    background-color: #e6e6e6;
+    min-width: 180px;
+    min-height: 50px;
+    max-width: 180px;
+    display: grid;
+    place-items: center;
+    color: #00000040;
+    border-radius: 6px;
+}
+
+.log-food {
+    background-color: #e6e6e6;
+
+    transition: 0.2s ease-in-out;
+}
+
+.log-food:hover {
+    background-color: #dbdbdb;
+    color: #00000065;
+}
+
+.big-white-box {
+    background-color: #ffffff;
+    border-radius: 45px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 10px 40px #00000020;
+}

@@ -2,15 +2,51 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kidney Foundation</title>
+    <link href="{% static 'css/home.css' %}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 </head>
-<body>
-    <p>Test from Base.html</p>
+
+<body style="display: grid; grid-template-columns: 20vw 1fr; min-height: 100%;">
+    <section style="background-color: #ffffff; height: 100vh; display: grid; grid-template-rows: 12vh 1fr;">
+        <div style="border: 1px solid #00000010; display: grid; place-items: center">
+            <h1 style="color: #ec995a">KidneyWatch</h1>
+        </div>
+        <div
+            style="border: 1px solid #00000010; display: grid; grid-template-rows: auto auto auto 1fr auto auto; padding: 40px;">
+            <div class="sidebar-button">
+                <h4>Home</h4>
+            </div>
+            <div class="sidebar-button">
+                <h4>Alerts</h4>
+            </div>
+            <div class="sidebar-button">
+                <h4>Diary</h4>
+            </div>
+            <div style="min-height: 60px;"></div>
+            <a href="{% url 'landing' %}">
+                <div class="sidebar-button">
+                    <h4>Back to Landing Page</h4>
+                </div>
+            </a>
+            <div class="sidebar-button">
+                <h4>Account</h4>
+            </div>
+        </div>
+    </section>
+
     {% block content %}
     {% endblock %}
+
 </body>
+
 </html>
