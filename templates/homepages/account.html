@@ -37,8 +37,14 @@
                 <p>{{patientData.city}}</p>
                 <p>{{patientData.state}}</p>
                 <p>{{patientData.zip}}</p>
-                <button href="{% url 'account' method="editPatient"%}">Edit Patient Info</button><br>
-                <button href="{% url 'account' method="changeLoginInfo"%}">Change Patient Username/Password</button>
+                <a href="{% url 'account' method="editPatient"%}">
+                    <button >Edit Patient Info</button>
+                </a>
+                <br>
+                <a href="{% url 'account' method="changeLoginInfo"%}">
+                    <button>Change Patient Username/Password</button>
+                </a>
+                
             </section>
         </section>
     </section>
