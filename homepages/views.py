@@ -5,23 +5,53 @@ from django.conf import settings
 import json
 from homepages.models import Food, Nutrient, Patient
 
+loggedIn = False
+
 def indexPageView(request):
-    return render(request,'homepages/index.html')
+    if loggedIn:
+        return render(request,'homepages/index.html')
+    else:
+        return LandingPageView(request)
+
+def SignOutPageView(request):
+    global loggedIn
+    loggedIn = False
+    return LandingPageView(request)
 
 def AlertsPageView(request):
-    return render(request, 'homepages/alerts.html')
+    if loggedIn:
+        return render(request,'homepages/alerts.html')
+    else:
+        return LandingPageView(request)
+    
 
 def DiaryPageView(request):
-    return render(request, 'homepages/diary.html')
+    if loggedIn:
+        return render(request,'homepages/diary.html')
+    else:
+        return LandingPageView(request)
 
 def AccountPageView(request):
-    return render(request, 'homepages/account.html')
+    if loggedIn:
+        return render(request,'homepages/account.html')
+    else:
+        return LandingPageView(request)
 
 def LandingPageView(request):
-    return render(request,'homepages/landingpage.html')
+    global loggedIn
+    if not loggedIn:
+        context = {
+            "signedIn": False
+        }
+    else:
+        context = {
+            "signedIn": True
+        }
+    return render(request,'homepages/landingpage.html', context)
+
 
 def LoginPageView(request, method):
-
+    global loggedIn
     if request.method == 'POST' and method == "form":
         email = request.POST['email']
         username = request.POST['username']
@@ -34,7 +64,6 @@ def LoginPageView(request, method):
                 errors += "This email has already been registered <br>"
             if username == patient.username:
                 errors += "This username is already taken <br>"
-        
         if errors != "":
             context = {
                     "display" : "create",
@@ -60,6 +89,8 @@ def LoginPageView(request, method):
             patient.phone = request.POST['phone']
 
             patient.save()
+
+            loggedIn = True
             
             return indexPageView(request)
 
@@ -73,16 +104,17 @@ def LoginPageView(request, method):
 
         for patient in data:
             if username == patient.username and password == patient.password:
+                loggedIn = True
                 return indexPageView(request)
             else :
                 found = True
             
-            if not found:
-                context = {
-                    "display" : "login",
-                    "errors" : "The username or password are incorrect"
-                }
-                return render(request, 'homepages/login.html', context)
+        if found:
+            context = {
+                "display" : "login",
+                "errors" : "The username or password are incorrect"
+            }
+            return render(request, 'homepages/login.html', context)
     else:
 
         if method == "landing" :

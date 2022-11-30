@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import indexPageView, LandingPageView, LoginPageView, AboutPageView, apiPageView, apiJSONView, AlertsPageView, DiaryPageView, AccountPageView
+from .views import indexPageView, SignOutPageView, LandingPageView, LoginPageView, AboutPageView, apiPageView, apiJSONView, AlertsPageView, DiaryPageView, AccountPageView
 
 urlpatterns = [
     path("home/", indexPageView, name="home"),
@@ -11,5 +11,6 @@ urlpatterns = [
     path("apitest/", apiPageView, name="apitest" ),
     path("apiJSON/", apiJSONView, name="apiJSON" ),
     path("landing/", LandingPageView, name="landing"),
+    path("signout/", SignOutPageView, name="signout" ),
     path("", LandingPageView, name="index")    
 ]

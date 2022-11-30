@@ -32,11 +32,20 @@
             <div style="background-color: transparent; min-width: 1px;"></div>
 
             <div style="text-align: right;">
-                <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
-                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
-                        <h4>Login</h4>
-                    </div>
-                </a>
+                {% if signedIn %}
+                    <a href="{% url 'signout' %}" style="text-decoration: none;">
+                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                            <h4>Sign Out</h4>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
+                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                            <h4>Login</h4>
+                        </div>
+                    </a>
+                {% endif %}
+                
             </div>
         </section>
 
