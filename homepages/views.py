@@ -58,13 +58,17 @@ def LoginPageView(request, method):
         
         username = request.POST['username']
         password = request.POST['password']
-        
+        found = False
+
         data = Patient.objects.all()
 
         for patient in data:
             if username == patient.username and password == patient.password:
                 return indexPageView(request)
             else :
+                found = True
+            
+            if not found:
                 context = {
                     "display" : "login",
                     "errors" : "The username or password are incorrect"
