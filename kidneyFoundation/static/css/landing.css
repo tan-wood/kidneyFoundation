@@ -25,9 +25,13 @@ h1 {
 
     padding: 0 80px 0 20px;
 
+    box-shadow: 0 10px 15px #00000020;
+
     display: grid;
     grid-template-columns: auto 1fr auto;
     gap: 40px;
+
+    z-index: 9999999;
 }
 
 .header-cell {
@@ -40,6 +44,53 @@ h1 {
     max-width: 300px;
 }
 
+.landing-text {
+    font-weight: 500;
+    position: absolute;
+    margin-top: 230px;
+    margin-left: 140px;
+    color: #ffffff;
+    font-size: 44px;
+}
+
+.landing-button {
+    position: absolute;
+    margin-top: 410px;
+    margin-left: 140px;
+    min-height: 60px;
+    min-width: 180px;
+    background-color: #ec995a;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+
+    transition: 0.1s ease-in-out;
+}
+
+.sign-up-button {
+    background-color: #ec995a;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    min-width: 180px;
+
+    transition: 0.1s ease-in-out;
+}
+
+.landing-button:hover {
+    transform: scale(1.05);
+}
+
+.sign-up-button:hover {
+    transform: scale(1.05);
+}
+
+.three-steps {
+    max-width: 260px;
+    max-height: 260px;
+}
+
 /* img {
     position: fixed;
     top: 60px;
@@ -50,7 +101,9 @@ h1 {
 
 .main-landing {
     /* background-image: url("{% static 'img/family-dinner.jpg' %}"); */
-    background-image: url("../img/family-dinner.jpg");
+    background-image: url("../img/KidneyWatchFamily50.png");
+    /* background-image: url("../img/KidneyWatchFamily25.png"); */
+    /* background-image: url("../img/family-dinner.jpg"); */
     background-color: #cccccc; /* Used if the image is unavailable */
     background-position: center;
     background-repeat: no-repeat;

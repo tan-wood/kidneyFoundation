@@ -34,30 +34,54 @@
 
         <!-- <img src="{% static 'img/family-dinner.jpg' %}"> -->
 
-        <div style="min-height: 700px;">hello</div>
+        <!-- <div style="min-height: 700px; color: #ffffff; font-size: 30px;"></div> -->
+        <div style="min-height: 700px; position: relative;">
+            <h4 class="landing-text">Eat what you want.</h4>
+            <h4 class="landing-text" style="margin-top: 310px;">We'll do the rest.</h4>
+            <div class="landing-button button">
+                <h3>See How</h3>
+            </div>
+        </div>
 
     </section>
 
-    <section style="min-height: 700px; background-color: #eeeeee;">
+    <section style="min-height: 800px; background-color: #ffffff;">
         <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
             <h1 style="font-size: 52px; color: #ec995a">We're here to Help</h1>
         </div>
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
             <h4><span style="color: #ec995a">Three easy steps</span> to better kidney health</h4>
         </div>
-        <div style="display: grid; grid-template-columns: auto auto auto; gap: 30px; padding: 40px 30px 0 30px;">
+        <div style="display: grid; grid-template-columns: auto auto auto auto auto; padding: 40px 5vw 0 5vw;">
             <div style="display: grid; place-items: center;">
-                <div style="background: rgb(236, 218, 207); width: 260px; height: 260px; border-radius: 10px;"></div>
+                <!-- <div style="background: rgb(236, 218, 207); width: 260px; height: 260px; border-radius: 10px;"></div> -->
+                <img src="{% static 'img/kidneyLanding1.png' %}" class="three-steps">
                 <h4>1. Track your meals</h4>
             </div>
             <div style="display: grid; place-items: center;">
-                <div style="background: rgb(207, 223, 236);  width: 260px; height: 260px; border-radius: 10px;"></div>
-                <h4>2. Get real-time alerts and suggestions</h4>
+                <img src="{% static 'img/kidneyLanding2.png' %}" style="max-width: 120px;">
             </div>
             <div style="display: grid; place-items: center;">
-                <div style="background: rgb(236, 218, 207);  width: 260px; height: 260px; border-radius: 10px;"></div>
+                <img src="{% static 'img/kidneyLanding3.png' %}" class="three-steps">
+                <!-- <div style="background: rgb(207, 223, 236);  width: 260px; height: 260px; border-radius: 10px;"></div> -->
+                <h4 style="margin: 0;">2. Get real-time alerts</h4>
+                <h4 style="margin: 0;">and suggestions</h4>
+            </div>
+            <div style="display: grid; place-items: center;">
+                <img src="{% static 'img/kidneyLanding4.png' %}" style="max-width: 120px;">
+            </div>
+            <div style="display: grid; place-items: center;">
+                <img src="{% static 'img/kidneyLanding5.png' %}" class="three-steps">
+                <!-- <div style="background: rgb(236, 218, 207);  width: 260px; height: 260px; border-radius: 10px;"></div> -->
                 <h4>3. Improve your eating habits</h4>
             </div>
+        </div>
+
+        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
+            <div class="button sign-up-button">
+                <h4 style="margin: 0;">Sign Me Up!</h4>
+            </div>
+            
         </div>
 
     </section>
