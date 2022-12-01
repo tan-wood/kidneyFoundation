@@ -118,21 +118,19 @@ def AccountPageView(request, method):
 
             patient.save()
 
-            # if request.POST['High Blood Pressure'] == "Yes":
-
-            #     condition = Condition.objects.get(description="High Blood Pressure")
-            #     patientId = Patient.objects.get(id=patient.id)
-            #     date = request.POST['date_diagnosed_High Blood Pressure']
-            #     Patient_Condition.objects.update(patient_id=patientId.id, condition_id=condition.id, date_diagnosed=date)
+            if request.POST['High Blood Pressure'] == "Yes":
+                condition = Condition.objects.get(description="High Blood Pressure")
+                patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
                 
                 
             
-            # if request.POST['Diabetes'] == "Yes":
+            if request.POST['Diabetes'] == "Yes":
 
-            #     condition = Condition.objects.get(description="Diabetes")
-            #     patientId = Patient.objects.get(id=patient.id)
-            #     date = request.POST['date_diagnosed_Diabetes']
-            #     Patient_Condition.objects.update(patient_id=patientId.id, condition_id=condition.id, date_diagnosed=date)
+                condition = Condition.objects.get(description="Diabetes")
+                patientId = Patient.objects.get(id=patient.id)
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
+
 
             return AccountPageView(request, "homeAccount")
         elif request.method == 'POST' and method == "changeUandPForm":
@@ -150,12 +148,12 @@ def AccountPageView(request, method):
             patientData = Patient.objects.get(id = loggedInPatientId)
             patientConditions = Patient_Condition.objects.all()
             loggedInPatientConditions = []
-            loggedInPatientDate = []
 
             for patient in patientConditions:
                 if patient.patient_id == loggedInPatientId:
                     loggedInPatientConditions.append(Condition.objects.get(id = patient.condition_id))
-                    loggedInPatientDate.append(patient.date_diagnosed)
+
+            condition_data = Condition.objects.all()
 
 
             if method == "homeAccount":
@@ -163,21 +161,21 @@ def AccountPageView(request, method):
                     'patientData' : patientData,
                     'display': "homeAccount",
                     'conditions' : loggedInPatientConditions,
-                    'date': loggedInPatientDate
+                    'condition_data' : condition_data,
                 }
             elif method == "editPatient":
                 context = {
                     'patientData' : patientData,
                     'display': "editPatient",
                     'conditions' : loggedInPatientConditions,
-                    'date': loggedInPatientDate
+                    'condition_data' : condition_data,
                 }
             else:
                 context = {
                     'patientData' : patientData,
                     'display': "changeLoginInfo",
                     'conditions' : loggedInPatientConditions,
-                    'date': loggedInPatientDate
+                    'condition_data' : condition_data,
                 }
     if loggedIn:
         return render(request,'homepages/account.html', context)
@@ -206,7 +204,6 @@ def LoginPageView(request, method):
     if request.method == 'POST' and method == "form":
         email = request.POST['email']
         username = request.POST['username']
-        
 
         data = Patient.objects.all()
 
@@ -215,10 +212,14 @@ def LoginPageView(request, method):
                 errors.append("This email has already been registered") 
             if username == patient.username:
                 errors.append("This username is already taken")
+        
+        condition_data = Condition.objects.all()
+
         if len(errors) != 0:
             context = {
                     "display" : "create",
-                    "errors" : errors
+                    "errors" : errors,
+                    "condition_data": condition_data,
                 }
             return render(request, 'homepages/login.html', context)
         else:
@@ -240,8 +241,7 @@ def LoginPageView(request, method):
 
                 condition = Condition.objects.get(description="High Blood Pressure")
                 patientId = Patient.objects.get(id=patient.id)
-                date = request.POST['date_diagnosed_High Blood Pressure']
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id, date_diagnosed=date)
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
                 
                 
             
@@ -249,8 +249,7 @@ def LoginPageView(request, method):
 
                 condition = Condition.objects.get(description="Diabetes")
                 patientId = Patient.objects.get(id=patient.id)
-                date = request.POST['date_diagnosed_Diabetes']
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id, date_diagnosed=date)
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
 
             
 
