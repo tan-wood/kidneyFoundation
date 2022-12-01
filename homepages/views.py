@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition
+from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food
 from datetime import datetime as dt
 
 loggedIn = False
@@ -469,6 +469,48 @@ def PickFavoritesPageView(request):
     if request.method == 'POST':
         favfoods = request.POST.getlist('foods')
         print(favfoods)
+
+        for favfood in favfoods :
+            print(favfood)
+            response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={favfood}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+            # turn it into json to be able to deal with the info we get
+            data = response.json()
+            # keep just the info about the specific FOOD and from only the FIRST one returned
+            clicked_food = data['foods'][0]
+
+
+            food_table = Food.objects.all()
+
+            # checking the database for the inputed food
+            food_found = False
+            for a_food in food_table :
+                if clicked_food['description'] == a_food.food_name :
+                    food_found = True
+
+            # load it up to be ready to save in the database if it's not found!
+            if not food_found: 
+                food_data = Food(
+                    food_name = clicked_food['description'],
+                )
+                # send it over to the database!
+                food_data.save()
+
+            patient_favorite_food_data = Patient_Favorite_Food(
+                patient = Patient.objects.get(username= loggedInUsername),
+                food = Food.objects.get(food_name= clicked_food['description']),
+                is_favorite = True
+            )
+
+            patient_favorite_food_data.save()
+            # adding the new things to our list - may be unneccessary...
+
+        
+
+            
+            
+
+        # get the name of the food they typed in and send it call the api with it!
+        # name = f"{post_form_data['food_names_options']}"
 
 
     context = {

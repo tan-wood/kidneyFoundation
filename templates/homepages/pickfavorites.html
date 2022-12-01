@@ -90,55 +90,55 @@
               }
         </style>
 
-        <form method="post">
+        <form method="POST">
             {% csrf_token %}
             
-            <li><input class="checkboxes" type="checkbox" value="Option1" id="option1" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option1" id="option1" name="foods"  onClick="change()" required/>
                 <label for="option1"><img src="https://picsum.photos/seed/1/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option2" id="option2" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option2" id="option2" name="foods" onClick="change()" required/>
                 <label for="option2"><img src="https://picsum.photos/seed/2/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option3" id="option3" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option3" id="option3" name="foods" onClick="change()" required/>
                 <label for="option3"><img src="https://picsum.photos/seed/3/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option4" id="option4" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option4" id="option4" name="foods" onClick="change()" required/>
                 <label for="option4"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option5" id="option5" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option5" id="option5" name="foods" onClick="change()" required/>
                 <label for="option5"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option6" id="option6" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option6" id="option6" name="foods"  onClick="change()" required/>
                 <label for="option6"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option7" id="option7" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option7" id="option7" name="foods"  onClick="change()" required/>
                 <label for="option7"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option8" id="option8" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option8" id="option8" name="foods"  onClick="change()" required/>
                 <label for="option8"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option9" id="option9" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option9" id="option9" name="foods"  onClick="change()" required/>
                 <label for="option9"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option10" id="option10" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option10" id="option10" name="foods"  onClick="change()" required/>
                 <label for="option10"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option11" id="option11" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option11" id="option11" name="foods"  onClick="change()" required/>
                 <label for="option11"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option12" id="option12" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option12" id="option12" name="foods"  onClick="change()" required/>
                 <label for="option12"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option13" id="option13" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option13" id="option13" name="foods"  onClick="change()" required/>
                 <label for="option13"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option14" id="option14" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option14" id="option14" name="foods"  onClick="change()" required/>
                 <label for="option14"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option15" id="option15" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option15" id="option15" name="foods"  onClick="change()" required/>
                 <label for="option15"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
-            <li><input class="checkboxes" type="checkbox" value="Option16" id="option16" name="foods" required/>
+            <li><input class="checkboxes" type="checkbox" value="Option16" id="option16" name="foods"  onClick="change()" required/>
                 <label for="option16"><img src="https://picsum.photos/seed/4/100" /></label>
             </li>
 
@@ -146,18 +146,33 @@
           </form>
 
 
-          <script type="text/javascript">
-            $(document).ready(function(){
-                var checkboxes = $('.checkboxes');
-                checkboxes.change(function(){
-                    if($('.checkboxes:checked+label').length>4) {
-                        checkboxes.removeAttr('required');
-                    } else {
-                        checkboxes.attr('required', 'required');
+        <script>
+            const buttons = document.getElementsByClassName("checkboxes");
+
+            const buttonPressed = e => {
+                document.getElementById(`${e.target.id}`).className = "checkedbox";
+            }
+
+            for (let button of buttons) {
+                button.addEventListener("click", buttonPressed);
+            }
+
+            function change() {
+                if (document.getElementsByClassName("checkedbox").length > 3) {
+                    const inputs = document.querySelectorAll('.checkboxes');
+
+                    for (const input of inputs) {
+
+                        input.removeAttribute('required');
                     }
-                });
-            });
-            </script>
+                      
+                }
+
+                console.log(document.getElementsByClassName("checkedbox").length)
+            }
+        </script>
+
+
 
         {% if results %}
         <div> {{results}} </div>
@@ -193,60 +208,13 @@
         <div id="three" class="notfaved"> Oranges </div>
         <div id="four" class="notfaved"> Grapes </div>
         <div id="five" class="notfaved"> Cookies </div>
-        <div id="six" class="notfaved"> Bananas </div>
-        <script>
-            const buttons = document.getElementsByClassName("notfaved");
-            const obj = {}
+        <div id="six" class="notfaved"> Bananas </div> {% endcomment %}
+        
 
-            /** function sendData() {
-                
-                $.ajax({
-                    type: "GET",
-                    url: '/my_def_in_view',
-                    data: {
-                        "result": result,
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        // any process in data
-                        alert("successfull")
-                    },
-                    failure: function () {
-                        alert("failure");
-                    }
-                });
-            } **/
-
-            const buttonPressed = e => {
-                
-                if (Object.keys(obj).length > 2) {
-                    console.log('Hello')
-
-                
-                }
-                else {
-                    console.log(e.target.id);  // Get ID of Clicked Element
-                    console.log(obj)
-                    obj[e.target.id] = document.getElementById(`${e.target.id}`).innerHTML
-
-
-                    document.getElementById(`${e.target.id}`).className = "faved";
-
-                }
-
-                console.log(obj);
-
-            }
-
-            for (let button of buttons) {
-                button.addEventListener("click", buttonPressed);
-            }
-            console.log(document.getElementsByClassName("faved").length)
-        </script>
 
         
         
-        <div>These are my favorites!</div> {% endcomment %}
+        <div>These are my favorites!</div>
         <div>
 
         </div>
