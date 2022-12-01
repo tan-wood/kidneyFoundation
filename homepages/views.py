@@ -369,23 +369,29 @@ def LogFoodPageView(request) :
         )
         patient_logs_food_data.save()
 
+        # thought i would need this data but didn't
+        # searched_food_form_data = Food.objects.all()
+        # measurement_form_data = Measurement.objects.all()
+        # nutrient_form_data = Nutrient.objects.all()
+        # nutrient_in_food_form_data = Nutrient_In_Food.objects.all()
 
-        searched_food_form_data = Food.objects.all()
-        measurement_form_data = Measurement.objects.all()
-        nutrient_form_data = Nutrient.objects.all()
-        nutrient_in_food_form_data = Nutrient_In_Food.objects.all()
 
-
-        all_form_data = {
-            'food' : searched_food_form_data,
-            'measurement' : measurement_form_data,
-            'nutrient' : nutrient_form_data,
-            'nutrient_in_food' : nutrient_in_food_form_data
-        }
+        # all_form_data = {
+        #     'food' : searched_food_form_data,
+        #     'measurement' : measurement_form_data,
+        #     'nutrient' : nutrient_form_data,
+        #     'nutrient_in_food' : nutrient_in_food_form_data
+        # }
 
     return render (request, 'homepages/logfood.html', { "food_names": 
     food_names} )
 
 
+def PickFavoritesPageView(request):
 
+    context = {
+        'dummy' : 'data'
+    }
+
+    return render(request, 'homepages/pickfavorites.html', context)
 
