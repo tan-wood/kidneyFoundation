@@ -282,6 +282,7 @@ def LogFoodPageView(request) :
             'Sodium, Na',
             'Water',
             'Phosphorus, P',
+            'Sugars, total including NLEA',
         ]
 
         # get the name of the food they typed in and send it call the api with it!
@@ -323,7 +324,7 @@ def LogFoodPageView(request) :
         # load it up to be ready to save in the database if it's not found!
         if not food_found: 
             food_data = Food(
-                food_name = searched_food['description']
+                food_name = searched_food['description'],
             )
             # send it over to the database!
             food_data.save()
