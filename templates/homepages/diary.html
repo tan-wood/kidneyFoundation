@@ -50,7 +50,24 @@
 
                 <div>
                     {% for food in past_foods %}
-                    <p>{{ food.food.food_name }}</p>
+                    <section>
+                        <hr>
+                        <div style="display: grid; grid-template-columns: auto 1fr auto;">
+                            <h4 style="color: #00000060;">{{ food.food.food.food_name }}</h4>
+                            <div></div>
+                            <h4 style="color: #00000040;">{{ food.food.date_time }}</h4>
+                        </div>
+                        <div style="display: grid; grid-template-rows: auto auto auto auto auto auto;">
+                            {% for nutrient in food.nutrients %}
+                            <div style="background-color: red; min-height: 60px; min-width: 60px;">
+                                <div> {{ nutrient.name }} </div>
+                                <div> {{ nutrient.amount }} </div>
+                                <div> {{ nutrient.measurement }} </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <hr>
+                    </section>
                     {% endfor %}
                 </div>
             </section>

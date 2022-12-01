@@ -69,30 +69,29 @@ def DiaryPageView(request):
                     'nutrients' : []
                 }
                 # Nutrients
+                nutrient_list = []
                 for nutrient in nutrient_data:
-                   
-                    nutrient_list = []
                     if nutrient.food.food_name == food.food.food_name:
                         nutrient_object = {
-                            'name': '',
-                            'amount': 0,
-                            'measurement': ''
+                            'name': nutrient.nutrient.nutrient_name,
+                            'amount': nutrient.amount,
+                            'measurement': nutrient.measurement.description
                         }
-                        nutrient_object['name'] = nutrient.nutrient.nutrient_name
-                        nutrient_object['amount'] = nutrient.amount
-                        nutrient_object['measurement'] = nutrient.measurement.description
-
                         nutrient_list.append(nutrient_object)
 
                 food_object['nutrients'] = nutrient_list
-                print("Food object:")
+                print("food_object: ")
                 print(food_object)
 
                 if food.date_time.date() == datetime.today().date():
+                    print('TODAY \n')
                     print("Nutrients:")
                     print(food_object['nutrients'])
                     user_today_foods.append(food_object)
                 else:
+                    print('PAST \n')
+                    print("Nutrients:")
+                    print(food_object['nutrients'])
                     user_past_foods.append(food_object)
 
         context = {
