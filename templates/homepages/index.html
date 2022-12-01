@@ -29,8 +29,8 @@
                     {% for nutrient in nutrients %}
                     <div class="micronutrient-container">
                         <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name truncated">{{ nutrient.nutrient_name }}</h5>
+                        <h5 style="color: #4d2d0e60">420 / {{ nutrient.dailyAmount }} {{ nutrient.measurement }}</h5>
+                        <h5 class="nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
                     </div>
                     {% endfor %}
 
