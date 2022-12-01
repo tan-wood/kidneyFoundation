@@ -27,11 +27,13 @@
                         <p>Height: {{patientData.height}} inches</p>
                         <p>Email: {{patientData.email}}</p>
                         <p>Phone Number: {{patientData.phone}}</p>
-                        <p>Address 1: {{patientData.address1}}</p>
-                        <p>Address 2: {{patientData.address2}}</p>
-                        <p>City: {{patientData.city}}</p>
-                        <p>State: {{patientData.state}}</p>
-                        <p>Zip: {{patientData.zip}}</p>
+                        <p><b>Patient's Current Comorbilities</b></p>
+
+                        {% for condition in conditions %}
+                        <p>{{condition}}</p>
+                        {% empty %}
+                        <p>None</p>
+                        {% endfor %}
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;">
                         <a href="{% url 'account' method='editPatient'%}">
@@ -92,26 +94,6 @@
             
                     <label for="height">Height: </label>
                     <input type="text" name="height" id="height" value="{{patientData.height}}" />
-                    <br /><br />
-            
-                    <label for="address1">Address 1: </label>
-                    <input type="text" name="address1" id="address1" value="{{patientData.address1}}" />
-                    <br /><br />
-            
-                    <label for="address2">Address 2: </label>
-                    <input type="text" name="address2" id="address2" value="{{patientData.address2}}" />
-                    <br /><br />
-            
-                    <label for="city">City: </label>
-                    <input type="text" name="city" id="city" value="{{patientData.city}}" />
-                    <br /><br />
-            
-                    <label for="state">State: </label>
-                    <input type="text" name="state" id="state" value="{{patientData.state}}" />
-                    <br /><br />
-            
-                    <label for="zip">Zip: </label>
-                    <input type="text" name="zip" id="zip" value="{{patientData.zip}}" />
                     <br /><br />
             
                     <label for="email">Email: </label>

@@ -41,7 +41,9 @@
 
         {% if errors == ""%}
         {%else%}
-        <p>{{ errors }}</p>
+        {% for error in errors%}
+            <p style="color:red text-align:center">{{ error }}</p>
+        {% endfor %}
         {% endif %}
 
         <div>
@@ -83,30 +85,19 @@
                         <input type="number" name="age" id="age" required />
                     </div>
 
-                    <div class="form-input">
-                        <label for="address1">Address 1:</label>
-                        <input type="text" name="address1" id="address1" required />
+                    {% for condition in conditions%}
+                    <div class="switch-field">
+                        <p>Do you have {{condition.description}}</p>
+                        <label for="Yes">Yes</label>
+                        <input type="radio" name="{{condition.description}}" id="Yes" value = "Yes" />
+                        <label for="No">No</label>
+                        <input type="radio" name="{{condition.description}}" id="No" value = "No"/>
                     </div>
-
                     <div class="form-input">
-                        <label for="address2">Address 2:</label>
-                        <input type="text" name="address2" id="address2" />
+                        <label for="date_diagnosed_{{condition.description}}">Date Diagnosed: </label>
+                        <input type="date" name="date_diagnosed_{{condition.description}}" id="date_diagnosed_{{condition.description}}"  />
                     </div>
-
-                    <div class="form-input">
-                        <label for="city">City:</label>
-                        <input type="text" name="city" id="city" required />
-                    </div>
-
-                    <div class="form-input">
-                        <label for="state">State:</label>
-                        <input type="text" name="state" id="state" required />
-                    </div>
-
-                    <div class="form-input">
-                        <label for="zip">Zip:</label>
-                        <input type="text" name="zip" id="zip" required />
-                    </div>
+                    {% endfor %}
 
                     <div class="form-input">
                         <label for="username">User Name:</label>
