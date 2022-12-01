@@ -16,148 +16,138 @@
 </head>
 
 <body>
-    <section style="padding: 250px 0 0 0;">
+    <section style="padding: 50px 0 0 0;">
         <div style="display: grid; place-items: center; padding: 20px;">
             <h1 style="color: #ec995a">KidneyWatch</h1>
         </div>
 
         {% if display == "original"%}
-            <section style="display: grid; grid-template-rows: auto auto; gap: 20px;">
-                <div style="display: grid; place-items: center;">
-                    <a href="{% url 'login' method="login" %}">
-                        <button class="login-button">Sign In</button>
-                    </a>    
-                </div>
-                <div style="display: grid; place-items: center;">
-                    <a href="{% url 'login' method="create"%}">
-                        <button class="login-button" style="background-color: #ec995a; color: #ffffff;">
-                            Create an Account
-                        </button>
-                    </a>
-                    
-                </div>
-            </section>
+        <section style="display: grid; grid-template-rows: auto auto; gap: 20px;">
+            <div style="display: grid; place-items: center;">
+                <a href="{% url 'login' method='login' %}">
+                    <button class="login-button">Sign In</button>
+                </a>
+            </div>
+            <div style="display: grid; place-items: center;">
+                <a href="{% url 'login' method='create'%}">
+                    <button class="login-button" style="background-color: #ec995a; color: #ffffff;">
+                        Create an Account
+                    </button>
+                </a>
+
+            </div>
+        </section>
         {% elif display == "create"%}
 
-            {% if errors == ""%}
-            {%else%}
-                <p>{{ errors }}</p>
-            {% endif %}
+        {% if errors == ""%}
+        {%else%}
+        <p>{{ errors }}</p>
+        {% endif %}
 
-            <div class="container">
-                <div class="text-left">
-                <h2 class="section-heading text-uppercase">Sign Up</h2>
+        <div>
+            <form name="form" method="post" action="{%url 'login' method='form' %}">
+                {% csrf_token %}
+                <div class="form-input-list">
+                    <div class="form-input">
+                        <label for="first_name">First name:</label>
+                        <input type="text" name="first_name" id="first_name" autofocus required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="last_name">Last name:</label>
+                        <input type="text" name="last_name" id="last_name" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="phone">Phone:</label>
+                        <input type="text" name="phone" id="phone" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="weight">Weight:</label>
+                        <input type="number" name="weight" id="weight" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="height">Height:</label>
+                        <input type="number" name="height" id="height" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="age">Age:</label>
+                        <input type="number" name="age" id="age" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="address1">Address 1:</label>
+                        <input type="text" name="address1" id="address1" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="address2">Address 2:</label>
+                        <input type="text" name="address2" id="address2" />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="city">City:</label>
+                        <input type="text" name="city" id="city" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="state">State:</label>
+                        <input type="text" name="state" id="state" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="zip">Zip:</label>
+                        <input type="text" name="zip" id="zip" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="username">User Name:</label>
+                        <input type="text" name="username" id="username" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="password">Password:</label>
+                        <input type="text" name="password" id="password" required />
+                    </div>
                 </div>
-                <br />
-                <form name="form" method="post" action="{%url 'login' method="form" %}">
-                    {% csrf_token %} 
-                    <label for="first_name">First name:</label>
-                    <input
-                        type="text"
-                        name="first_name"
-                        id="first_name"
-                        autofocus
-                        required
-                    />
-                    <br /><br />
-                
-                    <label for="last_name">Last name:</label>
-                    <input
-                        type="text"
-                        name="last_name"
-                        id="last_name"
-                        required
-                    />
-                    <br /><br />
+                <div style="display: grid; place-items: center;">
+                    <button type="submit" class="login-submit-button">Create Account</button>
+                </div>
+            </form>
+        </div>
 
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email" required/>
-                    <br /><br />
-                
-                    <label for="phone">Phone:</label>
-                    <input type="text" name="phone" id="phone" required/>
-                    <br /><br />
-
-                    <label for="weight">Weight:</label>
-                    <input type="number" name="weight" id="weight" required/>
-                    <br /><br />
-
-                    <label for="height">Height:</label>
-                    <input type="number" name="height" id="height" required/>
-                    <br /><br />
-
-                    <label for="age">Age:</label>
-                    <input type="number" name="age" id="age" required/>
-                    <br /><br />
-
-                    <label for="address1">Address 1:</label>
-                    <input type="text" name="address1" id="address1" required/>
-                    <br /><br />
-
-                    <label for="address2">Address 2:</label>
-                    <input type="text" name="address2" id="address2"/>
-                    <br /><br />
-
-                    <label for="city">City:</label>
-                    <input type="text" name="city" id="city" required/>
-                    <br /><br />
-
-                    <label for="state">State:</label>
-                    <input type="text" name="state" id="state" required/>
-                    <br /><br />
-
-                    <label for="zip">Zip:</label>
-                    <input type="text" name="zip" id="zip" required/>
-                    <br /><br />
-                
-                    <label for="username">User Name:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        required
-                    />
-                    <br /><br />
-                
-                    <label for="password">Password:</label>
-                    <input
-                        type="text"
-                        name="password"
-                        id="password"
-                        required
-                    />
-                    <br /><br />
-                    <button type="submit">Create Account</button>
-                </form>
-            </div>
-        
         {% else %}
 
-            {% if errors == ""%}
-            {%else%}
-                <p>{{ errors }}</p>
-            {% endif %}
-            <form method="post" action="{% url 'login' method="loginform" %}">
-                {% csrf_token %}
-                <label for="username">User Name:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        required
-                    />
-                    <br /><br />
-                
+        {% if errors == ""%}
+        {%else%}
+        <p>{{ errors }}</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' method='loginform' %}">
+            {% csrf_token %}
+            <div style="display: grid; place-items: center;">
+                <div class="form-input">
+                    <label for="username">User Name:</label>
+                    <input type="text" name="username" id="username" required />
+                </div>
+
+                <div class="form-input">
                     <label for="password">Password:</label>
-                    <input
-                        type="text"
-                        name="password"
-                        id="password"
-                        required
-                    />
-                    <br /><br />
-                    <button type="submit">Sign In</button>
-            </form>
+                    <input type="text" name="password" id="password" hint="password" required />
+                </div>
+                <div style="padding-top: 60px;">
+                    <button type="submit" class="login-submit-button">Sign In</button>
+                </div>
+            </div>
+        </form>
         {% endif %}
     </section>
 
