@@ -1,43 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Food</title>
-</head>
-<body>
-    <form method="GET">
-        <input type='text' name = "name" placeholder = "Search...">
-        <button type='submit'>Search Food</button>
-    </form>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
+<section class="main-content">
+    <section style="border: 1px solid #00000010; padding: 30px; display: grid; grid-template-columns: 180px 1fr 180px;">
+        <div class="navbar-button">
+            <h4 style="margin: 0;">{{ formatted_date }}</h4>
+        </div>
+    </section>
+    <section style="padding: 10px 0 10px 30px;">
+        <div style="display: grid; place-items: start;">
+            <h4 style="font-size: 18px; padding: 26px 0 26px 0;">Log Food</h4>
+        </div>
 
-    <div style="background-color: beige">
-        <form method="POST">
-            {% csrf_token %}
-            <h5>Food Name</h5>
-                <select name="food_names_options" >
-                    <option style="display:none">Select From Search:</option>
-                    {% for food_name in food_names.values %}
-                        <option value="{{ food_name }}" placeholder="Select From Search"> {{ food_name }}</option>
-                    {% endfor %}
-                <select>
+        <div style="display: grid; place-items: start; padding-bottom: 50px;">
+            <form method="GET">
+                <div style="display: grid; grid-template-columns: auto auto; gap: 20px;">
+                    <input class="logfood_input" type='text' name="name" placeholder="Search...">
+                    <button type='submit' class="search-button">
+                        <h4>Search</h4>
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            <br>
-            <br>
+        {% if 'name' in request.GET %}
+        <div style="display: grid; place-items: start;">
+            <form method="POST">
+                {% csrf_token %}
+                <section style="display: grid; grid-template-rows: auto auto auto; gap: 30px;">
+                    <div style="display: grid; place-items: start;">
+                        <h5>Food Name</h5>
+                        <select name="food_names_options">
+                            <option style="display:none">Select From Search:</option>
+                            {% for food_name in food_names.values %}
+                            <option value="{{ food_name }}" placeholder="Select From Search"> {{ food_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-            <h5>Number of Servings</h5>
-            <input type="number" name = "numServings" placeholder="Number of Servings" required>
-            
+                    <div style="display: grid; place-items: start;">
+                        <h5>Number of Servings</h5>
+                        <input class="logfood_input" type="number" name="numServings" placeholder="Number of Servings"
+                            required>
+                    </div>
 
-            <h5> Date and Time </h5>
-            <input type="datetime-local" name = "dateTime" required>
-
-            <button type="submit">Log Food</button>
-        </form>
-    </div>
-    
-    
-</body>
-</html>
+                    <div style="display: grid; place-items: start;">
+                        <h5> Date and Time </h5>
+                        <input class="logfood_input" type="datetime-local" name="dateTime" required>
+                    </div>
+                </section>
+                <div style="padding: 50px 0 0 0;">
+                    <button type="submit" class="log-food-button">Log Food</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

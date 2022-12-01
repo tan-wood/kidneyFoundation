@@ -4,7 +4,7 @@ import requests
 from django.conf import settings
 import json
 from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement
-import datetime
+from datetime import datetime as dt
 
 loggedIn = False
 loggedInUsername = ""
@@ -16,7 +16,7 @@ def indexPageView(request):
         data = Nutrient_In_Food.objects.all()
         patientData = Patient.objects.get(id = loggedInPatientId)
         nutrientNames = Nutrient.objects.all()
-        current_date = datetime.datetime.now().date()
+        current_date = dt.now().date()
         formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
         context = {
@@ -85,7 +85,7 @@ def DiaryPageView(request):
 
                 food_object['nutrients'] = nutrient_list
 
-                if food.date_time.date() == datetime.today().date():
+                if food.date_time.date() == dt.today().date():
                     user_today_foods.append(food_object)
                 else:
                     user_past_foods.append(food_object)
@@ -236,6 +236,8 @@ def apiJSONView(request) :
 
 def LogFoodPageView(request) :
     food_names = {}
+    current_date = dt.now().date()
+    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
     if 'name' in request.GET:
         name = request.GET['name']
@@ -376,7 +378,7 @@ def LogFoodPageView(request) :
         # }
 
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names} )
+    food_names, "formatted_date": formatted_date} )
 
 
 def PickFavoritesPageView(request):
