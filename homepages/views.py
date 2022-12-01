@@ -253,38 +253,103 @@ def LogFoodPageView(request) :
     current_date = dt.now().date()
     formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
-    nutrientList = [
-        'Protein',
-        'Potassium, K',
-        'Carbohydrate, by difference',
-        'Sodium, Na',
-        'Water',
-        'Phosphorus, P',
-    ]
-
-
-    # maybe put in some logic for a blank search
     if 'name' in request.GET:
-        if request.GET['name'] != '' :
+        name = request.GET['name']
+        response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=8&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+        data = response.json()
+        searchedFoods = data['foods']
+ 
+        for idx, food in enumerate(searchedFoods) :
+            food_names['food_name' + str(idx+1)] = food['description']
+    
 
-            name = request.GET['name']
-            response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
-            data = response.json()
-            searched_food = data['foods'][0]
+    if request.method == "POST":
+        post_form_data = request.POST
+        print(post_form_data['food_names_options'])
+        print(post_form_data['numServings'])
+        print(post_form_data['dateTime'])
 
+        all_form_data = {}
+        searched_food = {}
+        searched_food_data = {}
+        food_nutrients = {}
+        food_found = False
+
+        nutrientList = [
+            'Protein',
+            'Potassium, K',
+            'Carbohydrate, by difference',
+            'Sodium, Na',
+            'Water',
+            'Phosphorus, P',
+        ]
+
+        # get the name of the food they typed in and send it call the api with it!
+        name = f"{post_form_data['food_names_options']}"
+        response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+        # turn it into json to be able to deal with the info we get
+        data = response.json()
+        # keep just the info about the specific FOOD and from only the FIRST one returned
+        searched_food = data['foods'][0]
+
+        # the database food table accessible to us in a for loop
+        food_table = Food.objects.all()
+        
+        # the database nutrient table accessible to us in list (if/in)
+        nutrient_table = []
+        for a_nutrient in Nutrient.objects.all() :
+            # print(a_nutrient)
+            nutrient_table.append(f'{a_nutrient}')
+
+        # the database nutrient_in_food table accessible to us in list (if/in)
+        nutrient_in_food_table = []
+        for a_nutrient_in_food in Nutrient_In_Food.objects.all() :
+            # print(a_nutrient_in_food)
+            nutrient_in_food_table.append(f'{a_nutrient_in_food}')
+
+        # the database measurement table accessible to us in list (if/in)
+        measurement_table = []
+        for a_measurement in Measurement.objects.all() :
+            # print(a_measurement)
+            measurement_table.append(f'{a_measurement}')
+
+
+        # checking the database for the inputed food
+        food_found = False
+        for a_food in food_table :
+            if searched_food['description'] == a_food.food_name :
+                food_found = True
+
+        # load it up to be ready to save in the database if it's not found!
+        if not food_found: 
+            food_data = Food(
+                food_name = searched_food['description']
+            )
+            # send it over to the database!
+            food_data.save()
             
-            
-            # food_nutrients = searched_food['foodNutrients'][0]
-            for nutrient in searched_food['foodNutrients'] :
+
+        # get all the nutrients from the searched foods and check if it's 
+        # nutrients that we care about
+        for nutrient in searched_food['foodNutrients'] :
+            if nutrient['nutrientName'] in nutrientList:
                 food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+                # if they are not already in the database, load it up and send it over!
 
-                if nutrient['nutrientName'] in nutrientList :
+                if not nutrient['unitName'] in measurement_table:
+                    measurement_data = Measurement(
+                        description = nutrient['unitName'],
+                    )
+                    measurement_data.save()
+                    # adding the new things to our list - may be unneccessary...
+                    measurement_table.append(nutrient['unitName'])
+
+                if not nutrient['nutrientName'] in nutrient_table:
                     nutrient_data = Nutrient(
                         # this will have some logic to decide if macro or micro
                         # alsooo it doesn't like it?
                         nutrient_name = nutrient['nutrientName'],
                     )
-
                     nutrient_data.save()
                     # adding the new things to our list - may be unneccessary...
                     nutrient_table.append(nutrient['nutrientName'])
@@ -327,7 +392,8 @@ def LogFoodPageView(request) :
         # }
 
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names, "formatted_date": formatted_date} )
+    food_names, "formatted_date" : formatted_date} )
+
 
 
 def PickFavoritesPageView(request):
