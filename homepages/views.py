@@ -389,9 +389,9 @@ def LogFoodPageView(request) :
 
 def PickFavoritesPageView(request):
 
+
     context = {
         'dummy' : 'data'
     }
 
     return render(request, 'homepages/pickfavorites.html', context)
-

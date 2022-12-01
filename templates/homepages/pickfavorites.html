@@ -26,29 +26,69 @@
                 color: white;
             }
         </style>
-        <div id="one" class="notfaved" onClick="buttonPressed"> Sup Homie </div>
-        <div id="two" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="three" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="four" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="five" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="six" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+        <div id="one" class="notfaved"> Strawberries </div>
+        <div id="two" class="notfaved"> Blueberries </div>
+        <div id="three" class="notfaved"> Oranges </div>
+        <div id="four" class="notfaved"> Grapes </div>
+        <div id="five" class="notfaved"> Cookies </div>
+        <div id="six" class="notfaved"> Bananas </div>
         <script>
             const buttons = document.getElementsByClassName("notfaved");
+            const obj = {}
+
+            function sendData() {
+                
+                $.ajax({
+                    type: "GET",
+                    url: '/my_def_in_view',
+                    data: {
+                        "result": result,
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        // any process in data
+                        alert("successfull")
+                    },
+                    failure: function () {
+                        alert("failure");
+                    }
+                });
+            }
 
             const buttonPressed = e => {
-                console.log(e.target.id);  // Get ID of Clicked Element
+                
+                if (Object.keys(obj).length > 2) {
+                    console.log('Hello')
+
+                
+                }
+                else {
+                    console.log(e.target.id);  // Get ID of Clicked Element
+                    console.log(obj)
+                    obj[e.target.id] = document.getElementById(`${e.target.id}`).innerHTML
+
+
+                    document.getElementById(`${e.target.id}`).className = "faved";
+
+                }
+
+                console.log(obj);
+
             }
 
             for (let button of buttons) {
                 button.addEventListener("click", buttonPressed);
             }
-
-            function testFunction() {
-                document.getElementById(`${}`).className="faved";
-            }
-
-            console.log(document.getElementsByClassName("faved"))
+            console.log(document.getElementsByClassName("faved").length)
         </script>
+
+        
+        
+        <div>These are my favorites!</div>
+        <div>
+
+        </div>
+        
 
     
     </section>
