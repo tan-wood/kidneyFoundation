@@ -1,0 +1,59 @@
+{% load static %}{%block content%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidneyWatch</title>
+    <link href="{% static 'css/landing.css' %}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <section style="padding: 50px 0 0 0;">
+        <div style="display: grid; place-items: center; padding: 20px;">
+            <h1 style="color: #ec995a">KidneyWatch</h1>
+        </div>
+        <style>
+            .faved {
+                background-color: black;
+                color: white;
+            }
+        </style>
+        <div id="one" class="notfaved" onClick="buttonPressed"> Sup Homie </div>
+        <div id="two" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+        <div id="three" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+        <div id="four" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+        <div id="five" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+        <div id="six" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+        <script>
+            const buttons = document.getElementsByClassName("notfaved");
+
+            const buttonPressed = e => {
+                console.log(e.target.id);  // Get ID of Clicked Element
+            }
+
+            for (let button of buttons) {
+                button.addEventListener("click", buttonPressed);
+            }
+
+            function testFunction() {
+                document.getElementById(`${}`).className="faved";
+            }
+
+            console.log(document.getElementsByClassName("faved"))
+        </script>
+
+    
+    </section>
+
+</body>
+
+</html>
+{% endblock %}

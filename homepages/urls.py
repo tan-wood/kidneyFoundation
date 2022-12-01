@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import indexPageView, SignOutPageView, LandingPageView, LoginPageView, AboutPageView, apiPageView, apiJSONView, AlertsPageView, DiaryPageView, AccountPageView
+from .views import indexPageView, SignOutPageView, LandingPageView, LoginPageView, AboutPageView, LogFoodPageView, apiJSONView, AlertsPageView, DiaryPageView, AccountPageView, PickFavoritesPageView
 
 urlpatterns = [
     path("home/", indexPageView, name="home"),
@@ -7,8 +7,9 @@ urlpatterns = [
     path("diary/", DiaryPageView, name="diary"),
     path("account/<str:method>/", AccountPageView, name="account"),
     path("login/<str:method>/", LoginPageView, name="login"),
+    path("nextsteps/", PickFavoritesPageView, name="pickfavorites"),
     path("about/", AboutPageView, name="about"),
-    path("apitest/", apiPageView, name="apitest" ),
+    path("logfood/", LogFoodPageView, name="logfood" ),
     path("apiJSON/", apiJSONView, name="apiJSON" ),
     path("landing/", LandingPageView, name="landing"),
     path("signout/", SignOutPageView, name="signout" ),
