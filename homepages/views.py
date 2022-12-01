@@ -3,8 +3,8 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement
-import datetime
+from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition
+from datetime import datetime as dt
 
 loggedIn = False
 loggedInUsername = ""
@@ -16,7 +16,7 @@ def indexPageView(request):
         data = Nutrient_In_Food.objects.all()
         patientData = Patient.objects.get(id = loggedInPatientId)
         nutrientNames = Nutrient.objects.all()
-        current_date = datetime.datetime.now().date()
+        current_date = dt.now().date()
         formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
         context = {
@@ -72,28 +72,20 @@ def DiaryPageView(request):
                     'nutrients' : []
                 }
                 # Nutrients
+                nutrient_list = []
+                num_servings = food.quantity
                 for nutrient in nutrient_data:
-                   
-                    nutrient_list = []
                     if nutrient.food.food_name == food.food.food_name:
                         nutrient_object = {
-                            'name': '',
-                            'amount': 0,
-                            'measurement': ''
+                            'name': nutrient.nutrient.nutrient_name,
+                            'amount': round(nutrient.amount * num_servings, 2),
+                            'measurement': nutrient.measurement.description
                         }
-                        nutrient_object['name'] = nutrient.nutrient.nutrient_name
-                        nutrient_object['amount'] = nutrient.amount
-                        nutrient_object['measurement'] = nutrient.measurement.description
-
                         nutrient_list.append(nutrient_object)
 
                 food_object['nutrients'] = nutrient_list
-                print("Food object:")
-                print(food_object)
 
-                if food.date_time.date() == datetime.today().date():
-                    print("Nutrients:")
-                    print(food_object['nutrients'])
+                if food.date_time.date() == dt.today().date():
                     user_today_foods.append(food_object)
                 else:
                     user_past_foods.append(food_object)
@@ -234,16 +226,32 @@ def LoginPageView(request, method):
         return render(request, 'homepages/login.html', context)
 
 def AboutPageView(request):
-    return render(request, 'homepages/about.html')
+    data = Patient_Condition.objects.all()
+    user_condition = []
+    for condtion in data:
+        if condtion.patient.username == loggedInUsername:
+            user_condition.append(data)
+   
+    context = {
+            "condtions": user_condition
+        }
 
-# this is so I can see what is being returned to visualize how to deal with it in the below code
+    return render(request, 'homepages/about.html', context)
+# def apiPageView(request) :
+#     response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key={settings.API_KEY}&query=Cheddar%20Cheese').json()
+#     print(response)
+#     return render(request,'homepages/apitest.html',{'response':response})
+
+
 def apiJSONView(request) :
-    response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=banana&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
+    response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
     return JsonResponse(response)
 
 
 def LogFoodPageView(request) :
     food_names = {}
+    current_date = dt.now().date()
+    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
     if 'name' in request.GET:
         name = request.GET['name']
@@ -384,7 +392,8 @@ def LogFoodPageView(request) :
         # }
 
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names} )
+    food_names, "formatted_date" : formatted_date} )
+
 
 
 def PickFavoritesPageView(request):
