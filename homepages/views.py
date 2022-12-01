@@ -12,6 +12,7 @@ loggedInPatientId = None
 
 def indexPageView(request):
     global loggedInPatientId
+    global loggedInUsername
 
     """
     # Recommended Daily Amounts:
@@ -34,8 +35,6 @@ def indexPageView(request):
 
         loggedFoods = Patient_Logs_Food.objects.all()
         nutrients = []
-        current_date = dt.now().date()
-        formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
         currentProteinAmount = 0
         currentPotassiumAmount = 0
@@ -112,7 +111,6 @@ def indexPageView(request):
             'data' : allNutrientInFoodData,
             'patientData' : patientData,
             'nutrients' : nutrients,
-            'formatted_date' : formatted_date
         }
 
     if loggedIn:
@@ -129,8 +127,6 @@ def SignOutPageView(request):
 
 def AlertsPageView(request):
     global loggedInUsername
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     
     if loggedIn:
         data = Alert.objects.all()
@@ -141,7 +137,6 @@ def AlertsPageView(request):
         
         context = {
             "alerts": user_alerts,
-            "formatted_date" : formatted_date
         }
 
         return render(request,'homepages/alerts.html', context)
@@ -150,8 +145,6 @@ def AlertsPageView(request):
     
 
 def DiaryPageView(request):
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
     if loggedIn:
         food_data = Patient_Logs_Food.objects.all()
@@ -188,7 +181,6 @@ def DiaryPageView(request):
         context = {
             "today_foods" : user_today_foods,
             "past_foods" : user_past_foods,
-            "formatted_date" : formatted_date
         }
 
         return render(request,'homepages/diary.html', context)
@@ -196,8 +188,6 @@ def DiaryPageView(request):
         return LandingPageView(request)
 
 def AccountPageView(request, method):
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     
     if loggedInPatientId != None:
         if request.method == 'POST' and method == "editPatientForm":
@@ -260,7 +250,6 @@ def AccountPageView(request, method):
                     'patientData' : patientData,
                     'display': "homeAccount",
                     'conditions' : loggedInPatientConditions,
-                    'formatted_date' : formatted_date,
                     'date': loggedInPatientDate
                 }
             elif method == "editPatient":
@@ -268,7 +257,6 @@ def AccountPageView(request, method):
                     'patientData' : patientData,
                     'display': "editPatient",
                     'conditions' : loggedInPatientConditions,
-                    'formatted_date' : formatted_date,
                     'date': loggedInPatientDate
                 }
             else:
@@ -276,7 +264,6 @@ def AccountPageView(request, method):
                     'patientData' : patientData,
                     'display': "changeLoginInfo",
                     'conditions' : loggedInPatientConditions,
-                    'formatted_date' : formatted_date,
                     'date': loggedInPatientDate
                 }
     if loggedIn:
@@ -583,7 +570,7 @@ def LogFoodPageView(request) :
         # }
 
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names, "formatted_date" : formatted_date} )
+    food_names} )
 
 
 
@@ -595,3 +582,6 @@ def PickFavoritesPageView(request):
 
     return render(request, 'homepages/pickfavorites.html', context)
 
+def getUsername():
+    global loggedInUsername
+    return loggedInUsername
