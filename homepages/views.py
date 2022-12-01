@@ -358,7 +358,7 @@ def apiPageView(request) :
 
         patient_logs_food_data = Patient_Logs_Food(
             food = Food.objects.get(food_name= searched_food['description']),
-            patient = Patient.objects.get(first_name= 'NEPHI'),
+            patient = Patient.objects.get(username= loggedInUsername),
             measurement = Measurement.objects.get(description= "Servings"),
             quantity = post_form_data['numServings'],
             date_time = post_form_data['dateTime'],
