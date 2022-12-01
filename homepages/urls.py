@@ -13,5 +13,5 @@ urlpatterns = [
     path("apiJSON/", apiJSONView, name="apiJSON" ),
     path("landing/", LandingPageView, name="landing"),
     path("signout/", SignOutPageView, name="signout" ),
-    path("", LandingPageView, name="index")    
+    path("", LandingPageView, name="index"),
 ]

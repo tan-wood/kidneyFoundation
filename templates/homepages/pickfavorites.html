@@ -21,34 +21,204 @@
             <h1 style="color: #ec995a">KidneyWatch</h1>
         </div>
         <style>
-            .faved {
-                background-color: black;
+            ul {
+                list-style-type: none;
+              }
+              
+              li {
+                display: inline-block;
+              }
+              
+              input[type="checkbox"][id^="option"] {
+                display: none;
+              }
+              
+              label {
+                border: 1px solid #fff;
+                padding: 10px;
+                display: block;
+                position: relative;
+                margin: 10px;
+                cursor: pointer;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+              }
+              
+              label::before {
+                background-color: white;
                 color: white;
-            }
+                content: " ";
+                display: block;
+                border-radius: 50%;
+                border: 1px solid grey;
+                position: absolute;
+                top: -5px;
+                left: -5px;
+                width: 25px;
+                height: 25px;
+                text-align: center;
+                line-height: 28px;
+                transition-duration: 0.4s;
+                transform: scale(0);
+              }
+              
+              label img {
+                height: 100px;
+                width: 100px;
+                transition-duration: 0.2s;
+                transform-origin: 50% 50%;
+              }
+              
+              :checked+label {
+                border-color: #ddd;
+              }
+              
+              :checked+label::before {
+                content: "✓";
+                background-color: grey;
+                transform: scale(1);
+              }
+              
+              :checked+label img {
+                transform: scale(0.9);
+                box-shadow: 0 0 5px #333;
+                z-index: -1;
+              }
         </style>
-        <div id="one" class="notfaved" onClick="buttonPressed"> Sup Homie </div>
-        <div id="two" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="three" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="four" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="five" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="six" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <li><input class="checkboxes" type="checkbox" value="Option1" id="option1" name="foods"  onClick="change()" required/>
+                <label for="option1"><img src="https://picsum.photos/seed/1/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option2" id="option2" name="foods" onClick="change()" required/>
+                <label for="option2"><img src="https://picsum.photos/seed/2/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option3" id="option3" name="foods" onClick="change()" required/>
+                <label for="option3"><img src="https://picsum.photos/seed/3/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option4" id="option4" name="foods" onClick="change()" required/>
+                <label for="option4"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option5" id="option5" name="foods" onClick="change()" required/>
+                <label for="option5"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option6" id="option6" name="foods"  onClick="change()" required/>
+                <label for="option6"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option7" id="option7" name="foods"  onClick="change()" required/>
+                <label for="option7"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option8" id="option8" name="foods"  onClick="change()" required/>
+                <label for="option8"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option9" id="option9" name="foods"  onClick="change()" required/>
+                <label for="option9"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option10" id="option10" name="foods"  onClick="change()" required/>
+                <label for="option10"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option11" id="option11" name="foods"  onClick="change()" required/>
+                <label for="option11"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option12" id="option12" name="foods"  onClick="change()" required/>
+                <label for="option12"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option13" id="option13" name="foods"  onClick="change()" required/>
+                <label for="option13"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option14" id="option14" name="foods"  onClick="change()" required/>
+                <label for="option14"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option15" id="option15" name="foods"  onClick="change()" required/>
+                <label for="option15"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+            <li><input class="checkboxes" type="checkbox" value="Option16" id="option16" name="foods"  onClick="change()" required/>
+                <label for="option16"><img src="https://picsum.photos/seed/4/100" /></label>
+            </li>
+
+            <button type="submit">Submit</button>
+          </form>
+
+
         <script>
-            const buttons = document.getElementsByClassName("notfaved");
+            const buttons = document.getElementsByClassName("checkboxes");
 
             const buttonPressed = e => {
-                console.log(e.target.id);  // Get ID of Clicked Element
+                document.getElementById(`${e.target.id}`).className = "checkedbox";
             }
 
             for (let button of buttons) {
                 button.addEventListener("click", buttonPressed);
             }
 
-            function testFunction() {
-                document.getElementById(`${}`).className="faved";
-            }
+            function change() {
+                if (document.getElementsByClassName("checkedbox").length > 3) {
+                    const inputs = document.querySelectorAll('.checkboxes');
 
-            console.log(document.getElementsByClassName("faved"))
+                    for (const input of inputs) {
+
+                        input.removeAttribute('required');
+                    }
+                      
+                }
+
+                console.log(document.getElementsByClassName("checkedbox").length)
+            }
         </script>
+
+
+
+        {% if results %}
+        <div> {{results}} </div>
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {% comment %} <style>
+            .faved {
+                background-color: black;
+                color: white;
+            }
+        </style>
+        <div id="one" class="notfaved"> Strawberries </div>
+        <div id="two" class="notfaved"> Blueberries </div>
+        <div id="three" class="notfaved"> Oranges </div>
+        <div id="four" class="notfaved"> Grapes </div>
+        <div id="five" class="notfaved"> Cookies </div>
+        <div id="six" class="notfaved"> Bananas </div> {% endcomment %}
+        
+
+
+        
+        
+        <div>These are my favorites!</div>
+        <div>
+
+        </div>
+        
 
     
     </section>
