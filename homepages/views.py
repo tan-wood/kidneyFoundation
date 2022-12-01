@@ -310,7 +310,7 @@ def AboutPageView(request):
 
 
 def apiJSONView(request) :
-    response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
+    response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=burger&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
     return JsonResponse(response)
 
 
@@ -464,10 +464,16 @@ def LogFoodPageView(request) :
 
 
 def PickFavoritesPageView(request):
+    results = ""
+
+    if request.method == 'POST':
+        favfoods = request.POST.getlist('foods')
+        print(favfoods)
 
 
     context = {
-        'dummy' : 'data'
+        'results' : results
     }
+    
 
     return render(request, 'homepages/pickfavorites.html', context)
