@@ -85,7 +85,7 @@
                         <input type="number" name="age" id="age" required />
                     </div>
 
-                    {% for condition in conditions%}
+                    {% for condition in condition_data%}
                     <div class="switch-field">
                         <p>Do you have {{condition.description}}</p>
                         <label for="Yes">Yes</label>
@@ -112,7 +112,13 @@
                 <div style="display: grid; place-items: center;">
                     <button type="submit" class="login-submit-button">Create Account</button>
                 </div>
-            </form>
+                
+            </form><br>
+            <div style="display: grid; place-items: center;">
+                <a href="{% url 'login' method='login' %}">
+                    <button class="login-button">Already Have An Account? Login!</button>
+                </a>
+            </div>
         </div>
 
         {% else %}
@@ -138,7 +144,15 @@
                     <button type="submit" class="login-submit-button">Sign In</button>
                 </div>
             </div>
-        </form>
+        </form><br>
+        <div style="display: grid; place-items: center;">
+            <a href="{% url 'login' method='create'%}">
+                <button class="login-button" style="background-color: #ec995a; color: #ffffff;">
+                    Don't Have An Account? Sign Up!
+                </button>
+            </a>
+
+        </div>
         {% endif %}
     </section>
 
