@@ -29,11 +29,19 @@
                 </a>
         </div>
             <div style="text-align: right;">
-                <a href='{% url "login" method="landing" %}' style="text-decoration: none;">
-                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
-                        <h4>Login</h4>
-                    </div>
-                </a>
+                {% if signedIn %}
+                    <a href="{% url 'signout' %}" style="text-decoration: none;">
+                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                            <h4>Sign Out</h4>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
+                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                            <h4>Login</h4>
+                        </div>
+                    </a>
+                {% endif %}
             </div>
         </section>
 
@@ -76,19 +84,24 @@
         </div>
  
 
-        {%if 'High Blood Pressure' in conditions %}
+        {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
             <h2> High Blood Pressure
             </h2>
         </div>
-        {% elif 'Diabetes' in conditions%}
+        {% elif "Diabetes" in conditions and "High Blood Pressure" not in conditions %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
             <h2> Diabetes
             </h2>
         </div>
-        {% else%}
+        {% elif "Diabetes" in conditions and "High Blood Pressure" in conditions %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
             <h2> Diabetes and High Blood Pressure
+            </h2>
+        </div>
+        {% else %}
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> No Conditions
             </h2>
         </div>
         {%endif%}

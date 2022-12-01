@@ -210,11 +210,6 @@ def LoginPageView(request, method):
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
             patient.height = request.POST['height']
-            patient.address1 = request.POST['address1']
-            patient.address2 = request.POST['address2']
-            patient.city = request.POST['city']
-            patient.state = request.POST['state']
-            patient.zip = request.POST['zip']
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
@@ -292,14 +287,23 @@ def LoginPageView(request, method):
         return render(request, 'homepages/login.html', context)
 
 def AboutPageView(request):
-    data = Patient_Condition.objects.all()
-    user_condition = []
-    for condtion in data:
-        if condtion.patient.username == loggedInUsername:
-            user_condition.append(data)
-   
-    context = {
-            "condtions": user_condition
+    global loggedIn
+    patientConditions = Patient_Condition.objects.all()
+    loggedInPatientConditions = []
+
+    for patient in patientConditions:
+        if patient.patient_id == loggedInPatientId:
+            condition_obj = Condition.objects.get(id = patient.condition_id)
+            loggedInPatientConditions.append(condition_obj.description)
+
+    if not loggedIn:
+        context = {
+            "signedIn": False
+        }
+    else:
+        context = {
+            "signedIn": True,
+            "conditions": loggedInPatientConditions,
         }
 
     return render(request, 'homepages/about.html', context)
