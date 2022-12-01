@@ -25,6 +25,26 @@ a {
     color: #000000;
 }
 
+.truncated {
+    display: block;
+    white-space: nowrap;
+    /* forces text to single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main-content {
+    background-color: #eeeeee;
+    display: grid;
+    grid-template-rows: 100px 1fr;
+}
+
+.welcome-text {
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+}
+
 .sidebar-button {
     min-height: 60px;
     display: grid;
@@ -82,6 +102,11 @@ a {
     gap: 10px;
 }
 
+.big-box-diary {
+    grid-template-rows: auto auto auto;
+    gap: 18px;
+}
+
 .micronutrient-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -105,6 +130,12 @@ a {
     color: #4d2d0e60;
 }
 
+.white {
+    color: #ffffff;
+    /* color: #4d2d0e96; */
+    box-shadow: 0 0 25px #00000030;
+}
+
 .suggestion-grid {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr;
@@ -115,6 +146,26 @@ a {
     background-color: #eaeaea;
     border-radius: 18px;
     min-height: 100px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+    /* box-shadow: 0 5px 15px #0000020; */
+}
+
+.dash-diet-container {
+    background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.01), rgba(61, 61, 61, 0.75)),
+    url('../img/Dash-Diet.png');
+    /* background-image: url("../img/Dash-Diet.png"); */
+    background-color: #eaeaea;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 18px;
+    min-height: 100px;
+    /* box-shadow: 0 5 15px #0000020; */
 
     display: grid;
     grid-template-rows: 1fr auto auto;
@@ -149,4 +200,26 @@ a {
 
 .alert-container:hover {
     background-color: #00000010;
+}
+
+.account-button {
+    min-height: 50px;
+    border-radius: 6px;
+
+    display: grid;
+    place-items: center;
+
+    background-color: #eeeeee;
+    color: #000000;
+}
+
+.red {
+    background-color: #f2e4e4;
+    color: #ab6a6a;
+}
+
+.diary-section {
+    background-color: #eeeeee;
+    border-radius: 25px;
+    padding: 18px;
 }

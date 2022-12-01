@@ -3,7 +3,8 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food
+from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food
+from datetime import datetime
 
 loggedIn = False
 loggedInUsername = ""
@@ -14,10 +15,12 @@ def indexPageView(request):
     if loggedInPatientId != None:
         data = Nutrient_In_Food.objects.all()
         patientData = Patient.objects.get(id = loggedInPatientId)
+        nutrientNames = Nutrient.objects.all()
 
         context = {
             'data':data,
             'patientData' : patientData,
+            'nutrients' : nutrientNames
         }
 
     if loggedIn:
@@ -53,7 +56,51 @@ def AlertsPageView(request):
 
 def DiaryPageView(request):
     if loggedIn:
-        return render(request,'homepages/diary.html')
+        food_data = Patient_Logs_Food.objects.all()
+        nutrient_data = Nutrient_In_Food.objects.all()
+
+        user_today_foods = []
+        user_past_foods = []
+
+        for food in food_data:
+            if food.patient.username == loggedInUsername:
+                food_object = {
+                    'food': food,
+                    'nutrients' : []
+                }
+                # Nutrients
+                for nutrient in nutrient_data:
+                   
+                    nutrient_list = []
+                    if nutrient.food.food_name == food.food.food_name:
+                        nutrient_object = {
+                            'name': '',
+                            'amount': 0,
+                            'measurement': ''
+                        }
+                        nutrient_object['name'] = nutrient.nutrient.nutrient_name
+                        nutrient_object['amount'] = nutrient.amount
+                        nutrient_object['measurement'] = nutrient.measurement.description
+
+                        nutrient_list.append(nutrient_object)
+
+                food_object['nutrients'] = nutrient_list
+                print("Food object:")
+                print(food_object)
+
+                if food.date_time.date() == datetime.today().date():
+                    print("Nutrients:")
+                    print(food_object['nutrients'])
+                    user_today_foods.append(food_object)
+                else:
+                    user_past_foods.append(food_object)
+
+        context = {
+            "today_foods" : user_today_foods,
+            "past_foods" : user_past_foods
+        }
+
+        return render(request,'homepages/diary.html', context)
     else:
         return LandingPageView(request)
 

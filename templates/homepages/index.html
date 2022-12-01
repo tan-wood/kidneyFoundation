@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<section style="background-color: #eeeeee; display: grid; grid-template-rows: 12vh 1fr;">
+<section class="main-content">
     <section style="border: 1px solid #00000010; padding: 30px; display: grid; grid-template-columns: 180px 1fr 180px;">
         <div class="navbar-button">
             <h4 style="margin: 0;">Nov 30, 2022</h4>
         </div>
         <div>
-            <h1 style="text-align:center">Welcome, {{patientData.first_name}}</h1>
+            <h1 class="welcome-text">Welcome, {{patientData.first_name}}</h1>
         </div>
         <div class="navbar-button log-food" style="color: #00000070;">
             <h4 style="margin: 0; font-size: 14px;">Log Food</h4>
@@ -24,53 +24,13 @@
                 </div>
                 <div class="micronutrient-grid">
                     <!-- For nutrient in nutrient-list -->
+                    {% for nutrient in nutrients %}
                     <div class="micronutrient-container">
                         <div></div>
                         <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
+                        <h5 class="nutrient-name truncated">{{ nutrient.nutrient_name }}</h5>
                     </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
-
-                    <div class="micronutrient-container">
-                        <div></div>
-                        <h5 style="color: #4d2d0e60">420 / 500 mg</h5>
-                        <h5 class="nutrient-name">Calcium</h5>
-                    </div>
+                    {% endfor %}
 
                 </div>
             </div>
@@ -88,20 +48,11 @@
                         <h5 style="color: #0e4d0f60">High in Protein</h5>
                         <h5 class="nutrient-name">Chicken Parmesan</h5>
                     </div>
-                    <div class="suggestion-container">
+
+                    <div class="dash-diet-container">
                         <div></div>
-                        <h5 style="color: #0e4d0f60">High in Protein</h5>
-                        <h5 class="nutrient-name">Chicken Parmesan</h5>
-                    </div>
-                    <div class="suggestion-container">
-                        <div></div>
-                        <h5 style="color: #0e4d0f60">High in Protein</h5>
-                        <h5 class="nutrient-name">Chicken Parmesan</h5>
-                    </div>
-                    <div class="suggestion-container">
-                        <div></div>
-                        <h5 style="color: #0e4d0f60">High in Protein</h5>
-                        <h5 class="nutrient-name">Chicken Parmesan</h5>
+                        <h5 style="color: #ffffff">High in Protein</h5>
+                        <h5 class="nutrient-name white">Dash Diet</h5>
                     </div>
 
                 </div>
