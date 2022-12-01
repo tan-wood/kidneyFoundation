@@ -576,7 +576,23 @@ def LogFoodPageView(request) :
 
 
 def PickFavoritesPageView(request):
-    results = ""
+    food_list = [
+        'Fruit juice blend, 100% juice', #1,1
+        'Blueberries, raw', #1,2
+        'Apple, raw', #1,3
+        'Banana nectar', #1,4
+        'Cake, sponge', #1,5
+        'Blueberries, dried', #1,6
+        'Blueberries, dried', #1,7
+        'Blueberries, dried', #1,8
+        'Blueberries, dried', #1,9
+        'Blueberries, dried',
+        'Blueberries, dried',
+        'Blueberries, dried',
+        'Blueberries, dried',
+        'Blueberries, dried',
+        'Blueberries, dried'
+    ]
 
     if request.method == 'POST':
         favfoods = request.POST.getlist('foods')
@@ -607,6 +623,12 @@ def PickFavoritesPageView(request):
                 # send it over to the database!
                 food_data.save()
 
+            # duplication prevention
+            # patient_favorite_food_table = []
+            # for a_patient_favorite_food in Patient_Favorite_Food.objects.all() :
+            #     print(a_patient_favorite_food)
+            #     patient_favorite_food_table.append(f'{a_patient_favorite_food}')
+
             patient_favorite_food_data = Patient_Favorite_Food(
                 patient = Patient.objects.get(username= loggedInUsername),
                 food = Food.objects.get(food_name= clicked_food['description']),
@@ -614,19 +636,10 @@ def PickFavoritesPageView(request):
             )
 
             patient_favorite_food_data.save()
-            # adding the new things to our list - may be unneccessary...
-
-        
-
-            
-            
-
-        # get the name of the food they typed in and send it call the api with it!
-        # name = f"{post_form_data['food_names_options']}"
 
 
     context = {
-        'results' : results
+        'food_list' : food_list
     }
     
 
