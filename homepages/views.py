@@ -37,10 +37,6 @@ def indexPageView(request):
         current_date = dt.now().date()
         formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
-        # Current Amounts
-        user_today_foods = []
-        user_past_foods = []
-
         currentProteinAmount = 0
         currentPotassiumAmount = 0
         currentCarbAmount = 0
@@ -51,16 +47,24 @@ def indexPageView(request):
 
         for food in loggedFoods:
             if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+                # The foods here will be from the right user and will be today
                 num_servings = food.quantity
                 for nutrient in allNutrientInFoodData:
                     if nutrient.food.food_name == food.food.food_name:
-                        nutrient_object = {
-                            'name': nutrient.nutrient.nutrient_name,
-                            'amount': round(nutrient.amount * num_servings, 2),
-                            'measurement': nutrient.measurement.description
-                        }
-
-                
+                        if nutrient.nutrient.nutrient_name == "Protein":
+                            currentProteinAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Potassium, K":
+                            currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
+                            currentCarbAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sodium, NA":
+                            currentSodiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Water":
+                            currentWaterAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Phosphorus, P":
+                            currentPhosphorusAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sugars, total including NLEA":
+                            currentSugarAmount += round(nutrient.amount * num_servings, 2)
 
         # Recommended Amounts
         patientKG = patientData.weight * 0.453592
@@ -68,36 +72,44 @@ def indexPageView(request):
 
         for nutrient in nutrientData:
             if nutrient.nutrient_name == "Protein":
-                recommendedAmount = proteinAmount
+                currentAmount = round(currentProteinAmount, 2)
+                recommendedAmount = round(proteinAmount, 0)
                 recMeasurement = "G"
             elif nutrient.nutrient_name == "Potassium, K":
+                currentAmount = round(currentPotassiumAmount, 2)
                 recommendedAmount = 3000
                 recMeasurement = "MG"
             elif nutrient.nutrient_name == "Carbohydrate, by difference":
+                currentAmount = round(currentCarbAmount, 2)
                 recommendedAmount = 250
                 recMeasurement = "G"
             elif nutrient.nutrient_name == "Sodium, NA":
+                currentAmount = round(currentSodiumAmount, 2)
                 recommendedAmount = 2300
                 recMeasurement = "MG"
             elif nutrient.nutrient_name == "Water":
+                currentAmount = round(currentWaterAmount, 2)
                 recommendedAmount = 3700
                 recMeasurement = "MG"
             elif nutrient.nutrient_name == "Phosphorus, P":
+                currentAmount = round(currentPhosphorusAmount, 2)
                 recommendedAmount = 1500
                 recMeasurement = "MG"
             elif nutrient.nutrient_name == "Sugars, total including NLEA":
+                currentAmount = round(currentSugarAmount, 2)
                 recommendedAmount = 30
                 recMeasurement = "G"
             # Each nutrient needs a new object
             nutrient_object = {
                 'nutrient' : nutrient,
+                'currentAmount' : currentAmount,
                 'dailyAmount' : recommendedAmount,
                 'measurement' : recMeasurement
             }
             nutrients.append(nutrient_object)
 
         context = {
-            'data':data,
+            'data' : allNutrientInFoodData,
             'patientData' : patientData,
             'nutrients' : nutrients,
             'formatted_date' : formatted_date
@@ -298,11 +310,6 @@ def LoginPageView(request, method):
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
             patient.height = request.POST['height']
-            patient.address1 = request.POST['address1']
-            patient.address2 = request.POST['address2']
-            patient.city = request.POST['city']
-            patient.state = request.POST['state']
-            patient.zip = request.POST['zip']
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 

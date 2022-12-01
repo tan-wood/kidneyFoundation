@@ -75,7 +75,7 @@ class Patient(models.Model):
 class Patient_Favorite_Food(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    is_favorite = models.BooleanField
+    is_favorite = models.BooleanField(default=False)
 
     class Meta:
         db_table = "patient_favorite_food"
@@ -142,6 +142,7 @@ class Alert_Type(models.Model):
 
 class Alert(models.Model) :
     date_time = models.DateTimeField()
+    unread = models.BooleanField(default=True)
     alert_type = models.ForeignKey(Alert_Type, null=False, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, null=False, on_delete=models.CASCADE)
 
