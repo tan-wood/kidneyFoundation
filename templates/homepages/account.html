@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{% if display == "homeAccount"%}
+
 <section  class="main-content">
     <section style="border: 1px solid #00000010; padding: 30px; display: grid; grid-template-columns: 180px 1fr 180px;">
         <div class="navbar-button">
@@ -13,52 +13,156 @@
         </div>
     </section>
     <section style="border: 1px solid #00000010; padding: 30px;">
-        <section class="big-white-box">
-            <!-- This is going to just be one column of alerts -->
-            <h1>Account</h1>
+        {% if display == "homeAccount"%}
+            <section class="big-white-box">
+                <!-- This is going to just be one column of alerts -->
+                <h1>Account</h1>
 
-            <section>
-                <div style="padding: 20px 0 20px 0;">
-                    <p>First Name: {{patientData.first_name}}</p>
-                    <p>Last Name: {{patientData.last_name}}</p>
-                    <p>Age: {{patientData.age}}</p>
-                    <p>Weight: {{patientData.weight}} lbs</p>
-                    <p>Height: {{patientData.height}} inches</p>
-                    <p>Email: {{patientData.email}}</p>
-                    <p>Phone Number: {{patientData.phone}}</p>
-                    <p>Address 1: {{patientData.address1}}</p>
-                    <p>Address 2: {{patientData.address2}}</p>
-                    <p>City: {{patientData.city}}</p>
-                    <p>State: {{patientData.state}}</p>
-                    <p>Zip: {{patientData.zip}}</p>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;">
-                    <a href="{% url 'account' method='editPatient'%}">
-                        <div class="account-button">
-                            <h4>Edit Info</h4>
-                        </div>
-                    </a>
+                <section>
+                    <div style="padding: 20px 0 20px 0;">
+                        <p>First Name: {{patientData.first_name}}</p>
+                        <p>Last Name: {{patientData.last_name}}</p>
+                        <p>Age: {{patientData.age}}</p>
+                        <p>Weight: {{patientData.weight}} lbs</p>
+                        <p>Height: {{patientData.height}} inches</p>
+                        <p>Email: {{patientData.email}}</p>
+                        <p>Phone Number: {{patientData.phone}}</p>
+                        <p>Address 1: {{patientData.address1}}</p>
+                        <p>Address 2: {{patientData.address2}}</p>
+                        <p>City: {{patientData.city}}</p>
+                        <p>State: {{patientData.state}}</p>
+                        <p>Zip: {{patientData.zip}}</p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;">
+                        <a href="{% url 'account' method='editPatient'%}">
+                            <div class="account-button">
+                                <h4>Edit Info</h4>
+                            </div>
+                        </a>
 
-                    <a href="{% url 'account' method='changeLoginInfo'%}">
-                        <div class="account-button">
-                            <h4>Change Username/Password</h4>
-                        </div>
-                    </a>
+                        <a href="{% url 'account' method='changeLoginInfo'%}">
+                            <div class="account-button">
+                                <h4>Change Username/Password</h4>
+                            </div>
+                        </a>
 
-                    <a href="{% url 'signout' %}" style="text-decoration: none;">
-                        <div class="account-button red">
-                            <h4>Sign Out</h4>
-                        </div>
-                    </a>
-                </div>
+                        <a href="{% url 'signout' %}" style="text-decoration: none;">
+                            <div class="account-button red">
+                                <h4>Sign Out</h4>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
             </section>
 
-        </section>
+        {% elif display == "editPatient"%}
+            <section class="big-white-box">
+                <h1>Edit Patient Information</h1>
+                <form name="form" method="post" action="{%url 'account' method="editPatientForm"%}">
+                    {% csrf_token %} {% comment %} makes sure whoever is editing the form is the
+                    same as submitting the form {% endcomment %}
+                    
+                    <label for="first_name">First name:</label>
+                    <input
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    value="{{patientData.first_name}}"
+                    autofocus
+                    />
+                    <br /><br />
+            
+                    <label for="last_name">Last name:</label>
+                    <input
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    value="{{patientData.last_name}}"
+                    />
+                    <br /><br />
+            
+                    <label for="age">Age: </label>
+                    <input type="text" name="age" id="age" value="{{patientData.age}}" />
+                    <br /><br />
+            
+                    <label for="weight">Weight: </label>
+                    <input type="text" name="weight" id="weight" value="{{patientData.weight}}" />
+                    <br /><br />
+            
+                    <label for="height">Height: </label>
+                    <input type="text" name="height" id="height" value="{{patientData.height}}" />
+                    <br /><br />
+            
+                    <label for="address1">Address 1: </label>
+                    <input type="text" name="address1" id="address1" value="{{patientData.address1}}" />
+                    <br /><br />
+            
+                    <label for="address2">Address 2: </label>
+                    <input type="text" name="address2" id="address2" value="{{patientData.address2}}" />
+                    <br /><br />
+            
+                    <label for="city">City: </label>
+                    <input type="text" name="city" id="city" value="{{patientData.city}}" />
+                    <br /><br />
+            
+                    <label for="state">State: </label>
+                    <input type="text" name="state" id="state" value="{{patientData.state}}" />
+                    <br /><br />
+            
+                    <label for="zip">Zip: </label>
+                    <input type="text" name="zip" id="zip" value="{{patientData.zip}}" />
+                    <br /><br />
+            
+                    <label for="email">Email: </label>
+                    <input type="text" name="email" id="email" value="{{patientData.email}}" />
+                    <br /><br />
+            
+                    <label for="phone">Phone: </label>
+                    <input type="text" name="phone" id="phone" value="{{patientData.phone}}" />
+                    <br /><br />
+                    <br><br>
+                    <button type="submit">Update</button>
+                </form>
+                <a href="{% url "account" method="homeAccount" %}">
+                    <div>
+                        <button>Cancel</button>
+                    </div>
+                </a>
+            </section>
+        {% else %}
+            <section class="big-white-box">
+                <h1>Change username and password</h1>
+                    <form name="form" method="post" action="{%url 'account' method="changeUandPForm"%}">
+                        {% csrf_token %}
+
+                        <label for="username">User Name:</label>
+                        <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        value="{{patientData.username}}"
+                        />
+                        <br /><br />
+                
+                        <label for="password">Password:</label>
+                        <input
+                        type="text"
+                        name="password"
+                        id="password"
+                        value="{{patientData.password}}"
+                        />
+                        <br /><br />
+                        <button type="submit">Update</button>
+                    </form>
+                    <a href="{% url "account" method="homeAccount" %}">
+                        <div>
+                            <button>Cancel</button>
+                        </div>
+                    </a>
+            </section>
+        {% endif %}
     </section>
 </section>
-{% elif display == "editPatient"%}
-<h1>Edit page</h1>
-{% else %}
-<h1>Change username and password</h1>
-{% endif %}
+
 {% endblock %}

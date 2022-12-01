@@ -100,24 +100,59 @@ def DiaryPageView(request):
         return LandingPageView(request)
 
 def AccountPageView(request, method):
+    
+    
     if loggedInPatientId != None:
-        patientData = Patient.objects.get(id = loggedInPatientId)
-        
-        if method == "homeAccount":
-            context = {
-                'patientData' : patientData,
-                'display': "homeAccount",
-            }
-        elif method == "editPatient":
-            context = {
-                'patientData' : patientData,
-                'display': "editPatient",
-            }
-        else:
-            context = {
-                'patientData' : patientData,
-                'display': "changeLoginInfo",
-            }
+        if request.method == 'POST' and method == "editPatientForm":
+            patiend_id = loggedInPatientId
+
+            patient = Patient.objects.get(id = patiend_id)
+
+            patient.first_name = request.POST['first_name']
+            patient.last_name = request.POST['last_name']
+            patient.age = request.POST['age']
+            patient.weight = request.POST['weight']
+            patient.height = request.POST['height']
+            patient.address1 = request.POST['address1']
+            patient.address2 = request.POST['address2']
+            patient.city = request.POST['city']
+            patient.state = request.POST['state']
+            patient.zip = request.POST['zip']
+            patient.email = request.POST['email']
+            patient.phone = request.POST['phone']
+
+            patient.save()
+
+            return AccountPageView(request, "homeAccount")
+        elif request.method == 'POST' and method == "changeUandPForm":
+            patiend_id = loggedInPatientId
+
+            patient = Patient.objects.get(id = patiend_id)
+
+            patient.username = request.POST['username']
+            patient.password = request.POST['password']
+
+            patient.save()
+
+            return AccountPageView(request, "homeAccount")
+        else:     
+            patientData = Patient.objects.get(id = loggedInPatientId)
+            
+            if method == "homeAccount":
+                context = {
+                    'patientData' : patientData,
+                    'display': "homeAccount",
+                }
+            elif method == "editPatient":
+                context = {
+                    'patientData' : patientData,
+                    'display': "editPatient",
+                }
+            else:
+                context = {
+                    'patientData' : patientData,
+                    'display': "changeLoginInfo",
+                }
     if loggedIn:
         return render(request,'homepages/account.html', context)
     else:
@@ -209,7 +244,9 @@ def LoginPageView(request, method):
             return render(request, 'homepages/login.html', context)
     else:
 
-        if method == "landing" :
+        if (method == "landing" or method == "create" or method == "login") and loggedIn:
+            return indexPageView(request)
+        elif method == "landing" :
             context = {
                 "display" : "original"
             }
