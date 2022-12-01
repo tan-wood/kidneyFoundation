@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 # Create your models here.
 
 class Nutrient(models.Model):
-    nutrient_is_macro = models.BooleanField
     nutrient_name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -56,11 +55,7 @@ class Patient(models.Model):
     height = models.FloatField(default=0)
     email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=13, blank=True)
-    address1 = models.CharField(max_length=20)
-    address2 = models.CharField(max_length=20, blank=True)
-    city = models.CharField(max_length=20)
-    state = models.CharField(max_length=2)
-    zip = models.CharField(max_length=9)
+
 
     class Meta:
         db_table = "patient"
@@ -76,6 +71,19 @@ class Patient(models.Model):
         self.first_name = self.first_name.upper()
         self.last_name = self.last_name.upper()
         super(Patient, self).save()
+
+class Patient_Favorite_Food(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    is_favorite = models.BooleanField
+
+    class Meta:
+        db_table = "patient_favorite_food"
+    
+    def __str__(self):
+        return_string = self.patient.first_name + ': ' + self.food.food_name
+        return (return_string)
+
 
 class Patient_Logs_Food (models.Model):
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
@@ -93,7 +101,7 @@ class Patient_Logs_Food (models.Model):
 
 class Condition(models.Model) :
     description = models.CharField(max_length=25)
-    patients = models.ManyToManyField(Patient, through='Patient_Condition', blank=True)
+    patients = models.ManyToManyField(Patient, through='Patient_Condition')
 
     def __str__(self):
         return (self.description)
@@ -104,7 +112,7 @@ class Patient_Condition(models.Model) :
     
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     condition = models.ForeignKey(Condition, on_delete=models.CASCADE)
-    date_diagnosed = models.DateField()
+    date_diagnosed = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return_string = self.patient.first_name + ': ' + self.condition.description

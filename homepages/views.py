@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition
+from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition
 from datetime import datetime as dt
 
 loggedIn = False
@@ -100,24 +100,64 @@ def DiaryPageView(request):
         return LandingPageView(request)
 
 def AccountPageView(request, method):
+    
+    
     if loggedInPatientId != None:
-        patientData = Patient.objects.get(id = loggedInPatientId)
-        
-        if method == "homeAccount":
-            context = {
-                'patientData' : patientData,
-                'display': "homeAccount",
-            }
-        elif method == "editPatient":
-            context = {
-                'patientData' : patientData,
-                'display': "editPatient",
-            }
-        else:
-            context = {
-                'patientData' : patientData,
-                'display': "changeLoginInfo",
-            }
+        if request.method == 'POST' and method == "editPatientForm":
+            patiend_id = loggedInPatientId
+
+            patient = Patient.objects.get(id = patiend_id)
+
+            patient.first_name = request.POST['first_name']
+            patient.last_name = request.POST['last_name']
+            patient.age = request.POST['age']
+            patient.weight = request.POST['weight']
+            patient.height = request.POST['height']
+            patient.email = request.POST['email']
+            patient.phone = request.POST['phone']
+
+            patient.save()
+
+            return AccountPageView(request, "homeAccount")
+        elif request.method == 'POST' and method == "changeUandPForm":
+            patiend_id = loggedInPatientId
+
+            patient = Patient.objects.get(id = patiend_id)
+
+            patient.username = request.POST['username']
+            patient.password = request.POST['password']
+
+            patient.save()
+
+            return AccountPageView(request, "homeAccount")
+        else:     
+            patientData = Patient.objects.get(id = loggedInPatientId)
+            patientConditions = Patient_Condition.objects.all()
+            loggedInPatientConditions = []
+
+            for patient in patientConditions:
+                if patient.patient_id == loggedInPatientId:
+                    loggedInPatientConditions.append(Condition.objects.get(id = patient.condition_id))
+
+
+            if method == "homeAccount":
+                context = {
+                    'patientData' : patientData,
+                    'display': "homeAccount",
+                    'conditions' : loggedInPatientConditions,
+                }
+            elif method == "editPatient":
+                context = {
+                    'patientData' : patientData,
+                    'display': "editPatient",
+                    'conditions' : loggedInPatientConditions,
+                }
+            else:
+                context = {
+                    'patientData' : patientData,
+                    'display': "changeLoginInfo",
+                    'conditions' : loggedInPatientConditions,
+                }
     if loggedIn:
         return render(request,'homepages/account.html', context)
     else:
@@ -140,19 +180,21 @@ def LoginPageView(request, method):
     global loggedIn
     global loggedInPatientId
     global loggedInUsername
+    errors = []
+    errors.clear()
     if request.method == 'POST' and method == "form":
         email = request.POST['email']
         username = request.POST['username']
-        errors = ""
+        
 
         data = Patient.objects.all()
 
         for patient in data:
             if email == patient.email:
-                errors += "This email has already been registered <br>"
+                errors.append("This email has already been registered") 
             if username == patient.username:
-                errors += "This username is already taken <br>"
-        if errors != "":
+                errors.append("This username is already taken")
+        if len(errors) != 0:
             context = {
                     "display" : "create",
                     "errors" : errors
@@ -177,6 +219,24 @@ def LoginPageView(request, method):
             patient.phone = request.POST['phone']
 
             patient.save()
+
+            if request.POST['High Blood Pressure'] == "Yes":
+
+                condition = Condition.objects.get(description="High Blood Pressure")
+                patientId = Patient.objects.get(id=patient.id)
+                date = request.POST['date_diagnosed_High Blood Pressure']
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id, date_diagnosed=date)
+                
+                
+            
+            if request.POST['Diabetes'] == "Yes":
+
+                condition = Condition.objects.get(description="Diabetes")
+                patientId = Patient.objects.get(id=patient.id)
+                date = request.POST['date_diagnosed_Diabetes']
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id, date_diagnosed=date)
+
+            
 
             loggedIn = True
             loggedInPatientId = patient.id
@@ -209,13 +269,19 @@ def LoginPageView(request, method):
             return render(request, 'homepages/login.html', context)
     else:
 
-        if method == "landing" :
+        if (method == "landing" or method == "create" or method == "login") and loggedIn:
+            return indexPageView(request)
+        elif method == "landing" :
             context = {
                 "display" : "original"
             }
         elif method == "create":
+
+            condition_data = Condition.objects.all()
+
             context = {
-                "display" : "create"
+                "display" : "create",
+                "conditions": condition_data,
             }
         else :
             context = {
