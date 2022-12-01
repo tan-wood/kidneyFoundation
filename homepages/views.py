@@ -4,7 +4,7 @@ import requests
 from django.conf import settings
 import json
 from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement
-from datetime import datetime
+import datetime
 
 loggedIn = False
 loggedInUsername = ""
@@ -16,11 +16,14 @@ def indexPageView(request):
         data = Nutrient_In_Food.objects.all()
         patientData = Patient.objects.get(id = loggedInPatientId)
         nutrientNames = Nutrient.objects.all()
+        current_date = datetime.datetime.now().date()
+        formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
         context = {
             'data':data,
             'patientData' : patientData,
-            'nutrients' : nutrientNames
+            'nutrients' : nutrientNames,
+            'formatted_date' : formatted_date
         }
 
     if loggedIn:
@@ -239,7 +242,7 @@ def apiJSONView(request) :
     return JsonResponse(response)
 
 
-def apiPageView(request) :
+def LogFoodPageView(request) :
     food_names = {}
 
     if 'name' in request.GET:
@@ -380,7 +383,7 @@ def apiPageView(request) :
             'nutrient_in_food' : nutrient_in_food_form_data
         }
 
-    return render (request, 'homepages/apitest.html', { "food_names": 
+    return render (request, 'homepages/logfood.html', { "food_names": 
     food_names} )
 
 
