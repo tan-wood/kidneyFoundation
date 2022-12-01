@@ -21,9 +21,6 @@ def date_processor(request):
 
 def message_processor(request):
     loggedInUsername = getUsername()
-    print("LOGGED IN USERNAME: ")
-    print(loggedInUsername)
-    print("\n\n")
     allAlerts = Alert.objects.all()
     user_unread_alerts = []
     for alert in allAlerts:
