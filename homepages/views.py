@@ -12,17 +12,106 @@ loggedInPatientId = None
 
 def indexPageView(request):
     global loggedInPatientId
+
+    """
+    # Recommended Daily Amounts:
+    Protein                         0.6 g / kg
+    Potassium, K                    3000 mg
+    Carbohydrate, by difference     250 g
+    Sodium, Na                      2300 mg
+    Water                           3700 mg
+    Phosphorus, P                   3500 mg
+    Sugar                           30 g
+    """
+
     if loggedInPatientId != None:
-        data = Nutrient_In_Food.objects.all()
         patientData = Patient.objects.get(id = loggedInPatientId)
-        nutrientNames = Nutrient.objects.all()
+        nutrientData = Nutrient.objects.all()
+        
+        # Filter Nutrient Data down to the logged in users nutrients from today
+        allNutrientInFoodData = Nutrient_In_Food.objects.all()
+
+
+        loggedFoods = Patient_Logs_Food.objects.all()
+        nutrients = []
         current_date = dt.now().date()
         formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
+        currentProteinAmount = 0
+        currentPotassiumAmount = 0
+        currentCarbAmount = 0
+        currentSodiumAmount = 0
+        currentWaterAmount = 0
+        currentPhosphorusAmount = 0
+        currentSugarAmount = 0
+
+        for food in loggedFoods:
+            if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+                # The foods here will be from the right user and will be today
+                num_servings = food.quantity
+                for nutrient in allNutrientInFoodData:
+                    if nutrient.food.food_name == food.food.food_name:
+                        if nutrient.nutrient.nutrient_name == "Protein":
+                            currentProteinAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Potassium, K":
+                            currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
+                            currentCarbAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sodium, NA":
+                            currentSodiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Water":
+                            currentWaterAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Phosphorus, P":
+                            currentPhosphorusAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sugars, total including NLEA":
+                            currentSugarAmount += round(nutrient.amount * num_servings, 2)
+
+        # Recommended Amounts
+        patientKG = patientData.weight * 0.453592
+        proteinAmount = patientKG * 0.6
+
+        for nutrient in nutrientData:
+            if nutrient.nutrient_name == "Protein":
+                currentAmount = round(currentProteinAmount, 2)
+                recommendedAmount = round(proteinAmount, 0)
+                recMeasurement = "G"
+            elif nutrient.nutrient_name == "Potassium, K":
+                currentAmount = round(currentPotassiumAmount, 2)
+                recommendedAmount = 3000
+                recMeasurement = "MG"
+            elif nutrient.nutrient_name == "Carbohydrate, by difference":
+                currentAmount = round(currentCarbAmount, 2)
+                recommendedAmount = 250
+                recMeasurement = "G"
+            elif nutrient.nutrient_name == "Sodium, NA":
+                currentAmount = round(currentSodiumAmount, 2)
+                recommendedAmount = 2300
+                recMeasurement = "MG"
+            elif nutrient.nutrient_name == "Water":
+                currentAmount = round(currentWaterAmount, 2)
+                recommendedAmount = 3700
+                recMeasurement = "MG"
+            elif nutrient.nutrient_name == "Phosphorus, P":
+                currentAmount = round(currentPhosphorusAmount, 2)
+                recommendedAmount = 1500
+                recMeasurement = "MG"
+            elif nutrient.nutrient_name == "Sugars, total including NLEA":
+                currentAmount = round(currentSugarAmount, 2)
+                recommendedAmount = 30
+                recMeasurement = "G"
+            # Each nutrient needs a new object
+            nutrient_object = {
+                'nutrient' : nutrient,
+                'currentAmount' : currentAmount,
+                'dailyAmount' : recommendedAmount,
+                'measurement' : recMeasurement
+            }
+            nutrients.append(nutrient_object)
+
         context = {
-            'data':data,
+            'data' : allNutrientInFoodData,
             'patientData' : patientData,
-            'nutrients' : nutrientNames,
+            'nutrients' : nutrients,
             'formatted_date' : formatted_date
         }
 
@@ -40,6 +129,8 @@ def SignOutPageView(request):
 
 def AlertsPageView(request):
     global loggedInUsername
+    current_date = dt.now().date()
+    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     
     if loggedIn:
         data = Alert.objects.all()
@@ -49,7 +140,8 @@ def AlertsPageView(request):
                 user_alerts.append(alert)
         
         context = {
-            "alerts": user_alerts
+            "alerts": user_alerts,
+            "formatted_date" : formatted_date
         }
 
         return render(request,'homepages/alerts.html', context)
@@ -58,6 +150,9 @@ def AlertsPageView(request):
     
 
 def DiaryPageView(request):
+    current_date = dt.now().date()
+    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
+
     if loggedIn:
         food_data = Patient_Logs_Food.objects.all()
         nutrient_data = Nutrient_In_Food.objects.all()
@@ -92,7 +187,8 @@ def DiaryPageView(request):
 
         context = {
             "today_foods" : user_today_foods,
-            "past_foods" : user_past_foods
+            "past_foods" : user_past_foods,
+            "formatted_date" : formatted_date
         }
 
         return render(request,'homepages/diary.html', context)
@@ -100,7 +196,8 @@ def DiaryPageView(request):
         return LandingPageView(request)
 
 def AccountPageView(request, method):
-    
+    current_date = dt.now().date()
+    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     
     if loggedInPatientId != None:
         if request.method == 'POST' and method == "editPatientForm":

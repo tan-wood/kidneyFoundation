@@ -114,7 +114,18 @@ a {
 }
 
 .micronutrient-container {
-    background-color: #eee6de;
+    background-color: #e2eede;
+    border-radius: 18px;
+    min-height: 150px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+}
+
+.alert-micronutrient-container {
+    background-color: #edd3d2;
     border-radius: 18px;
     min-height: 150px;
 
@@ -127,7 +138,13 @@ a {
 .nutrient-name {
     font-family: 'Playfair Display', serif;
     font-size: 26px;
-    color: #4d2d0e60;
+    color: #0e4d0e60;
+}
+
+.alert-nutrient-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #450b0a60;
 }
 
 .white {
