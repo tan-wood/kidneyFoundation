@@ -303,7 +303,7 @@ def AccountPageView(request, method):
             patient.last_name = request.POST['last_name']
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
-            patient.height = (int(request.POST['height_ft'])*12) + (int(request.POST['height_in']))
+            patient.height = (int(float(request.POST['height_ft']))*12) + (int(float(request.POST['height_in'])))
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
