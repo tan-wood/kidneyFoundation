@@ -107,6 +107,23 @@ def indexPageView(request):
             }
             nutrients.append(nutrient_object)
 
+
+
+
+        # Food Suggestions
+
+        favoriteFoods = Patient_Favorite_Food.objects.all()
+        levels_list = []
+        
+        for a_nutrient in nutrients :
+            
+            print(a_nutrient['currentAmount'])
+            nutrient_level = a_nutrient['currentAmount'] / a_nutrient['dailyAmount']
+            
+            levels_list.append(nutrient_level)
+            print("SUP DAWG")
+
+
         context = {
             'data' : allNutrientInFoodData,
             'patientData' : patientData,
@@ -623,9 +640,10 @@ def PickFavoritesPageView(request):
                 # send it over to the database!
                 food_data.save()
 
-
+            # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
+            #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
             # patient_favorite_food_table = []
-            # for a_patient_favorite_food in Patient_Favorite_Food.objects.get(username= loggedInUsername) :
+            # for a_patient_favorite_food in Patient_Favorite_Food.objects.get(patient= Patient.objects.get(username= loggedInUsername)) :
             #     print(f'{a_patient_favorite_food.patient.first_name}{a_patient_favorite_food}')
             #     patient_favorite_food_table.append(f'{a_patient_favorite_food}')
 
