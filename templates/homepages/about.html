@@ -70,39 +70,77 @@
         <!-- <div style="min-height: 700px; color: #ffffff; font-size: 30px;"></div> -->
 
     </section>
-    <div style="display: grid; place-items: center;">
-        <section style="min-height: 800px; background-color: #ffffff; padding: 50px;">
-            <h4 class="landing-text" style="margin: 100px 0 0 0;">The Start</h4>
-            <h4 class="landing-text" style="margin: 0;">to a Brighter Future</h4>
-            <div style="display: grid; place-items: start; padding: 40px 0 0 0;">
-                <h3>What is KidneyWatch?</h3>
-            </div>
-            <div>
-                <p>In the US, 1 in 7 adults are estimated to have Chronic Kidney Disease (CKD). </p>
-                <p>
-                    That means that life
-                    for apporximately 37 million Americans includes high blood pressure, heart disease, and stroke
-                    caused by CKD.
-                </p>
-            </div>
-            <div>
-                <p> <span style="color: #ec995a">There is still hope!</span>
-                </p>
-            </div>
-            <div>
-                <p> Studies have shown nutrition plays a large part in the health of those battling CKD.
-                </p>
-            </div>
-            <div>
-                <p> The DASH diet in particular has been found to <span style="color: #ec995a">decrease the risk of
-                        stroke, cancer, kidney stones, and high blood pressure. </span>
-                </p>
-            </div>
-            <div>
-                <p> KidneyWatch helps users impliment the DASH diet into their life with tools such as personalized meal
-                    suggestions and real-time notifications.
-                </p>
-            </div>
+
+    <section style="min-height: 800px; background-color: #ffffff;">
+        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
+            <h1 style="font-size: 52px; color: #ec995a">What is KidneyWatch?</h1>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2>In the US, 1 in 7 adults are estimated to have Chronic Kidney Disease (CKD) </h2>
+            <h2>
+            That means that life 
+                for apporximately 37 million Americans includes high blood pressure, heart disease, and stroke caused by CKD
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> <span style="color: #ec995a">Still, there is hope</span>
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> Studies have shown nutrition plays a large part in the health of those battling CKD
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> The DASH diet in particular has been found to <span style="color: #ec995a">decrease the risk of stroke, cancer, kidney stones, and high blood pressure </span>
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> KidneyWatch helps users impliment the DASH diet into their life with tools such as personalized meal suggestions and real-time notifications
+            </h2>
+        </div>
+
+
+        {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2>The DASH diet was originally designed to help people with high blood pressure. 
+                The diet revolves around greens, fruits, and lean proteins. The avoidance of fats, sodium, and red meats makes adherence to the DASH diet a key factor in fighting against high blood pressure.                 
+            </h2>
+        </div>
+        {% elif "Diabetes" in conditions and "High Blood Pressure" not in conditions %}
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+                The DASH diet is not only limited to those with kidney disease Those with diabetes in particular have experienced improved insulin resistance, hyperlipidemia, and lower levels of obesity when following DASH diet guidelines. 
+                
+            </h2>
+        </div>
+        {% elif "Diabetes" in conditions and "High Blood Pressure" in conditions %}
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2>The DASH diet was originally designed to help people with high blood pressure. 
+                The diet revolves around greens, fruits, and lean proteins. The avoidance of fats, sodium, and red meats makes adherence to the DASH diet a key factor in fighting against high blood pressure.                 
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+                The DASH diet is not only limited to those with kidney disease Those with diabetes in particular have experienced improved insulin resistance, hyperlipidemia, and lower levels of obesity when following DASH diet guidelines. 
+            </h2>
+        </div>
+        {% else %}
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+            </h2>
+        </div>
+        {%endif%}
+        
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+                <span style="color: #ec995a">At KidneyWatch, your health is our number one priority</span>
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+            Join now and watch what KidneyWatch will do for you!
+            </h2>
+        </div>
 
 
             {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}

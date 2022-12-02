@@ -521,7 +521,7 @@ def LoginPageView(request, method):
             loggedInPatientId = patient.id
             loggedInUsername = patient.username
             
-            return indexPageView(request)
+            return PickFavoritesPageView(request)
 
     elif request.method == 'POST' and method == "loginform":
         
@@ -1120,6 +1120,7 @@ def PickFavoritesPageView(request):
 
             patient_favorite_food_data.save()
 
+            return indexPageView(request)
 
      
     context = {
