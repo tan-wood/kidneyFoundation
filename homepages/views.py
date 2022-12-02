@@ -1131,6 +1131,82 @@ def PickFavoritesPageView(request):
 
     return render(request, 'homepages/pickfavorites.html', context)
 
+
+def DiaryItemPageView(request, item_id):
+
+    # Get the patientLogsFood item where id is item_id
+    patientFoodData = Patient_Logs_Food.objects.get(id = item_id)
+
+    # Get the nutrients in the food
+    nutrientInFoodData = Nutrient_In_Food.objects.all()
+    nutrientInFoodList = []
+    nutrientInFoodNames = []
+    for nutrientInFood in nutrientInFoodData:
+        if nutrientInFood.food.food_name == patientFoodData.food.food_name and nutrientInFood.nutrient.nutrient_name not in nutrientInFoodNames:
+            nutrient_object = {
+                'name': nutrientInFood.nutrient.nutrient_name,
+                'value': nutrientInFood.amount,
+                'unitName': nutrientInFood.measurement
+            }
+            nutrientInFoodList.append(nutrient_object)
+            nutrientInFoodNames.append(nutrientInFood.nutrient.nutrient_name)
+
+
+    context = {
+        'item' : patientFoodData,
+        'nutrientInFoodList' : nutrientInFoodList
+    }
+
+    return render(request, 'homepages/diary_item.html', context)
+
+def DeleteItemPageView(request, item_id):
+
+    if loggedIn:
+
+        patientFoodData = Patient_Logs_Food.objects.filter(id = item_id).delete()
+
+        food_data = Patient_Logs_Food.objects.all()
+        nutrient_data = Nutrient_In_Food.objects.all()
+
+        user_today_foods = []
+        user_past_foods = []
+
+        for food in food_data:
+            if food.patient.username == loggedInUsername:
+                food_object = {
+                    'food': food,
+                    'nutrients' : []
+                }
+                # Nutrients
+                nutrient_list = []
+                num_servings = food.quantity
+                for nutrient in nutrient_data:
+                    if nutrient.food.food_name == food.food.food_name:
+                        nutrient_object = {
+                            'name': nutrient.nutrient.nutrient_name,
+                            'amount': round(nutrient.amount * num_servings, 2),
+                            'measurement': nutrient.measurement.description
+                        }
+                        nutrient_list.append(nutrient_object)
+
+                food_object['nutrients'] = nutrient_list
+
+                if food.date_time.date() == dt.today().date():
+                    user_today_foods.append(food_object)
+                else:
+                    user_past_foods.append(food_object)
+
+        context = {
+            "today_foods" : user_today_foods,
+            "past_foods" : user_past_foods,
+        }
+
+        return render(request,'homepages/diary.html', context)
+    else:
+        return LandingPageView(request)
+
+
+
 def getUsername():
     global loggedInUsername
     return loggedInUsername

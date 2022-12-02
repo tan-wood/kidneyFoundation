@@ -25,22 +25,26 @@
 
                 <div>
                     {% for food in today_foods %}
-                    <section>
-                        <div style="display: grid; grid-template-columns: auto 1fr auto;">
-                            <h4 style="color: #000000; padding: 10px 0 10px 0;">{{ food.food.food.food_name }} <span style="color: #00000040;"> - {{ food.food.quantity }} serving(s)</span></h4>
-                            <div></div>
-                            <h4 style="color: #00000040; padding: 10px 0 10px 0;">{{ food.food.date_time }}</h4>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            {% for nutrient in food.nutrients %}
-                            <div style="background-color: rgb(222, 222, 222); min-height: 60px; max-width: 120px; padding: 5px; border-radius: 6px; flex-grow: 1;">
-                                <h4 class="truncated"> {{ nutrient.name }} </h4>
-                                <p> {{ nutrient.amount }} {{ nutrient.measurement }} </p>
+                    <a href="{% url 'diary_item' item_id=food.food.id %}">
+                        <section>
+                            <div style="display: grid; grid-template-columns: auto 1fr auto;">
+                                <h4 style="color: #000000; padding: 10px 0 10px 0;">{{ food.food.food.food_name }} <span
+                                        style="color: #00000040;"> - {{ food.food.quantity }} serving(s)</span></h4>
+                                <div></div>
+                                <h4 style="color: #00000040; padding: 10px 0 10px 0;">{{ food.food.date_time }}</h4>
                             </div>
-                            {% endfor %}
-                        </div>
-                        <hr>
-                    </section>
+                            <div style="display: flex; gap: 10px;">
+                                {% for nutrient in food.nutrients %}
+                                <div
+                                    style="background-color: rgb(222, 222, 222); min-height: 60px; max-width: 120px; padding: 5px; border-radius: 6px; flex-grow: 1;">
+                                    <h4 class="truncated"> {{ nutrient.name }} </h4>
+                                    <p> {{ nutrient.amount }} {{ nutrient.measurement }} </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <hr>
+                        </section>
+                    </a>
                     {% endfor %}
                 </div>
 
@@ -53,15 +57,17 @@
                 <div>
                     {% for food in past_foods %}
                     <section>
-                        
+
                         <div style="display: grid; grid-template-columns: auto 1fr auto;">
-                            <h4 style="color: #000000; padding: 10px 0 10px 0;">{{ food.food.food.food_name }} <span style="color: #00000040;"> - {{ food.food.quantity }} serving(s)</span></h4>
+                            <h4 style="color: #000000; padding: 10px 0 10px 0;">{{ food.food.food.food_name }} <span
+                                    style="color: #00000040;"> - {{ food.food.quantity }} serving(s)</span></h4>
                             <div></div>
                             <h4 style="color: #00000040; padding: 10px 0 10px 0;">{{ food.food.date_time }}</h4>
                         </div>
                         <div style="display: flex; gap: 10px;">
                             {% for nutrient in food.nutrients %}
-                            <div style="background-color: rgb(222, 222, 222); min-height: 60px; max-width: 120px; padding: 5px; border-radius: 6px; flex-grow: 1;">
+                            <div
+                                style="background-color: rgb(222, 222, 222); min-height: 60px; max-width: 120px; padding: 5px; border-radius: 6px; flex-grow: 1;">
                                 <h4 class="truncated"> {{ nutrient.name }} </h4>
                                 <p> {{ nutrient.amount }} {{ nutrient.measurement }} </p>
                             </div>
