@@ -10,101 +10,118 @@
             <h4 style="margin: 0;">{{ formatted_date }}</h4>
         </div>
     </section>
-    <section style="padding: 10px 0 10px 30px;">
-        <div style="display: grid; place-items: start;">
-            <h4 style="font-size: 18px; padding: 26px 0 26px 0;">Log Food</h4>
-        </div>
 
-        <div style="display: grid; place-items: start; padding-bottom: 50px;">
-            <form method="GET">
-                <div style="display: grid; grid-template-columns: auto auto; gap: 20px;">
-                    <input class="logfood_input" type='text' name="name" placeholder="Search...">
-                    <button type='submit' class="search-button">
-                        <h4>Search</h4>
-                    </button>
-                </div>
-            </form>
-        </div>
+    <section style="padding: 10px 0 10px 30px; display: grid; grid-template-columns: auto 1fr; gap: 60px;">
+        <section>
+            <div style="display: grid; place-items: start;">
+                <h4 style="font-size: 18px; padding: 26px 0 26px 0;">Log Food</h4>
+            </div>
 
-        {% if 'name' in request.GET%}
-        <div style="display: grid; place-items: start;">
-            <form method="POST">
-                {% csrf_token %}
-                <section style="display: grid; grid-template-rows: auto auto auto; gap: 30px;">
-                    <div style="display: grid; place-items: start;">
-                        <h5>Food Name</h5>
-
-                        <select name="food_names_options">
-
-                            <option style="display:none">Select From Search:</option>
-                            {% for food_name in food_names.values %}
-
-                            <option value="{{ food_name }}" placeholder="Select From Search"> {{ food_name }}</option>
-                            
-                            {% endfor %}
-                        </select>
+            <div style="display: grid; place-items: start; padding-bottom: 50px;">
+                <form method="GET">
+                    <div style="display: grid; grid-template-columns: auto auto; gap: 20px;">
+                        <input class="logfood_input" type='text' name="name" placeholder="Search...">
+                        <button type='submit' class="search-button" style="cursor: pointer;">
+                            <h4>Search</h4>
+                        </button>
                     </div>
+                </form>
+            </div>
 
-                    <div style="display: grid; place-items: start;">
-                        <h5>Number of Servings</h5>
-                        <input class="logfood_input" type="number" name="numServings" placeholder="Number of Servings"
-                            required>
-                    </div>
+            {% if 'name' in request.GET%}
+            <div style="display: grid; place-items: start;">
+                <form method="POST">
+                    {% csrf_token %}
+                    <section style="display: grid; grid-template-rows: auto auto auto; gap: 30px;">
+                        <div style="display: grid; place-items: start;">
+                            <h5>Food Name</h5>
 
-                    <div style="display: grid; place-items: start;">
-                        <h5> Date and Time </h5>
-                        <input class="logfood_input" type="datetime-local" name="dateTime" required>
+                            <select name="food_names_options">
+
+                                <option style="display:none">Select From Search:</option>
+                                {% for food_name in food_names.values %}
+
+                                <option value="{{ food_name }}" placeholder="Select From Search"> {{ food_name }}
+                                </option>
+
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div style="display: grid; place-items: start;">
+                            <h5>Number of Servings</h5>
+                            <input class="logfood_input" type="number" name="numServings"
+                                placeholder="Number of Servings" required>
+                        </div>
+
+                        <div style="display: grid; place-items: start;">
+                            <h5> Date and Time </h5>
+                            <input class="logfood_input" type="datetime-local" name="dateTime" required>
+                        </div>
+                    </section>
+                    <div style="padding: 50px 0 0 0;">
+                        <button type="submit" class="log-food-button" style="cursor: pointer;">Log Food</button>
                     </div>
-                </section>
-                <div style="padding: 50px 0 0 0;">
-                    <button type="submit" class="log-food-button">Log Food</button>
-                </div>
-            </form>
-        </div>
-        {% endif %}
+                </form>
+            </div>
+            {% endif %}
+        </section>
 
         {% if display_chart %}
+        <section>
+            <div style="display: grid; place-items: start;">
+                <h4 style="font-size: 18px; padding: 26px 0 26px 0;">{{ searched_food_title }}</h4>
+            </div>
             <div>
-                <canvas id="myChart" width="200" height="200"></canvas>
+                <canvas id="myChart" width="20" height="20" style="max-height: 340px; max-width: 340px;"></canvas>
                 <script>
                     const ctx = document.getElementById('myChart').getContext('2d');
                     const myChart = new Chart(ctx, {
                         type: 'pie',
                         data: {
-                            labels: [{% for nutrient, value in nutrient_info.items %} '{{nutrient}} in {{nutrient.unitName}}', {% endfor %}],
-                            datasets: [{
-                                label: 'Amount',
-                                data: [{% for nutrient in nutrient_info %} {{value}}, {% endfor %}],
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.8)',
-                                    'rgba(54, 162, 235, 0.8)',
-                                    'rgba(255, 206, 86, 0.8)',
-                                    'rgba(75, 192, 192, 0.8)',
-                                    'rgba(153, 102, 255, 0.8)',
-                                    'rgba(255, 159, 64, 0.8)'
-                                ],
-                                borderColor: [
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)',
-                                    'rgba(75, 192, 192, 1)',
-                                    'rgba(153, 102, 255, 1)',
-                                    'rgba(255, 159, 64, 1)'
-                                ],
+                            labels: [{% for nutrient in food_nutrients2 %} '{{nutrient.name}} in {{nutrient.unitName}}', {% endfor %}],
+                    datasets: [{
+                        label: 'Amount',
+                        data: [{% for nutrient in food_nutrients2 %} {{ nutrient.value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
                                 borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
+                                }]
+                            },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
                             }
                         }
-                    });
+                    }
+                        });
                 </script>
             </div>
+            <a href="{% url 'diary' %}">
+                <div style="padding: 50px 0 0 0;">
+                    <button type="submit" class="log-food-button" style="cursor: pointer;">View in Diary</button>
+                </div>
+            </a>
+        </section>
+
+
         {% endif %}
+
     </section>
 </section>
 

@@ -18,46 +18,49 @@
 </head>
 
 <body>
-    <section class="main-landing">
+    <section>
         <section class="header">
-            <div class="header-cell">
+            <div class="header-cell" style="min-width: 280px;">
                 <h1 style="color: #ec995a">KidneyWatch</h1>
             </div>
-            <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
-                <a href='{% url "landing" %}'>
-                 <h4>Home</h4>
-                </a>
-        </div>
-        <div style="text-align: center">
-            {% if signedIn %}
+            <a href='{% url "landing" %}'>
+                <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                    <h4>Home</h4>
+                </div>
+            </a>
+
+            <div style="background-color: transparent; min-width: 1px;"></div>
+
+            <div style="text-align: center">
+                {% if signedIn %}
                 <a href="{% url 'home' %}" style="text-decoration: none;">
                     <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
                         <h4>Enter App</h4>
                     </div>
                 </a>
-            {% else %}
+                {% else %}
                 <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
                     <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
                         <h4>Enter App</h4>
                     </div>
                 </a>
-            {% endif %}
-            
-        </div>
+                {% endif %}
+
+            </div>
 
             <div style="text-align: right;">
                 {% if signedIn %}
-                    <a href="{% url 'signout' %}" style="text-decoration: none;">
-                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
-                            <h4>Sign Out</h4>
-                        </div>
-                    </a>
+                <a href="{% url 'signout' %}" style="text-decoration: none;">
+                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                        <h4>Sign Out</h4>
+                    </div>
+                </a>
                 {% else %}
-                    <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
-                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
-                            <h4>Login</h4>
-                        </div>
-                    </a>
+                <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
+                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                        <h4>Login</h4>
+                    </div>
+                </a>
                 {% endif %}
             </div>
         </section>
@@ -65,97 +68,105 @@
         <!-- <img src="{% static 'img/family-dinner.jpg' %}"> -->
 
         <!-- <div style="min-height: 700px; color: #ffffff; font-size: 30px;"></div> -->
-        <div style="min-height: 700px; position: relative;">
-            <h4 class="landing-text">The Start</h4>
-            <h4 class="landing-text" style="margin-top: 310px;">to a Brighter Future</h4>
-        </div>
 
     </section>
-
-    <section style="min-height: 800px; background-color: #ffffff;">
-        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
-            <h1 style="font-size: 52px; color: #ec995a">What is KidneyWatch?</h1>
-        </div>
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2>In the US, 1 in 7 adults are estimated to have Chronic Kidney Disease (CKD) </h2>
-            <h2>
-            That means that life 
-                for apporximately 37 million Americans includes high blood pressure, heart disease, and stroke caused by CKD
-            </h2>
-        </div>
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> <span style="color: #ec995a">Still, there is hope</span>
-            </h2>
-        </div>
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Studies have shown nutrition plays a large part in the health of those battling CKD
-            </h2>
-        </div>
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> The DASH diet in particular has been found to <span style="color: #ec995a">decrease the risk of stroke, cancer, kidney stones, and high blood pressure </span>
-            </h2>
-        </div>
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> KidneyWatch helps users impliment the DASH diet into their life with tools such as personalized meal suggestions and real-time notifications
-            </h2>
-        </div>
- 
-
-        {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> High Blood Pressure
-            </h2>
-        </div>
-        {% elif "Diabetes" in conditions and "High Blood Pressure" not in conditions %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Diabetes
-            </h2>
-        </div>
-        {% elif "Diabetes" in conditions and "High Blood Pressure" in conditions %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Diabetes and High Blood Pressure
-            </h2>
-        </div>
-        {% else %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> No Conditions
-            </h2>
-        </div>
-        {%endif%}
-        
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> 
-                <span style="color: #ec995a">At KidneyWatch, your health is our number one priority</span>
-            </h2>
-        </div>
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> 
-            Join now and watch what KidneyWatch will do for you!
-            </h2>
-        </div>
+    <div style="display: grid; place-items: center;">
+        <section style="min-height: 800px; background-color: #ffffff; padding: 50px;">
+            <h4 class="landing-text" style="margin: 100px 0 0 0;">The Start</h4>
+            <h4 class="landing-text" style="margin: 0;">to a Brighter Future</h4>
+            <div style="display: grid; place-items: start; padding: 40px 0 0 0;">
+                <h3>What is KidneyWatch?</h3>
+            </div>
+            <div>
+                <p>In the US, 1 in 7 adults are estimated to have Chronic Kidney Disease (CKD). </p>
+                <p>
+                    That means that life
+                    for apporximately 37 million Americans includes high blood pressure, heart disease, and stroke
+                    caused by CKD.
+                </p>
+            </div>
+            <div>
+                <p> <span style="color: #ec995a">There is still hope!</span>
+                </p>
+            </div>
+            <div>
+                <p> Studies have shown nutrition plays a large part in the health of those battling CKD.
+                </p>
+            </div>
+            <div>
+                <p> The DASH diet in particular has been found to <span style="color: #ec995a">decrease the risk of
+                        stroke, cancer, kidney stones, and high blood pressure. </span>
+                </p>
+            </div>
+            <div>
+                <p> KidneyWatch helps users impliment the DASH diet into their life with tools such as personalized meal
+                    suggestions and real-time notifications.
+                </p>
+            </div>
 
 
-    
+            {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}
+            <div>
+                <p> High Blood Pressure
+                </p>
+            </div>
+            {% elif "Diabetes" in conditions and "High Blood Pressure" not in conditions %}
+            <div>
+                <p> Diabetes
+                </p>
+            </div>
+            {% elif "Diabetes" in conditions and "High Blood Pressure" in conditions %}
+            <div>
+                <p> Diabetes and High Blood Pressure
+                </p>
+            </div>
+            {% else %}
+            <div>
+                <p></p>
+            </div>
+            {%endif%}
 
-        <div style="display: grid; grid-template-columns: auto auto; padding: 40px 5vw 0 5vw;">
-            <div style="display: grid; place-items: center;">
+            <br>
+            <div>
+                <p>
+                    <span style="color: #ec995a">At KidneyWatch, your health is our number one priority!</span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    Join now and see what KidneyWatch does for you!
+                </p>
+            </div>
+
+            <div style="display: flex; padding: 60px 0 60px 0; gap: 20px;">
+                <a href="{% url 'login' method='create' %}" style="text-decoration: none; flex: grow;">
+                    <div class="button sign-up-button">
+                        <h4 style="margin: 0;">Sign Me Up!</h4>
+                    </div>
+                </a>
                 <a href='https://www.kidney.org/atoz/content/Dash_Diet'>
-                <img src="{% static 'img/kidneyFoundationAboutFood.jpeg' %}" class="three-steps">
+                    <div class="button sign-up-button" style="background-color: #eeeeee; color: #00000040;">
+                        <h4 style="margin: 0;">Learn about DASH</h4>
+                    </div>
                 </a>
-                <h4>DASH Diet Info</h4>
-            </div>
-            <div style="display: grid; place-items: center;">
-                <a href='{% url "login" method="landing" %}' >
-                <img src="{% static 'img/kidneyFoundationAboutRun.png' %}" class="three-steps">
-                </a>
-                <h4>Sign Up</h4>
-            </div>
-            
-        </div>
-        
-    
 
-    </section>
+            </div>
+
+            <!-- <div style="display: grid; place-items: start">
+                <div style="display: grid; place-items: center;">
+                    <a href='https://www.kidney.org/atoz/content/Dash_Diet'>
+                        <img src="{% static 'img/kidneyFoundationAboutFood.jpeg' %}" class="three-steps">
+                    </a>
+                    <h4>DASH Diet Info</h4>
+                </div>
+            </div> -->
+
+            
+
+
+
+        </section>
+    </div>
 
     <section
         style="min-height: 100px; background-color: #ec995a; display: grid; grid-template-rows: 80px 10px 10px; gap: 20px; padding: 30px 30px 50px 30px;">

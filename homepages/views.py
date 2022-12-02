@@ -152,25 +152,25 @@ def indexPageView(request):
         else :
 
             # Print them out to see if it worked
-            print(nutriMaxName['nutrient'])
-            print (round((nutriMax),4))
-            print(nutri2MaxName['nutrient'])
-            print (round((nutri2Max),4))
+            # print(nutriMaxName['nutrient'])
+            # print (round((nutriMax),4))
+            # print(nutri2MaxName['nutrient'])
+            # print (round((nutri2Max),4))
 
             # Step 2: Find which favorite food has the lowest in max nutrient 1
             #         Find which favorite food has the lowest in max nutrient 2
             favoriteFoods = Patient_Favorite_Food.objects.all()
-            print(favoriteFoods)
+            # print(favoriteFoods)
             for favoriteFood in favoriteFoods :
-                print("\n----\nFavorite Food: " + str(favoriteFood.patient.first_name))
-                print(favoriteFood.patient.id, loggedInPatientId)
+                # print("\n----\nFavorite Food: " + str(favoriteFood.patient.first_name))
+                # print(favoriteFood.patient.id, loggedInPatientId)
                 if favoriteFood.patient.id == loggedInPatientId :
                     for nutrient in allNutrientInFoodData:
                         # print("Nutrient: " + str(nutrient))
-                        print(nutrient.food.food_name, nutrient.nutrient.nutrient_name, favoriteFood.food.food_name)
+                        # print(nutrient.food.food_name, nutrient.nutrient.nutrient_name, favoriteFood.food.food_name)
                         if nutrient.food.food_name == favoriteFood.food.food_name:
-                            print("HELLO")
-                            print(nutrient.food.food_name, favoriteFood.food.food_name)
+                            # print("HELLO")
+                            # print(nutrient.food.food_name, favoriteFood.food.food_name)
                             if nutrient.nutrient.nutrient_name == str(nutriMaxName['nutrient']) :
                                 if nutrient.amount < favNutriMin :
                                     favFoodNutriMin = nutrient.food.food_name
@@ -181,19 +181,19 @@ def indexPageView(request):
                                     favFoodNutri2Min = nutrient.food.food_name
                                     favNutri2Min = nutrient.amount
                                     favNutri2MinName = nutrient.nutrient.nutrient_name
-            print(" ")
-            print(" ")
-            print(" ")
-            print("LoggedIn Username: " + str(loggedInUsername))
-            print(" ")
-            print(" ")
-            print(" ")
-            print(favFoodNutriMin)
-            print(favNutriMinName)
-            print(favNutriMin)
-            print(favFoodNutri2Min)
-            print(favNutri2MinName)
-            print(favNutri2Min)
+            # print(" ")
+            # print(" ")
+            # print(" ")
+            # print("LoggedIn Username: " + str(loggedInUsername))
+            # print(" ")
+            # print(" ")
+            # print(" ")
+            # print(favFoodNutriMin)
+            # print(favNutriMinName)
+            # print(favNutriMin)
+            # print(favFoodNutri2Min)
+            # print(favNutri2MinName)
+            # print(favNutri2Min)
 
 
         suggested_foods = {
@@ -534,6 +534,8 @@ def LogFoodPageView(request) :
     formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     display_chart = False
     food_nutrients = {}
+    food_nutrients2 = []
+    searched_food_title = ""
 
     nutrientList = [
     'Protein',
@@ -557,9 +559,9 @@ def LogFoodPageView(request) :
     if request.method == "POST":
         display_chart = True
         post_form_data = request.POST
-        print(post_form_data['food_names_options'])
-        print(post_form_data['numServings'])
-        print(post_form_data['dateTime'])
+        # print(post_form_data['food_names_options'])
+        # print(post_form_data['numServings'])
+        # print(post_form_data['dateTime'])
 
         all_form_data = {}
         searched_food = {}
@@ -623,9 +625,16 @@ def LogFoodPageView(request) :
 
         # get all the nutrients from the searched foods and check if it's 
         # nutrients that we care about
+        searched_food_title = searched_food['description']
         for nutrient in searched_food['foodNutrients'] :
             if nutrient['nutrientName'] in nutrientList:
                 food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+                nutrient_object = {
+                    'name' : nutrient['nutrientName'],
+                    'value' : nutrient['value'],
+                    'unitName' : nutrient['unitName']
+                }
+                food_nutrients2.append(nutrient_object)
                 # if they are not already in the database, load it up and send it over!
 
                 if not nutrient['unitName'] in measurement_table:
@@ -878,9 +887,14 @@ def LogFoodPageView(request) :
             )
             alert_object.save()
 
+    print(food_nutrients)
+    print("-----")
+    print()
+
 
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names, "display_chart": display_chart, "nutrient_info": food_nutrients} )
+    food_names, "display_chart": display_chart, "food_nutrients": food_nutrients, "food_nutrients2": food_nutrients2,
+    'searched_food_title' : searched_food_title} )
 
 
 
