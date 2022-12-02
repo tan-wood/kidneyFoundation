@@ -23,13 +23,30 @@
                 <h1 style="color: #ec995a">KidneyWatch</h1>
             </div>
 
-            <a href="{% url 'about' %}"">
+            <a href="{% url 'about' %}">
                 <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
                     <h4>About</h4>
                 </div>
             </a>
 
             <div style="background-color: transparent; min-width: 1px;"></div>
+
+            <div style="text-align: center">
+                {% if signedIn %}
+                    <a href="{% url 'home' %}" style="text-decoration: none;">
+                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                            <h4>Enter App</h4>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
+                        <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                            <h4>Enter App</h4>
+                        </div>
+                    </a>
+                {% endif %}
+                
+            </div>
 
             <div style="text-align: right;">
                 {% if signedIn %}

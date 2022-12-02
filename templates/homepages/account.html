@@ -106,17 +106,13 @@
                     <input type="text" name="phone" id="phone" value="{{patientData.phone}}" />
                     <br /><br />
 
-                    {% for condition in conditions%}
+                    {% for condition in condition_data%}
                     <div class="switch-field">
                         <p>Do you have {{condition.description}}</p>
                         <label for="Yes">Yes</label>
                         <input type="radio" name="{{condition.description}}" id="Yes" value = "Yes" />
                         <label for="No">No</label>
                         <input type="radio" name="{{condition.description}}" id="No" value = "No"/>
-                    </div>
-                    <div class="form-input">
-                        <label for="date_diagnosed_{{condition.description}}">Date Diagnosed: </label>
-                        <input type="date" name="date_diagnosed_{{condition.description}}" id="date_diagnosed_{{condition.description}}"/>
                     </div>
                     {% endfor %}
                     

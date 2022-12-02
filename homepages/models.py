@@ -112,7 +112,6 @@ class Patient_Condition(models.Model) :
     
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     condition = models.ForeignKey(Condition, on_delete=models.CASCADE)
-    date_diagnosed = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return_string = self.patient.first_name + ': ' + self.condition.description

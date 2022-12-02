@@ -28,6 +28,23 @@
                  <h4>Home</h4>
                 </a>
         </div>
+        <div style="text-align: center">
+            {% if signedIn %}
+                <a href="{% url 'home' %}" style="text-decoration: none;">
+                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                        <h4>Enter App</h4>
+                    </div>
+                </a>
+            {% else %}
+                <a href="{% url 'login' method='landing' %}" style="text-decoration: none;">
+                    <div class="header-cell button" style="max-width: 200px; min-width: 200px;">
+                        <h4>Enter App</h4>
+                    </div>
+                </a>
+            {% endif %}
+            
+        </div>
+
             <div style="text-align: right;">
                 {% if signedIn %}
                     <a href="{% url 'signout' %}" style="text-decoration: none;">
