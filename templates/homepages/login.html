@@ -42,7 +42,7 @@
         {% if errors == ""%}
         {%else%}
         {% for error in errors%}
-            <p style="color:red text-align:center">{{ error }}</p>
+            <p style="color:red; text-align:center">{{ error }}</p>
         {% endfor %}
         {% endif %}
 
@@ -134,7 +134,7 @@
 
                 <div class="form-input">
                     <label for="password">Password:</label>
-                    <input type="text" name="password" id="password" hint="password" required />
+                    <input type="password" name="password" id="password" hint="password" required />
                 </div>
                 <div style="padding-top: 60px;">
                     <button type="submit" class="login-submit-button">Sign In</button>

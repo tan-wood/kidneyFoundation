@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition
+from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food, Alert_Type
 from datetime import datetime as dt
 
 loggedIn = False
@@ -12,6 +12,7 @@ loggedInPatientId = None
 
 def indexPageView(request):
     global loggedInPatientId
+    global loggedInUsername
 
     """
     # Recommended Daily Amounts:
@@ -34,8 +35,6 @@ def indexPageView(request):
 
         loggedFoods = Patient_Logs_Food.objects.all()
         nutrients = []
-        current_date = dt.now().date()
-        formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
         currentProteinAmount = 0
         currentPotassiumAmount = 0
@@ -57,7 +56,7 @@ def indexPageView(request):
                             currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
                         elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
                             currentCarbAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Sodium, NA":
+                        elif nutrient.nutrient.nutrient_name == "Sodium, Na":
                             currentSodiumAmount += round(nutrient.amount * num_servings, 2)
                         elif nutrient.nutrient.nutrient_name == "Water":
                             currentWaterAmount += round(nutrient.amount * num_servings, 2)
@@ -83,7 +82,7 @@ def indexPageView(request):
                 currentAmount = round(currentCarbAmount, 2)
                 recommendedAmount = 250
                 recMeasurement = "G"
-            elif nutrient.nutrient_name == "Sodium, NA":
+            elif nutrient.nutrient_name == "Sodium, Na":
                 currentAmount = round(currentSodiumAmount, 2)
                 recommendedAmount = 2300
                 recMeasurement = "MG"
@@ -108,12 +107,105 @@ def indexPageView(request):
             }
             nutrients.append(nutrient_object)
 
+
+
+
+        # Food Suggestions
+        # Step 1: Find the two nutrients that are closest to going over
+        #         the recommended amount
+        nutriMax = 0
+        nutriMaxName = ""
+        nutri2Max = 0
+        nutri2MaxName = ""
+        favNutriMin = 99999
+        favNutriMinName = ""
+        favNutri2Min = 99999
+        favNutri2MinName = ""
+        favFoodNutriMin = ""
+        favFoodNutri2Min = ""
+        favoriteFoods = ""
+
+
+        max_nutrients_in_foods = {}
+        
+        for a_nutrient in nutrients :
+            
+            nutrient_level = a_nutrient['currentAmount'] / a_nutrient['dailyAmount']
+
+            if nutrient_level > nutriMax:
+                nutri2Max = nutriMax
+                nutri2MaxName = nutriMaxName
+                nutriMax = nutrient_level
+                nutriMaxName = a_nutrient
+            elif nutriMax > nutrient_level > nutri2Max:
+                nutri2Max = nutrient_level
+                nutri2MaxName = a_nutrient
+
+        
+        if nutriMax == 0 and nutri2Max == 0 :
+            # print(favoriteFoods)
+            # suggested_food_one = 
+            # suggested_food_two = #random
+            desc_one = "From your favorites"
+            desc_two = "From your favorites"
+
+        else :
+
+            # Print them out to see if it worked
+            print(nutriMaxName['nutrient'])
+            print (round((nutriMax),4))
+            print(nutri2MaxName['nutrient'])
+            print (round((nutri2Max),4))
+
+            # Step 2: Find which favorite food has the lowest in max nutrient 1
+            #         Find which favorite food has the lowest in max nutrient 2
+            favoriteFoods = Patient_Favorite_Food.objects.all()
+            print(favoriteFoods)
+            for favoriteFood in favoriteFoods :
+                if favoriteFood.patient.id == loggedInPatientId :
+                    for nutrient in allNutrientInFoodData:
+                        if nutrient.food.food_name == favoriteFood.food.food_name:
+                            if nutrient.nutrient.nutrient_name == str(nutriMaxName['nutrient']) :
+                                if nutrient.amount < favNutriMin :
+                                    favFoodNutriMin = nutrient.food.food_name
+                                    favNutriMin = nutrient.amount
+                                    favNutriMinName = nutrient.nutrient.nutrient_name
+                            if nutrient.nutrient.nutrient_name == str(nutri2MaxName['nutrient']) :
+                                if nutrient.amount < favNutri2Min :
+                                    favFoodNutri2Min = nutrient.food.food_name
+                                    favNutri2Min = nutrient.amount
+                                    favNutri2MinName = nutrient.nutrient.nutrient_name
+            print(" ")
+            print(" ")
+            print(" ")
+            print(" ")
+            print(" ")
+            print(" ")
+            print(favFoodNutriMin)
+            print(favNutriMinName)
+            print(favNutriMin)
+            print(favFoodNutri2Min)
+            print(favNutri2MinName)
+            print(favNutri2Min)
+
+
+        suggested_foods = {
+            "suggestion1" : favFoodNutriMin,
+            "nutrient_for_suggestion1" : favNutriMinName,
+            "nutrient_amount_in_suggestion1" : favNutriMin,
+            "suggestion2" : favFoodNutri2Min,
+            "nutrient_for_suggestion2" : favNutri2MinName,
+            "nutrient_amount_in_suggestion2" : favNutri2Min,
+        }
+
+
         context = {
             'data' : allNutrientInFoodData,
             'patientData' : patientData,
             'nutrients' : nutrients,
-            'formatted_date' : formatted_date
+            'suggested_foods' : suggested_foods,
         }
+
 
     if loggedIn:
         return render(request,'homepages/index.html', context)
@@ -129,8 +221,6 @@ def SignOutPageView(request):
 
 def AlertsPageView(request):
     global loggedInUsername
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     
     if loggedIn:
         data = Alert.objects.all()
@@ -138,10 +228,12 @@ def AlertsPageView(request):
         for alert in data:
             if alert.patient.username == loggedInUsername:
                 user_alerts.append(alert)
+                a = Alert.objects.get(id=alert.id)
+                a.unread = False  # change field
+                a.save() # this will update only
         
         context = {
             "alerts": user_alerts,
-            "formatted_date" : formatted_date
         }
 
         return render(request,'homepages/alerts.html', context)
@@ -150,8 +242,6 @@ def AlertsPageView(request):
     
 
 def DiaryPageView(request):
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
     if loggedIn:
         food_data = Patient_Logs_Food.objects.all()
@@ -188,7 +278,6 @@ def DiaryPageView(request):
         context = {
             "today_foods" : user_today_foods,
             "past_foods" : user_past_foods,
-            "formatted_date" : formatted_date
         }
 
         return render(request,'homepages/diary.html', context)
@@ -196,8 +285,6 @@ def DiaryPageView(request):
         return LandingPageView(request)
 
 def AccountPageView(request, method):
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     
     if loggedInPatientId != None:
         if request.method == 'POST' and method == "editPatientForm":
@@ -429,7 +516,7 @@ def AboutPageView(request):
 
 
 def apiJSONView(request) :
-    response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
+    response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query=burger&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key={settings.API_KEY}').json()
     return JsonResponse(response)
 
 
@@ -470,7 +557,15 @@ def LogFoodPageView(request) :
         food_nutrients = {}
         food_found = False
 
-
+        nutrientList = [
+            'Protein',
+            'Potassium, K',
+            'Carbohydrate, by difference',
+            'Sodium, Na',
+            'Water',
+            'Phosphorus, P',
+            'Sugars, total including NLEA',
+        ]
 
         # get the name of the food they typed in and send it call the api with it!
         name = f"{post_form_data['food_names_options']}"
@@ -511,7 +606,7 @@ def LogFoodPageView(request) :
         # load it up to be ready to save in the database if it's not found!
         if not food_found: 
             food_data = Food(
-                food_name = searched_food['description']
+                food_name = searched_food['description'],
             )
             # send it over to the database!
             food_data.save()
@@ -579,11 +674,203 @@ def LogFoodPageView(request) :
         #     'nutrient_in_food' : nutrient_in_food_form_data
         # }
 
-        return render (request, 'homepages/logfood.html', { "food_names": 
-        food_names, "formatted_date" : formatted_date, "display_chart": True, "nutrient_info": food_nutrients} )
+
+        # Create alerts
+        allNutrientInFoodData = Nutrient_In_Food.objects.all()
+        loggedFoods = Patient_Logs_Food.objects.all()
+        patientData = Patient.objects.get(id = loggedInPatientId)
+
+        currentProteinAmount = 0
+        currentPotassiumAmount = 0
+        currentCarbAmount = 0
+        currentSodiumAmount = 0
+        currentWaterAmount = 0
+        currentPhosphorusAmount = 0
+        currentSugarAmount = 0
+
+        for food in loggedFoods:
+            if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+                num_servings = food.quantity
+                for nutrient in allNutrientInFoodData:
+                    if nutrient.food.food_name == food.food.food_name:
+                        if nutrient.nutrient.nutrient_name == "Protein":
+                            currentProteinAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Potassium, K":
+                            currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
+                            currentCarbAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sodium, Na":
+                            currentSodiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Water":
+                            currentWaterAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Phosphorus, P":
+                            currentPhosphorusAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sugars, total including NLEA":
+                            currentSugarAmount += round(nutrient.amount * num_servings, 2)
+
+        patientKG = patientData.weight * 0.453592
+        proteinAmount = patientKG * 0.6
+
+        """
+        # Recommended Daily Amounts:
+        Protein                         0.6 g / kg
+        Potassium, K                    3000 mg
+        Carbohydrate, by difference     250 g
+        Sodium, Na                      2300 mg
+        Water                           3700 mg
+        Phosphorus, P                   3500 mg
+        Sugar                           30 g
+        """
+
+        if currentProteinAmount > proteinAmount:
+            alert_name = "High Protein Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your protein levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentPotassiumAmount > 3000:
+            alert_name = "High Potassium Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your potassium levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentCarbAmount > 250:
+            alert_name = "High Carb Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your carbohydrate levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentSodiumAmount > 2300:
+            alert_name = "High Sodium Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your sodium levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentWaterAmount > 3700:
+            alert_name = "High Water Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your water levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentPhosphorusAmount > 3500:
+            alert_name = "High Phosphorus Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your phosphorus levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentSugarAmount > 30:
+            alert_name = "High Sugar Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your sugar levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
 
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names, "formatted_date" : formatted_date} )
+    food_names} )
 
 
 
@@ -611,10 +898,82 @@ def LogFoodPageView(request) :
     #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
+    food_dict = {
+       'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
+       'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
+       'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
+       'Pear, raw': 'pear.jpg',   #1,4
+       'Fruit smoothie, light' : 'smoothie.jpg',
+       'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
+       'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
+       'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
+       'Raspberries, raw' : 'raspberries.jpg',#1,8
+       'Fish, salmon, grilled': 'grilledSalmon.jpg', #1,9
+       'Mixed salad greens, raw': 'mixedGreens.jpg', #1, 10
+       'Peach, raw' : 'peach.jpg', #1, 11
+       'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
+       'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
+       'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
+        #1, 15
+       'Orange, raw' : 'orange.jpg', #1,16
+   }
 
+
+    if request.method == 'POST':
+        favfoods = request.POST.getlist('foods')
+        print(favfoods)
+
+        for favfood in favfoods :
+            print(favfood)
+            response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={favfood}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+            # turn it into json to be able to deal with the info we get
+            data = response.json()
+            # keep just the info about the specific FOOD and from only the FIRST one returned
+            clicked_food = data['foods'][0]
+
+
+            food_table = Food.objects.all()
+
+            # checking the database for the inputed food
+            food_found = False
+            for a_food in food_table :
+                if clicked_food['description'] == a_food.food_name :
+                    food_found = True
+
+            # load it up to be ready to save in the database if it's not found!
+            if not food_found: 
+                food_data = Food(
+                    food_name = clicked_food['description'],
+                )
+                # send it over to the database!
+                food_data.save()
+
+            # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
+            #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
+            # patient_favorite_food_table = Patient.objects.all()
+            # for a_patient_favorite_food in patient_favorite_food_table :
+            #     if a_patient_favorite_food.patient.id == loggedInPatientId :
+            #         print(f'{a_patient_favorite_food.patient.first_name}: {a_patient_favorite_food}')
+            #         patient_favorite_food_table.append(f'{a_patient_favorite_food}')
+
+            patient_favorite_food_data = Patient_Favorite_Food(
+                patient = Patient.objects.get(username= loggedInUsername),
+                food = Food.objects.get(food_name= clicked_food['description']),
+                is_favorite = True
+            )
+
+            patient_favorite_food_data.save()
+
+
+     
     context = {
-        'dummy' : 'data'
+        'food_dict' : food_dict
     }
+
+    
 
     return render(request, 'homepages/pickfavorites.html', context)
 
+def getUsername():
+    global loggedInUsername
+    return loggedInUsername

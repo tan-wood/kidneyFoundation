@@ -1,0 +1,242 @@
+body {
+    margin: 0;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+h2 {
+    margin: 0;
+}
+
+h3, h4, h5, p, button {
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.truncated {
+    display: block;
+    white-space: nowrap;
+    /* forces text to single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main-content {
+    background-color: #eeeeee;
+    display: grid;
+    grid-template-rows: 100px 1fr;
+}
+
+.welcome-text {
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+}
+
+.sidebar-button {
+    min-height: 60px;
+    display: grid;
+    place-items: center;
+
+    color: #00000060;
+
+    transition: 0.1s ease-in-out;
+}
+
+.sidebar-button:hover {
+    background-color: #f1f1f170;
+    color: #00000080;
+}
+
+.navbar-button {
+    background-color: #e6e6e6;
+    min-width: 180px;
+    min-height: 50px;
+    max-width: 180px;
+    display: grid;
+    place-items: center;
+    color: #00000040;
+    border-radius: 6px;
+}
+
+.log-food {
+    background-color: #e6e6e6;
+
+    transition: 0.2s ease-in-out;
+}
+
+.log-food:hover {
+    background-color: #dbdbdb;
+    color: #00000065;
+}
+
+.big-white-box {
+    background-color: #ffffff;
+    border-radius: 45px;
+    width: auto;
+    height: auto;
+    box-shadow: 0 10px 40px #00000020;
+
+    display: grid; 
+    
+    padding: 30px;
+}
+.big-box-home {
+    grid-template-columns: 48% 48%;
+    gap: 30px;
+}
+.big-box-alerts {
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+}
+
+.big-box-diary {
+    grid-template-rows: auto auto auto;
+    gap: 18px;
+}
+
+.micronutrient-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.micronutrient-container {
+    background-color: #e2eede;
+    border-radius: 18px;
+    min-height: 150px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+}
+
+.alert-micronutrient-container {
+    background-color: #edd3d2;
+    border-radius: 18px;
+    min-height: 150px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+}
+
+.nutrient-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #0e4d0e60;
+}
+
+.alert-nutrient-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #450b0a60;
+}
+
+.white {
+    color: #ffffff;
+    /* color: #4d2d0e96; */
+    box-shadow: 0 0 25px #00000030;
+}
+
+.suggestion-grid {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.suggestion-container {
+    background-color: #eaeaea;
+    border-radius: 18px;
+    min-height: 100px;
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+    /* box-shadow: 0 5px 15px #0000020; */
+}
+
+.dash-diet-container {
+    background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.01), rgba(61, 61, 61, 0.75)),
+    url('../img/Dash-Diet.png');
+    /* background-image: url("../img/Dash-Diet.png"); */
+    background-color: #eaeaea;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 18px;
+    min-height: 100px;
+    /* box-shadow: 0 5 15px #0000020; */
+
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+
+    padding: 14px;
+}
+
+.alert-container {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    cursor: pointer;
+
+    padding: 0 18px 0 18px;
+    border-radius: 6px;
+
+    transition: 0.1s ease-in-out;
+}
+
+.circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ec995a;
+}
+
+.alert {
+    border: 1px solid #00000000;
+
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+.alert-container:hover {
+    background-color: #00000010;
+}
+
+.account-button {
+    min-height: 50px;
+    border-radius: 6px;
+
+    display: grid;
+    place-items: center;
+
+    background-color: #eeeeee;
+    color: #000000;
+}
+
+.red {
+    background-color: #f2e4e4;
+    color: #ab6a6a;
+}
+
+.diary-section {
+    background-color: #eeeeee;
+    border-radius: 25px;
+    padding: 18px;
+}

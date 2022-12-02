@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KidneyWatch</title>
     <link href="{% static 'css/landing.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/pickFav.css' %}" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -15,42 +16,125 @@
         rel="stylesheet">
 </head>
 
-<body>
+<body style="background-color: #eeeeee;">
     <section style="padding: 50px 0 0 0;">
         <div style="display: grid; place-items: center; padding: 20px;">
-            <h1 style="color: #ec995a">KidneyWatch</h1>
+            <h4 style="font-size: 22px;">Select at least 5</h4>
+            <h4 style="font-size: 22px;">favorite foods</h4>
         </div>
-        <style>
-            .faved {
-                background-color: black;
-                color: white;
-            }
-        </style>
-        <div id="one" class="notfaved" onClick="buttonPressed"> Sup Homie </div>
-        <div id="two" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="three" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="four" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="five" class="notfaved" onClick="testFunction()"> Sup Homie </div>
-        <div id="six" class="notfaved" onClick="testFunction()"> Sup Homie </div>
+
+
+        <form method="POST" style="display: grid; place-items: center;">
+
+            <div style="padding: 20px;">
+                <button type="submit" class="continue-button-disabled" id="continue">
+                    <h4>Continue</h4>
+                </button>
+            </div>
+
+
+            {% csrf_token %}
+            <section class="option-grid">
+                {% for key,value in food_dict.items%}
+                <input class="checkboxes" type="checkbox" value="{{ key }}" id="option{{ forloop.counter }}"
+                    name="foods" onClick="change()" required />
+                <label for="option{{ forloop.counter }}"
+                    style="display: grid; grid-template-rows: 1fr 74px; gap: 10px;">
+                    <img src="../../static/img/{{ value }}"
+                        style="border-radius: 6px 6px 0 0; width: 160px; height: 160px; object-fit: cover;" />
+                    <h4 style="padding: 10px;" class="truncated">{{ key }}</h4>
+                </label>
+            {% endfor %}
+            </section>
+
+        </form>
+
+
         <script>
-            const buttons = document.getElementsByClassName("notfaved");
+            const buttons = document.getElementsByClassName("checkboxes");
 
             const buttonPressed = e => {
-                console.log(e.target.id);  // Get ID of Clicked Element
+                if (document.getElementById(`${e.target.id}`).className == "checkboxes") {
+                    document.getElementById(`${e.target.id}`).className = "checkedbox";
+                } else {
+                    document.getElementById(`${e.target.id}`).className = "checkboxes";
+                }
+
             }
 
             for (let button of buttons) {
                 button.addEventListener("click", buttonPressed);
             }
 
-            function testFunction() {
-                document.getElementById(`${}`).className="faved";
-            }
+            function change() {
+                    if (document.getElementsByClassName("checkedbox").length > 3) {
+                    const inputs = document.querySelectorAll('.checkboxes');
 
-            console.log(document.getElementsByClassName("faved"))
+                    for (const input of inputs) {
+                        input.removeAttribute('required');
+                    }
+                    
+                    document.getElementById('continue').classList.add('continue-button');
+
+                    // can_continue = true;
+                    // if (document.getElementsByClassName("checkedbox").length < 3) {
+                    
+                    // document.getElementById('continue').classList.remove('continue-button');
+                    // can_continue = false
+
+                // }
+                }
+                
+                
+
+                console.log(document.getElementsByClassName("checkedbox").length)
+            }
         </script>
 
-    
+
+
+        {% if results %}
+        <div> {{results}} </div>
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {% comment %} <style>
+            .faved {
+                background-color: black;
+                color: white;
+            }
+        </style>
+        <div id="one" class="notfaved"> Strawberries </div>
+        <div id="two" class="notfaved"> Blueberries </div>
+        <div id="three" class="notfaved"> Oranges </div>
+        <div id="four" class="notfaved"> Grapes </div>
+        <div id="five" class="notfaved"> Cookies </div>
+        <div id="six" class="notfaved"> Bananas </div> {% endcomment %}
+
+        <div>
+
+        </div>
+
+
+
     </section>
 
 </body>

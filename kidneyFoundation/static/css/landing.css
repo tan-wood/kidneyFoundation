@@ -33,7 +33,7 @@ a {
     box-shadow: 0 10px 15px #00000020;
 
     display: grid;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto 1fr auto auto;
     /* gap: 40px; */
 
     z-index: 9999999;
@@ -175,7 +175,7 @@ a {
 input {
     background-color: #eeeeee;
     border: 0px solid transparent;
-    min-width: 120px;
+    min-width: 280px;
     min-height: 30px;
     max-width: 300px;
     max-height: 30px;

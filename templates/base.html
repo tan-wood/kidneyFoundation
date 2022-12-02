@@ -40,10 +40,26 @@
                 {% if 'alerts' in request.path %}
                 <div class="sidebar-button" style="color: #ec995a;">
                     <h4>Alerts</h4>
+                    {% if unread_messages > 0 %}
+                    <div style="position: absolute; margin-left: 90px; margin-bottom: 0px;">
+                        <div
+                            style="background-color: #ec995a; color: white; border-radius: 50%; min-width: 20px; min-height: 20px; display: grid; place-items: center;">
+                            <h5 style="padding-bottom: 2px;">{{ unread_messages }}</h5>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 {% else %}
                 <div class="sidebar-button">
                     <h4>Alerts</h4>
+                    {% if unread_messages > 0 %}
+                    <div style="position: absolute; margin-left: 90px; margin-bottom: 0px;">
+                        <div
+                            style="background-color: #ec995a; color: white; border-radius: 50%; min-width: 20px; min-height: 20px; display: grid; place-items: center;">
+                            <h5 style="padding-bottom: 2px;">{{ unread_messages }}</h5>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endif %}
             </a>
