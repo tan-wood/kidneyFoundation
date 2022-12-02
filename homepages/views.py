@@ -133,35 +133,32 @@ def indexPageView(request):
 
         
         if nutriMax == 0 and nutri2Max == 0 :
-            print(favoriteFoods)
+            # print(favoriteFoods)
             # suggested_food_one = 
             # suggested_food_two = #random
             desc_one = "From your favorites"
             desc_two = "From your favorites"
 
         # Print them out to see if it worked
-        print(nutriMaxName['nutrient'])
-        print (round((nutriMax),4))
-        print(nutri2MaxName['nutrient'])
-        print (round((nutri2Max),4))
+        # print(nutriMaxName['nutrient'])
+        # print (round((nutriMax),4))
+        # print(nutri2MaxName['nutrient'])
+        # print (round((nutri2Max),4))
 
         # Step 2: Find which favorite food has the lowest in max nutrient 1
         #         Find which favorite food has the lowest in max nutrient 2
         favoriteFoods = Patient_Favorite_Food.objects.all()
-        print(favoriteFoods)
         for favoriteFood in favoriteFoods :
             if favoriteFood.patient.id == loggedInPatientId :
-                print('-----------')
-                print(favoriteFood.food.food_name)
                 for nutrient in allNutrientInFoodData:
                     if nutrient.food.food_name == favoriteFood.food.food_name:
-
-                        print(nutrient.nutrient.nutrient_name)
-                        print(nutrient.amount)
+                        pass
+                        # print(nutrient.nutrient.nutrient_name)
+                        # print(nutrient.amount)
                         # nutrient_info = Nutrient_In_Food.objects.all()
                         # print(allNutrientInFoodData)
 
-        suggested_foods = {}
+        # suggested_foods = {}
 
         context = {
             'data' : allNutrientInFoodData,

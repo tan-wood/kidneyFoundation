@@ -33,7 +33,7 @@ a {
     box-shadow: 0 10px 15px #00000020;
 
     display: grid;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto 1fr auto auto;
     /* gap: 40px; */
 
     z-index: 9999999;
