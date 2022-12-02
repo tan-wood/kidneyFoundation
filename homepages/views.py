@@ -466,8 +466,8 @@ def LoginPageView(request, method):
     errors = []
     errors.clear()
     if request.method == 'POST' and method == "form":
-        email = request.POST['email']
-        username = request.POST['username']
+        email = request.POST.get('email', False)
+        username = request.POST.get('username', False)
 
         data = Patient.objects.all()
 
