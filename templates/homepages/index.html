@@ -30,15 +30,13 @@
                     {% if nutrient.currentAmount >= nutrient.dailyAmount %}
                     <div class="alert-micronutrient-container">
                         <div></div>
-                        <h5 style="color: #4d0e0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{
-                            nutrient.measurement }}</h5>
+                        <h5 style="color: #4d0e0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{ nutrient.measurement }}</h5>
                         <h5 class="alert-nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
                     </div>
                     {% else %}
                     <div class="micronutrient-container">
                         <div></div>
-                        <h5 style="color: #194d0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{
-                            nutrient.measurement }}</h5>
+                        <h5 style="color: #194d0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{ nutrient.measurement }}</h5>
                         <h5 class="nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
                     </div>
                     {% endif %}
