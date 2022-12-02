@@ -19,7 +19,7 @@
         <section class="big-white-box big-box-home">
             <!-- Gonna have two columns -->
 
-            
+
             <div style="background: transparent; width: auto; height: auto; border-radius: 25px;">
                 <div style="padding: 0 0 20px 0;">
                     <h3>Micronutrient Levels</h3>
@@ -27,19 +27,21 @@
                 <div class="micronutrient-grid">
                     <!-- For nutrient in nutrient-list -->
                     {% for nutrient in nutrients %}
-                        {% if nutrient.currentAmount >= nutrient.dailyAmount %}
-                        <div class="alert-micronutrient-container">
-                            <div></div>
-                            <h5 style="color: #4d0e0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{ nutrient.measurement }}</h5>
-                            <h5 class="alert-nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
-                        </div>
-                        {% else %}
-                        <div class="micronutrient-container">
-                            <div></div>
-                            <h5 style="color: #194d0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{ nutrient.measurement }}</h5>
-                            <h5 class="nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
-                        </div>
-                        {% endif %}
+                    {% if nutrient.currentAmount >= nutrient.dailyAmount %}
+                    <div class="alert-micronutrient-container">
+                        <div></div>
+                        <h5 style="color: #4d0e0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{
+                            nutrient.measurement }}</h5>
+                        <h5 class="alert-nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
+                    </div>
+                    {% else %}
+                    <div class="micronutrient-container">
+                        <div></div>
+                        <h5 style="color: #194d0e60">{{ nutrient.currentAmount }} / {{ nutrient.dailyAmount }} {{
+                            nutrient.measurement }}</h5>
+                        <h5 class="nutrient-name truncated">{{ nutrient.nutrient.nutrient_name }}</h5>
+                    </div>
+                    {% endif %}
                     {% endfor %}
 
                 </div>
@@ -56,28 +58,33 @@
 
                     <div class="suggestion-container">
                         <div></div>
-                        <h5 style="color: #0e4d0f60">{{suggested_foods.desc}}{{suggested_foods.nutrient_for_suggestion1}}</h5>
+                        <h5 style="color: #0e4d0f60">
+                            {{suggested_foods.desc}}{{suggested_foods.nutrient_for_suggestion1}}</h5>
                         <h5 class="nutrient-name">{{suggested_foods.suggestion1}}</h5>
                     </div>
 
                     <div class="suggestion-container">
                         <div></div>
-                        <h5 style="color: #0e4d0f60">{{suggested_foods.desc}}{{suggested_foods.nutrient_for_suggestion2}}</h5>
+                        <h5 style="color: #0e4d0f60">
+                            {{suggested_foods.desc}}{{suggested_foods.nutrient_for_suggestion2}}</h5>
                         <h5 class="nutrient-name">{{suggested_foods.suggestion2}}</h5>
                     </div>
 
+
                     <div class="dash-diet-container">
-                        <div></div>
-                        <h5 style="color: #ffffff">Nutrition, benefits, and more</h5>
-                        <h5 class="nutrient-name white">Dash Diet</h5>
+                        <a href='https://www.kidney.org/atoz/content/Dash_Diet'>
+                            <div></div>
+                            <h5 style="color: #ffffff">Nutrition, benefits, and more</h5>
+                            <h5 class="nutrient-name white">Dash Diet</h5>
+                        </a>
                     </div>
 
                 </div>
             </div>
-            
+
 
         </section>
-        
+
     </section>
 </section>
 
