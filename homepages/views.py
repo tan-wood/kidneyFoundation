@@ -11,7 +11,6 @@ import time
 loggedIn = False
 loggedInUsername = ""
 loggedInPatientId = None
-save = False
 
 nutrientList = [
     'Protein',
@@ -1004,6 +1003,8 @@ def LogFoodPageView(request) :
     #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
+
+    save = False
     
     food_dict = {
         'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
@@ -1024,14 +1025,12 @@ def PickFavoritesPageView(request):
         'Orange, raw' : 'orange.jpg' #1,16
     }
     
-    global save
 
     global nutrient_list
     food_nutrients = {}
     clicked_food = {}
 
     if request.method == 'POST':
-        global save
         favfoods = request.POST.getlist('foods')
         print(favfoods)
 
@@ -1149,7 +1148,7 @@ def PickFavoritesPageView(request):
 
     
     if save :
-        time.sleep(10)
+        time.sleep(5)
         return indexPageView(request)
     else:
         return render(request, 'homepages/pickfavorites.html', context)
