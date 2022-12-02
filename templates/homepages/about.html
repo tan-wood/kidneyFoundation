@@ -85,24 +85,24 @@
  
 
         {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}
+        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
+            <h1 style="font-size: 52px; color: #ec995a">High Blood Pressure</h1>
+        </div>
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> High Blood Pressure
-            </h2>
+            <h2> </h2>
+            <h2>
         </div>
         {% elif "Diabetes" in conditions and "High Blood Pressure" not in conditions %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Diabetes
-            </h2>
+        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
+            <h1 style="font-size: 52px; color: #ec995a">Diabetes</h1>
         </div>
         {% elif "Diabetes" in conditions and "High Blood Pressure" in conditions %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Diabetes and High Blood Pressure
-            </h2>
+        <div style="display: grid; place-items: center; padding: 60px 0 0 0;">
+            <h1 style="font-size: 52px; color: #ec995a">Diabetes and High Blood Pressure</h1>
         </div>
         {% else %}
-        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> No Conditions
-            </h2>
+        <div style="display: grid; place-items: center; padding: 50px 0 0 0;">
+            <h1 style="font-size: 52px; color: #ec995a">No Conditions</h1>
         </div>
         {%endif%}
         
