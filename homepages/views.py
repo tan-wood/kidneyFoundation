@@ -378,30 +378,22 @@ def AccountPageView(request, method):
             patient.last_name = request.POST['last_name']
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
-            patient.height = (int(request.POST['height_ft'])*12) + (int(request.POST['height_in']))
+            patient.height = request.POST['height']
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
             patient.save()
 
-            condition_list = ['High Blood Pressure', 'Diabetes']
-
-            for i in range(len(condition_list)):
-                if request.POST[condition_list[i]] == "Yes":
-                    condition = Condition.objects.get(description=condition_list[i])
-                    try:
-                        patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
-                        pass
-                    except:
-                        Patient_Condition.objects.create(patient_id=loggedInPatientId, condition_id=condition.id)
-                else:
-                    condition = Condition.objects.get(description=condition_list[i])
-                    try:
-                        patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
-                        patient_condition.delete()
-                    except:
-                        pass
+            if request.POST['High Blood Pressure'] == "Yes":
+                condition = Condition.objects.get(description="High Blood Pressure")
+                patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
             
+            if request.POST['Diabetes'] == "Yes":
+
+                condition = Condition.objects.get(description="Diabetes")
+                patientId = Patient.objects.get(id=patient.id)
+                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
 
 
             return AccountPageView(request, "homeAccount")
@@ -427,8 +419,6 @@ def AccountPageView(request, method):
 
             condition_data = Condition.objects.all()
 
-            inches = patientData.height % 12
-            feet = (patientData.height - inches)/12
 
             if method == "homeAccount":
                 context = {
@@ -436,8 +426,6 @@ def AccountPageView(request, method):
                     'display': "homeAccount",
                     'conditions' : loggedInPatientConditions,
                     'condition_data' : condition_data,
-                    'inches': inches,
-                    'feet': feet
                 }
             elif method == "editPatient":
                 context = {
@@ -445,8 +433,6 @@ def AccountPageView(request, method):
                     'display': "editPatient",
                     'conditions' : loggedInPatientConditions,
                     'condition_data' : condition_data,
-                    'inches': inches,
-                    'feet': feet
                 }
             else:
                 context = {
@@ -471,6 +457,7 @@ def LandingPageView(request):
             "signedIn": True
         }
     return render(request,'homepages/landingpage.html', context)
+
 
 def LoginPageView(request, method):
     global loggedIn
@@ -508,7 +495,7 @@ def LoginPageView(request, method):
             patient.password = request.POST['password']
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
-            patient.height = (int(request.POST['height_ft'])*12) + (int(request.POST['height_in']))
+            patient.height = request.POST['height']
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
@@ -530,11 +517,11 @@ def LoginPageView(request, method):
 
             
 
-            
+            loggedIn = True
             loggedInPatientId = patient.id
             loggedInUsername = patient.username
             
-            return PickFavoritesPageView(request)
+            return indexPageView(request)
 
     elif request.method == 'POST' and method == "loginform":
         
@@ -556,7 +543,7 @@ def LoginPageView(request, method):
         if notFound:
             context = {
                 "display" : "login",
-                "errors" : "The username or password is incorrect"
+                "errors" : "The username or password are incorrect"
             }
             return render(request, 'homepages/login.html', context)
     else:
@@ -1002,16 +989,12 @@ def LogFoodPageView(request) :
     #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
-    global loggedIn
-
-    if not loggedIn:
-        food_dict = {
+    food_dict = {
         'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
         'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
         'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
         'Pear, raw': 'pear.jpg',   #1,4
-        'Fruit smoothie, light' : 'smoothie.jpg',
-        'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
+        'Caesar salad, with romaine, no dressing' : 'chickenCaeser.jpg', #1,5
         'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
         'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
         'Raspberries, raw' : 'raspberries.jpg',#1,8
@@ -1021,8 +1004,8 @@ def PickFavoritesPageView(request):
         'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
         'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
         'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
-            #1, 15
-        'Orange, raw' : 'orange.jpg', #1,16
+        'Fruit smoothie, light' : 'smoothie.jpg', #1, 15
+        'Orange, raw' : 'orange.jpg' #1,16
     }
 
 
