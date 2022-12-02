@@ -940,7 +940,7 @@ def PickFavoritesPageView(request):
         'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
         'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
         'Pear, raw': 'pear.jpg',   #1,4
-        'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
+        'Caesar salad, with romaine, no dressing' : 'chickenCaeser.jpg', #1,5
         'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
         'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
         'Raspberries, raw' : 'raspberries.jpg',#1,8
@@ -957,7 +957,7 @@ def PickFavoritesPageView(request):
 
     global nutrient_list
     food_nutrients = {}
-    clicked_food = []
+    clicked_food = {}
 
     if request.method == 'POST':
         favfoods = request.POST.getlist('foods')
@@ -969,6 +969,7 @@ def PickFavoritesPageView(request):
             # turn it into json to be able to deal with the info we get
             data = response.json()
             # keep just the info about the specific FOOD and from only the FIRST one returned
+
             clicked_food = data['foods'][0]
 
 
