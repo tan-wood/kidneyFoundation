@@ -629,6 +629,7 @@ def apiJSONView(request) :
 
 
 def LogFoodPageView(request) :
+    global nutrientList
 
     food_names = {}
     current_date = dt.now().date()
@@ -637,15 +638,6 @@ def LogFoodPageView(request) :
     food_nutrients = {}
     food_nutrients2 = []
     searched_food_title = ""
-
-    nutrientList = [
-    'Protein',
-    'Potassium, K',
-    'Carbohydrate, by difference',
-    'Sodium, Na',
-    'Water',
-    'Phosphorus, P',
-    ]
 
     if 'name' in request.GET:
         name = request.GET['name']
