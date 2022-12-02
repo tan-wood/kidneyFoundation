@@ -303,7 +303,7 @@ def AccountPageView(request, method):
             patient.last_name = request.POST['last_name']
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
-            patient.height = request.POST['height']
+            patient.height = (int(request.POST['height_ft'])*12) + (int(request.POST['height_in']))
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
@@ -352,6 +352,8 @@ def AccountPageView(request, method):
 
             condition_data = Condition.objects.all()
 
+            inches = patientData.height % 12
+            feet = (patientData.height - inches)/12
 
             if method == "homeAccount":
                 context = {
@@ -359,6 +361,8 @@ def AccountPageView(request, method):
                     'display': "homeAccount",
                     'conditions' : loggedInPatientConditions,
                     'condition_data' : condition_data,
+                    'inches': inches,
+                    'feet': feet
                 }
             elif method == "editPatient":
                 context = {
@@ -366,6 +370,8 @@ def AccountPageView(request, method):
                     'display': "editPatient",
                     'conditions' : loggedInPatientConditions,
                     'condition_data' : condition_data,
+                    'inches': inches,
+                    'feet': feet
                 }
             else:
                 context = {
@@ -428,7 +434,7 @@ def LoginPageView(request, method):
             patient.password = request.POST['password']
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
-            patient.height = request.POST['height']
+            patient.height = (int(request.POST['height_ft'])*12) + (int(request.POST['height_in']))
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
@@ -450,7 +456,7 @@ def LoginPageView(request, method):
 
             
 
-            loggedIn = True
+            
             loggedInPatientId = patient.id
             loggedInUsername = patient.username
             
@@ -896,83 +902,90 @@ def LogFoodPageView(request) :
 
 
 def PickFavoritesPageView(request):
-    food_dict = {
-       'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
-       'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
-       'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
-       'Pear, raw': 'pear.jpg',   #1,4
-       'Fruit smoothie, light' : 'smoothie.jpg',
-       'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
-       'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
-       'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
-       'Raspberries, raw' : 'raspberries.jpg',#1,8
-       'Fish, salmon, grilled': 'grilledSalmon.jpg', #1,9
-       'Mixed salad greens, raw': 'mixedGreens.jpg', #1, 10
-       'Peach, raw' : 'peach.jpg', #1, 11
-       'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
-       'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
-       'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
-        #1, 15
-       'Orange, raw' : 'orange.jpg', #1,16
-   }
+    global loggedIn
 
-
-    if request.method == 'POST':
-        favfoods = request.POST.getlist('foods')
-        print(favfoods)
-
-        for favfood in favfoods :
-            print(favfood)
-            response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={favfood}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
-            # turn it into json to be able to deal with the info we get
-            data = response.json()
-            # keep just the info about the specific FOOD and from only the FIRST one returned
-            clicked_food = data['foods'][0]
-
-
-            food_table = Food.objects.all()
-
-            # checking the database for the inputed food
-            food_found = False
-            for a_food in food_table :
-                if clicked_food['description'] == a_food.food_name :
-                    food_found = True
-
-            # load it up to be ready to save in the database if it's not found!
-            if not food_found: 
-                food_data = Food(
-                    food_name = clicked_food['description'],
-                )
-                # send it over to the database!
-                food_data.save()
-
-            # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
-            #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
-            # patient_favorite_food_table = Patient.objects.all()
-            # for a_patient_favorite_food in patient_favorite_food_table :
-            #     if a_patient_favorite_food.patient.id == loggedInPatientId :
-            #         print(f'{a_patient_favorite_food.patient.first_name}: {a_patient_favorite_food}')
-            #         patient_favorite_food_table.append(f'{a_patient_favorite_food}')
-
-            patient_favorite_food_data = Patient_Favorite_Food(
-                patient = Patient.objects.get(username= loggedInUsername),
-                food = Food.objects.get(food_name= clicked_food['description']),
-                is_favorite = True
-            )
-
-            patient_favorite_food_data.save()
-
-            return indexPageView(request)
-
-
-     
-    context = {
-        'food_dict' : food_dict
+    if not loggedIn:
+        food_dict = {
+        'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
+        'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
+        'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
+        'Pear, raw': 'pear.jpg',   #1,4
+        'Fruit smoothie, light' : 'smoothie.jpg',
+        'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
+        'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
+        'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
+        'Raspberries, raw' : 'raspberries.jpg',#1,8
+        'Fish, salmon, grilled': 'grilledSalmon.jpg', #1,9
+        'Mixed salad greens, raw': 'mixedGreens.jpg', #1, 10
+        'Peach, raw' : 'peach.jpg', #1, 11
+        'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
+        'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
+        'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
+            #1, 15
+        'Orange, raw' : 'orange.jpg', #1,16
     }
 
-    
 
-    return render(request, 'homepages/pickfavorites.html', context)
+        if request.method == 'POST':
+            favfoods = request.POST.getlist('foods')
+            print(favfoods)
+
+            for favfood in favfoods :
+                print(favfood)
+                response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={favfood}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+                # turn it into json to be able to deal with the info we get
+                data = response.json()
+                # keep just the info about the specific FOOD and from only the FIRST one returned
+                clicked_food = data['foods'][0]
+
+
+                food_table = Food.objects.all()
+
+                # checking the database for the inputed food
+                food_found = False
+                for a_food in food_table :
+                    if clicked_food['description'] == a_food.food_name :
+                        food_found = True
+
+                # load it up to be ready to save in the database if it's not found!
+                if not food_found: 
+                    food_data = Food(
+                        food_name = clicked_food['description'],
+                    )
+                    # send it over to the database!
+                    food_data.save()
+
+                # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
+                #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
+                # patient_favorite_food_table = Patient.objects.all()
+                # for a_patient_favorite_food in patient_favorite_food_table :
+                #     if a_patient_favorite_food.patient.id == loggedInPatientId :
+                #         print(f'{a_patient_favorite_food.patient.first_name}: {a_patient_favorite_food}')
+                #         patient_favorite_food_table.append(f'{a_patient_favorite_food}')
+
+                patient_favorite_food_data = Patient_Favorite_Food(
+                    patient = Patient.objects.get(username= loggedInUsername),
+                    food = Food.objects.get(food_name= clicked_food['description']),
+                    is_favorite = True
+                )
+
+                patient_favorite_food_data.save()
+
+                loggedIn = True
+
+                return indexPageView(request)
+
+
+        
+        context = {
+            'food_dict' : food_dict
+        }
+
+        
+
+        return render(request, 'homepages/pickfavorites.html', context)
+    else:
+        return indexPageView(request)
 
 def getUsername():
     global loggedInUsername

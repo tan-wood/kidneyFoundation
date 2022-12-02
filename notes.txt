@@ -1,6 +1,3 @@
 TODOS:
 
 make the height to be height in feet and height in inches
-
-route from the create account, takes you to this next steps and then it takes you
-to home
