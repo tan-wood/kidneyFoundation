@@ -10,7 +10,7 @@
         <div></div>
         <a href="{% url 'logfood' %}">
             <div class="navbar-button log-food" style="color: #00000070;">
-                <h4 style="margin: 0; font-size: 14px;">Log Food</h4>
+                <h4 style="margin: 0; font-size: 14px; color: #ffffff;">Log Food</h4>
             </div>
         </a>
     </section>
@@ -18,7 +18,7 @@
         {% if display == "homeAccount"%}
             <section class="big-white-box">
                 <!-- This is going to just be one column of alerts -->
-                <h1>Account</h1>
+                <h3>Account</h3>
 
                 <section>
                     <div style="padding: 20px 0 20px 0;">
@@ -62,8 +62,8 @@
 
         {% elif display == "editPatient"%}
             <section class="big-white-box">
-                <h1>Edit Patient Information</h1>
-                <form name="form" method="post" action="{%url 'account' method="editPatientForm"%}">
+                <h3>Edit Patient Information</h3>
+                <form name="form" method="post" action="{%url 'account' method='editPatientForm'%}" style="padding: 40px 0 40px 0;">
                     {% csrf_token %} {% comment %} makes sure whoever is editing the form is the
                     same as submitting the form {% endcomment %}
                     
@@ -117,18 +117,18 @@
                     {% endfor %}
                     
                     <br><br>
-                    <button type="submit">Update</button>
+                    <button type="submit" class="account-button" style="background-color: #ec995a; color: white; max-width: 280px; min-width: 280px; border: none;">Update</button>
                 </form>
-                <a href="{% url "account" method="homeAccount" %}">
-                    <div>
-                        <button>Cancel</button>
+                <a href="{% url 'account' method='homeAccount'%}">
+                    <div class="account-button" style="max-width: 280px;">
+                        <h4>Cancel</h4>
                     </div>
                 </a>
             </section>
         {% else %}
             <section class="big-white-box">
-                <h1>Change username and password</h1>
-                    <form name="form" method="post" action="{%url 'account' method="changeUandPForm"%}">
+                <h3>Change username and password</h3>
+                    <form name="form" method="post" action="{%url 'account' method='changeUandPForm'%}" style="padding: 40px 0 40px 0;">
                         {% csrf_token %}
 
                         <label for="username">User Name:</label>
@@ -148,11 +148,11 @@
                         value="{{patientData.password}}"
                         />
                         <br /><br />
-                        <button type="submit">Update</button>
+                        <button type="submit" class="account-button" style="background-color: #ec995a; color: white; max-width: 280px; min-width: 280px; border: none;">Update</button>
                     </form>
-                    <a href="{% url "account" method="homeAccount" %}">
-                        <div>
-                            <button>Cancel</button>
+                    <a href="{% url 'account' method='homeAccount'%}">
+                        <div class="account-button" style="max-width: 280px;">
+                            <h4>Cancel</h4>
                         </div>
                     </a>
             </section>
