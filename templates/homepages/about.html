@@ -82,26 +82,35 @@
             <h2> KidneyWatch helps users impliment the DASH diet into their life with tools such as personalized meal suggestions and real-time notifications
             </h2>
         </div>
- 
+
 
         {%if "High Blood Pressure" in conditions and "Diabetes" not in conditions %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> High Blood Pressure
+            <h2>The DASH diet was originally designed to help people with high blood pressure. 
+                The diet revolves around greens, fruits, and lean proteins. The avoidance of fats, sodium, and red meats makes adherence to the DASH diet a key factor in fighting against high blood pressure.                 
             </h2>
         </div>
         {% elif "Diabetes" in conditions and "High Blood Pressure" not in conditions %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Diabetes
+            <h2> 
+                The DASH diet is not only limited to those with kidney disease Those with diabetes in particular have experienced improved insulin resistance, hyperlipidemia, and lower levels of obesity when following DASH diet guidelines. 
+                
             </h2>
         </div>
         {% elif "Diabetes" in conditions and "High Blood Pressure" in conditions %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> Diabetes and High Blood Pressure
+            <h2>The DASH diet was originally designed to help people with high blood pressure. 
+                The diet revolves around greens, fruits, and lean proteins. The avoidance of fats, sodium, and red meats makes adherence to the DASH diet a key factor in fighting against high blood pressure.                 
+            </h2>
+        </div>
+        <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
+            <h2> 
+                The DASH diet is not only limited to those with kidney disease Those with diabetes in particular have experienced improved insulin resistance, hyperlipidemia, and lower levels of obesity when following DASH diet guidelines. 
             </h2>
         </div>
         {% else %}
         <div style="display: grid; place-items: center; padding: 20px 0 0 0;">
-            <h2> No Conditions
+            <h2> 
             </h2>
         </div>
         {%endif%}
