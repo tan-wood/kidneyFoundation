@@ -525,6 +525,8 @@ def LogFoodPageView(request) :
     food_names = {}
     current_date = dt.now().date()
     formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
+    display_chart = False
+    food_nutrients = {}
 
     nutrientList = [
     'Protein',
@@ -546,6 +548,7 @@ def LogFoodPageView(request) :
     
 
     if request.method == "POST":
+        display_chart = True
         post_form_data = request.POST
         print(post_form_data['food_names_options'])
         print(post_form_data['numServings'])
@@ -554,7 +557,6 @@ def LogFoodPageView(request) :
         all_form_data = {}
         searched_food = {}
         searched_food_data = {}
-        food_nutrients = {}
         food_found = False
 
         nutrientList = [
@@ -869,8 +871,9 @@ def LogFoodPageView(request) :
             )
             alert_object.save()
 
+
     return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names} )
+    food_names, "display_chart": display_chart, "nutrient_info": food_nutrients} )
 
 
 

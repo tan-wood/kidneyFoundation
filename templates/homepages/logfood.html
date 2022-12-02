@@ -64,17 +64,17 @@
         {% endif %}
 
         {% if display_chart %}
-            <div class = "col-md-8">
+            <div>
                 <canvas id="myChart" width="200" height="200"></canvas>
                 <script>
                     const ctx = document.getElementById('myChart').getContext('2d');
                     const myChart = new Chart(ctx, {
                         type: 'pie',
                         data: {
-                            labels: [{% for nutrient in nutrient_info %} '{{nutrient}} in {{nutrient.nutrientName.unitName}}', {% endfor %}],
-                            datasets: [{9
+                            labels: [{% for nutrient, value in nutrient_info.items %} '{{nutrient}} in {{nutrient.unitName}}', {% endfor %}],
+                            datasets: [{
                                 label: 'Amount',
-                                data: [{% for nutrient in nutrient_info %} {{nutrient.nutrientName.value}}, {% endfor %}],
+                                data: [{% for nutrient in nutrient_info %} {{value}}, {% endfor %}],
                                 backgroundColor: [
                                     'rgba(255, 99, 132, 0.8)',
                                     'rgba(54, 162, 235, 0.8)',
