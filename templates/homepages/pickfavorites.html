@@ -93,63 +93,12 @@
         <form method="POST">
             {% csrf_token %}
 
-            {% for foodoption in food_list %}
-                <li><input class="checkboxes" type="checkbox" value="{{ foodoption }}" id="option{{ forloop.counter }}" name="foods"  onClick="change()" required/>
-                    <label for="option{{ forloop.counter }}"><img src="https://picsum.photos/seed/1/100" /></label>
-                </li>
+            {% for key,value in food_dict.items%}
+                <li><input class="checkboxes" type="checkbox" value="{{ key }}" id="option{{ forloop.counter }}" name="foods"  onClick="change()" required/>
+                    <label for="option{{ forloop.counter }}"><img src="../../static/img/{{ value }}"/></label>
+                </li> 
             {% endfor %}
-
-
-            {% comment %} <p>{{ food_list }}</p>
-            
-            <li><input class="checkboxes" type="checkbox" value="" id="option1" name="foods"  onClick="change()" required/>
-                <label for="option1"><img src="https://picsum.photos/seed/1/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option2" name="foods" onClick="change()" required/>
-                <label for="option2"><img src="https://picsum.photos/seed/2/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option3" name="foods" onClick="change()" required/>
-                <label for="option3"><img src="https://picsum.photos/seed/3/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option4" name="foods" onClick="change()" required/>
-                <label for="option4"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option5" name="foods" onClick="change()" required/>
-                <label for="option5"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option6" name="foods"  onClick="change()" required/>
-                <label for="option6"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option7" name="foods"  onClick="change()" required/>
-                <label for="option7"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option8" name="foods"  onClick="change()" required/>
-                <label for="option8"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option9" name="foods"  onClick="change()" required/>
-                <label for="option9"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option10" name="foods"  onClick="change()" required/>
-                <label for="option10"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option11" name="foods"  onClick="change()" required/>
-                <label for="option11"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option12" name="foods"  onClick="change()" required/>
-                <label for="option12"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option13" name="foods"  onClick="change()" required/>
-                <label for="option13"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option14" name="foods"  onClick="change()" required/>
-                <label for="option14"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option15" name="foods"  onClick="change()" required/>
-                <label for="option15"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option16" name="foods"  onClick="change()" required/>
-                <label for="option16"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li> {% endcomment %}
+           
 
             <button type="submit">Submit</button>
           </form>
