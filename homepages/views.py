@@ -117,6 +117,16 @@ def indexPageView(request):
         nutriMaxName = ""
         nutri2Max = 0
         nutri2MaxName = ""
+        favNutriMin = 99999
+        favNutriMinName = ""
+        favNutri2Min = 99999
+        favNutri2MinName = ""
+        favFoodNutriMin = ""
+        favFoodNutri2Min = ""
+        favoriteFoods = ""
+
+
+        max_nutrients_in_foods = {}
         
         for a_nutrient in nutrients :
             
@@ -139,32 +149,63 @@ def indexPageView(request):
             desc_one = "From your favorites"
             desc_two = "From your favorites"
 
-        # Print them out to see if it worked
-        # print(nutriMaxName['nutrient'])
-        # print (round((nutriMax),4))
-        # print(nutri2MaxName['nutrient'])
-        # print (round((nutri2Max),4))
+        else :
 
-        # Step 2: Find which favorite food has the lowest in max nutrient 1
-        #         Find which favorite food has the lowest in max nutrient 2
-        favoriteFoods = Patient_Favorite_Food.objects.all()
-        for favoriteFood in favoriteFoods :
-            if favoriteFood.patient.id == loggedInPatientId :
-                for nutrient in allNutrientInFoodData:
-                    if nutrient.food.food_name == favoriteFood.food.food_name:
-                        pass
-                        # print(nutrient.nutrient.nutrient_name)
-                        # print(nutrient.amount)
-                        # nutrient_info = Nutrient_In_Food.objects.all()
-                        # print(allNutrientInFoodData)
+            # Print them out to see if it worked
+            print(nutriMaxName['nutrient'])
+            print (round((nutriMax),4))
+            print(nutri2MaxName['nutrient'])
+            print (round((nutri2Max),4))
 
-        # suggested_foods = {}
+            # Step 2: Find which favorite food has the lowest in max nutrient 1
+            #         Find which favorite food has the lowest in max nutrient 2
+            favoriteFoods = Patient_Favorite_Food.objects.all()
+            print(favoriteFoods)
+            for favoriteFood in favoriteFoods :
+                if favoriteFood.patient.id == loggedInPatientId :
+                    for nutrient in allNutrientInFoodData:
+                        if nutrient.food.food_name == favoriteFood.food.food_name:
+                            if nutrient.nutrient.nutrient_name == str(nutriMaxName['nutrient']) :
+                                if nutrient.amount < favNutriMin :
+                                    favFoodNutriMin = nutrient.food.food_name
+                                    favNutriMin = nutrient.amount
+                                    favNutriMinName = nutrient.nutrient.nutrient_name
+                            if nutrient.nutrient.nutrient_name == str(nutri2MaxName['nutrient']) :
+                                if nutrient.amount < favNutri2Min :
+                                    favFoodNutri2Min = nutrient.food.food_name
+                                    favNutri2Min = nutrient.amount
+                                    favNutri2MinName = nutrient.nutrient.nutrient_name
+            print(" ")
+            print(" ")
+            print(" ")
+            print(" ")
+            print(" ")
+            print(" ")
+            print(favFoodNutriMin)
+            print(favNutriMinName)
+            print(favNutriMin)
+            print(favFoodNutri2Min)
+            print(favNutri2MinName)
+            print(favNutri2Min)
+
+
+        suggested_foods = {
+            "suggestion1" : favFoodNutriMin,
+            "nutrient_for_suggestion1" : favNutriMinName,
+            "nutrient_amount_in_suggestion1" : favNutriMin,
+            "suggestion2" : favFoodNutri2Min,
+            "nutrient_for_suggestion2" : favNutri2MinName,
+            "nutrient_amount_in_suggestion2" : favNutri2Min,
+        }
+
 
         context = {
             'data' : allNutrientInFoodData,
             'patientData' : patientData,
             'nutrients' : nutrients,
+            'suggested_foods' : suggested_foods,
         }
+
 
     if loggedIn:
         return render(request,'homepages/index.html', context)
