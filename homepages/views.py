@@ -378,22 +378,30 @@ def AccountPageView(request, method):
             patient.last_name = request.POST['last_name']
             patient.age = request.POST['age']
             patient.weight = request.POST['weight']
-            patient.height = request.POST['height']
+            patient.height = (int(request.POST['height_ft'])*12) + (int(request.POST['height_in']))
             patient.email = request.POST['email']
             patient.phone = request.POST['phone']
 
             patient.save()
 
-            if request.POST['High Blood Pressure'] == "Yes":
-                condition = Condition.objects.get(description="High Blood Pressure")
-                patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
-            
-            if request.POST['Diabetes'] == "Yes":
+            condition_list = ['High Blood Pressure', 'Diabetes']
 
-                condition = Condition.objects.get(description="Diabetes")
-                patientId = Patient.objects.get(id=patient.id)
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
+            for i in range(len(condition_list)):
+                if request.POST[condition_list[i]] == "Yes":
+                    condition = Condition.objects.get(description=condition_list[i])
+                    try:
+                        patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
+                        pass
+                    except:
+                        Patient_Condition.objects.create(patient_id=loggedInPatientId, condition_id=condition.id)
+                else:
+                    condition = Condition.objects.get(description=condition_list[i])
+                    try:
+                        patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
+                        patient_condition.delete()
+                    except:
+                        pass
+            
 
 
             return AccountPageView(request, "homeAccount")
@@ -419,6 +427,8 @@ def AccountPageView(request, method):
 
             condition_data = Condition.objects.all()
 
+            inches = patientData.height % 12
+            feet = (patientData.height - inches)/12
 
             if method == "homeAccount":
                 context = {
@@ -426,6 +436,8 @@ def AccountPageView(request, method):
                     'display': "homeAccount",
                     'conditions' : loggedInPatientConditions,
                     'condition_data' : condition_data,
+                    'inches': inches,
+                    'feet': feet
                 }
             elif method == "editPatient":
                 context = {
@@ -433,6 +445,8 @@ def AccountPageView(request, method):
                     'display': "editPatient",
                     'conditions' : loggedInPatientConditions,
                     'condition_data' : condition_data,
+                    'inches': inches,
+                    'feet': feet
                 }
             else:
                 context = {
