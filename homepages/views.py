@@ -472,7 +472,6 @@ def LandingPageView(request):
         }
     return render(request,'homepages/landingpage.html', context)
 
-
 def LoginPageView(request, method):
     global loggedIn
     global loggedInPatientId
@@ -480,8 +479,8 @@ def LoginPageView(request, method):
     errors = []
     errors.clear()
     if request.method == 'POST' and method == "form":
-        email = request.POST.get('email', False)
-        username = request.POST.get('username', False)
+        email = request.POST['email']
+        username = request.POST['username']
 
         data = Patient.objects.all()
 
@@ -558,113 +557,6 @@ def LoginPageView(request, method):
             context = {
                 "display" : "login",
                 "errors" : "The username or password is incorrect"
-            }
-            return render(request, 'homepages/login.html', context)
-    else:
-
-        if (method == "landing" or method == "create" or method == "login") and loggedIn:
-            return indexPageView(request)
-        elif method == "landing" :
-            context = {
-                "display" : "original"
-            }
-        elif method == "create":
-
-            condition_data = Condition.objects.all()
-
-            context = {
-                "display" : "create",
-                "condition_data": condition_data,
-            }
-        else :
-            context = {
-                "display" : "login",
-                "errors" : ""
-            }
-
-        return render(request, 'homepages/login.html', context)
-    
-    errors = []
-    errors.clear()
-    if request.method == 'POST' and method == "form":
-        email = request.POST['email']
-        username = request.POST['username']
-
-        data = Patient.objects.all()
-
-        for patient in data:
-            if email == patient.email:
-                errors.append("This email has already been registered") 
-            if username == patient.username:
-                errors.append("This username is already taken")
-        
-        condition_data = Condition.objects.all()
-
-        if len(errors) != 0:
-            context = {
-                    "display" : "create",
-                    "errors" : errors,
-                    "condition_data": condition_data,
-                }
-            return render(request, 'homepages/login.html', context)
-        else:
-            patient = Patient()
-
-            patient.first_name = request.POST['first_name']
-            patient.last_name = request.POST['last_name']
-            patient.username = request.POST['username']
-            patient.password = request.POST['password']
-            patient.age = request.POST['age']
-            patient.weight = request.POST['weight']
-            patient.height = request.POST['height']
-            patient.email = request.POST['email']
-            patient.phone = request.POST['phone']
-
-            patient.save()
-
-            if request.POST['High Blood Pressure'] == "Yes":
-
-                condition = Condition.objects.get(description="High Blood Pressure")
-                patientId = Patient.objects.get(id=patient.id)
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
-                
-                
-            
-            if request.POST['Diabetes'] == "Yes":
-
-                condition = Condition.objects.get(description="Diabetes")
-                patientId = Patient.objects.get(id=patient.id)
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
-
-            
-
-            loggedIn = True
-            loggedInPatientId = patient.id
-            loggedInUsername = patient.username
-            
-            return indexPageView(request)
-
-    elif request.method == 'POST' and method == "loginform":
-        
-        username = request.POST['username']
-        password = request.POST['password']
-        notFound = False
-
-        data = Patient.objects.all()
-
-        for patient in data:
-            if username == patient.username and password == patient.password:
-                loggedIn = True
-                loggedInPatientId = patient.id
-                loggedInUsername = patient.username
-                return indexPageView(request)
-            else :
-                notFound = True
-            
-        if notFound:
-            context = {
-                "display" : "login",
-                "errors" : "The username or password are incorrect"
             }
             return render(request, 'homepages/login.html', context)
     else:
