@@ -27,10 +27,16 @@
         <form method="POST" action="{% url 'pickfavorites' %}" style="display: grid; place-items: center;">
 
             <div style="padding: 20px;">
-                <button type="submit" class="continue-button-disabled" id="continue">
+                <button type="submit" class="continue-button-disabled" onsubmit="load()" id="continue">
                     <h4>Continue</h4>
                 </button>
             </div>
+            <script>
+                function load() {
+                    document.getElementById("continue").innerHTML = "Generating..."
+                }
+                
+            </script>
 
 
             {% csrf_token %}
