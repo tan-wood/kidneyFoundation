@@ -1,0 +1,142 @@
+h4 {
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline-block;
+}
+
+input[type="checkbox"][id^="option"] {
+    display: none;
+}
+
+label {
+    color: #000000;
+    background-color: #ffffff;
+    /* border: 1px solid #fff; */
+    border-radius: 6px;
+    display: block;
+    position: relative;
+    margin: 10px;
+    cursor: pointer;
+    max-width: 160px;
+    box-shadow: 0 5px 15px #00000010;
+
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+label::before {
+    /* background-color: #ec995a; */
+    /* color: white; */
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    /* border: 1px solid grey; */
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 28px;
+    transition-duration: 0.4s;
+    transform: scale(0);
+}
+
+label img {
+    height: 100px;
+    width: 100px;
+    transition-duration: 0.2s;
+    transform-origin: 50% 50%;
+}
+
+:checked+label {
+    background-color: #ffffff;
+    /* border-color: #ddd; */
+    box-shadow: 0 5px 25px #00000040;
+    color: #ec995a;
+}
+
+:checked+label::before {
+    content: "✓";
+    background-color: #ec995a;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 0px 5px #00000040;
+    transform: scale(1);
+
+    z-index: 999999;
+}
+
+:checked+label img {
+    /* transform: scale(0.9); */
+    /* box-shadow: 0 0 5px #333; */
+    /* z-index: -1; */
+}
+
+.option-grid {
+    background-color: transparent;
+    display: grid; 
+    grid-template-columns: auto auto auto auto;
+    gap: 30px;
+    padding: 40px;
+    max-width: 850px;
+}
+
+.option-card {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+
+    box-shadow: 0 5px 15px #00000020;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+
+    max-width: 140px;
+    max-height: 200px;
+}
+
+.continue-button-disabled {
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 50px;
+    max-height: 50px;
+
+    background-color: #dedede;
+    color: #00000040;
+    border-radius: 6px;
+    border: none;
+
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.continue-button {
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 50px;
+    max-height: 50px;
+
+    background-color: #ec995a;
+    color: #ffffff;
+    border-radius: 6px;
+    border: none;
+
+    display: grid;
+    place-items: center;
+
+    box-shadow: 0 5px 20px #00000040;
+    cursor: pointer;
+}
