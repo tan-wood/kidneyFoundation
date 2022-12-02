@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="main-content">
+    <section style="border: 1px solid #00000010; padding: 30px; display: grid; grid-template-columns: 180px 1fr 180px;">
+        <div class="navbar-button">
+            <h4 style="margin: 0;">{{ formatted_date }}</h4>
+        </div>
+        <div></div>
+        <a href="{% url 'logfood' %}">
+            <div class="navbar-button log-food" style="color: #00000070;">
+                <h4 style="margin: 0; font-size: 14px; color: #ffffff;">Log Food</h4>
+            </div>
+        </a>
+    </section>
+    <section style="border: 1px solid #00000010; padding: 30px;">
+        <section class="big-white-box big-box-diary">
+            <div>
+                <h4>{{ item.food.food_name }}<span style="color: #00000020;"> - {{ item.quantity }} serving(s)</span>
+                </h4>
+                <h5 style="color: #00000040;">{{ item.date_time }}</h5>
+            </div>
+
+
+            <div>
+                <canvas id="myChart" width="20" height="20" style="max-height: 340px; max-width: 340px;"></canvas>
+                <script>
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    const myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [{% for nutrient in nutrientInFoodList %} '{{nutrient.name}} in {{nutrient.unitName}}', {% endfor %}],
+                    datasets: [{
+                        label: 'Amount',
+                        data: [{% for nutrient in nutrientInFoodList %} {{ nutrient.value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                                borderWidth: 1
+                                }]
+                            },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                        });
+                </script>
+            </div>
+
+            <a href="{% url 'delete_item' item_id=item.id  %}">
+                <button class="account-button red" style="max-width: 280px; border: none; cursor: pointer;">
+                    <h4>Delete Item</h4>
+                </button>
+            </a>
+
+        </section>
+    </section>
+</section>
+
+{% endblock %}
