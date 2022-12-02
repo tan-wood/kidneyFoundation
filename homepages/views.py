@@ -309,16 +309,24 @@ def AccountPageView(request, method):
 
             patient.save()
 
-            if request.POST['High Blood Pressure'] == "Yes":
-                condition = Condition.objects.get(description="High Blood Pressure")
-                patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
-            
-            if request.POST['Diabetes'] == "Yes":
+            condition_list = ['High Blood Pressure', 'Diabetes']
 
-                condition = Condition.objects.get(description="Diabetes")
-                patientId = Patient.objects.get(id=patient.id)
-                Patient_Condition.objects.create(patient_id=patientId.id, condition_id=condition.id)
+            for i in range(len(condition_list)):
+                if request.POST[condition_list[i]] == "Yes":
+                    condition = Condition.objects.get(description=condition_list[i])
+                    try:
+                        patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
+                        pass
+                    except:
+                        Patient_Condition.objects.create(patient_id=loggedInPatientId, condition_id=condition.id)
+                else:
+                    condition = Condition.objects.get(description=condition_list[i])
+                    try:
+                        patient_condition = Patient_Condition.objects.get(patient_id=loggedInPatientId, condition_id=condition.id)
+                        patient_condition.delete()
+                    except:
+                        pass
+            
 
 
             return AccountPageView(request, "homeAccount")
@@ -468,7 +476,7 @@ def LoginPageView(request, method):
         if notFound:
             context = {
                 "display" : "login",
-                "errors" : "The username or password are incorrect"
+                "errors" : "The username or password is incorrect"
             }
             return render(request, 'homepages/login.html', context)
     else:
