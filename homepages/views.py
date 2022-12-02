@@ -830,23 +830,26 @@ def LogFoodPageView(request) :
 
 
 def PickFavoritesPageView(request):
-    food_list = [
-        'Fruit juice blend, 100% juice', #1,1
-        'Blueberries, raw', #1,2
-        'Apple, raw', #1,3
-        'Banana nectar', #1,4
-        'Cake, sponge', #1,5
-        'Blueberries, dried', #1,6
-        'Blueberries, dried', #1,7
-        'Blueberries, dried', #1,8
-        'Blueberries, dried', #1,9
-        'Blueberries, dried',
-        'Blueberries, dried',
-        'Blueberries, dried',
-        'Blueberries, dried',
-        'Blueberries, dried',
-        'Blueberries, dried'
-    ]
+    food_dict = {
+       'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
+       'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
+       'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
+       'Pear, raw': 'pear.jpg',   #1,4
+       'Fruit smoothie, light' : 'smoothie.jpg',
+       'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
+       'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
+       'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
+       'Raspberries, raw' : 'raspberries.jpg',#1,8
+       'Fish, salmon, grilled': 'grilledSalmon.jpg', #1,9
+       'Mixed salad greens, raw': 'mixedGreens.jpg', #1, 10
+       'Peach, raw' : 'peach.jpg', #1, 11
+       'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
+       'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
+       'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
+        #1, 15
+       'Orange, raw' : 'orange.jpg', #1,16
+   }
+
 
     if request.method == 'POST':
         favfoods = request.POST.getlist('foods')
@@ -894,9 +897,11 @@ def PickFavoritesPageView(request):
             patient_favorite_food_data.save()
 
 
+     
     context = {
-        'food_list' : food_list
+        'food_dict' : food_dict
     }
+
     
 
     return render(request, 'homepages/pickfavorites.html', context)

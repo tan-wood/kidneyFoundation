@@ -35,19 +35,11 @@
 
             {% csrf_token %}
             <section class="option-grid">
-                {% for foodoption in food_list %}
-
-                <input class="checkboxes" type="checkbox" value="{{ foodoption }}" id="option{{ forloop.counter }}"
-                    name="foods" onClick="change()" required />
-                <label for="option{{ forloop.counter }}"
-                    style="display: grid; grid-template-rows: 1fr 74px; gap: 10px;">
-                    <img src="https://picsum.photos/seed/1/100"
-                        style="border-radius: 6px 6px 0 0; width: 160px; height: 160px;" />
-                    <h4 style="padding: 10px;">{{ foodoption }}</h4>
-                </label>
-
-
-                {% endfor %}
+                {% for key,value in food_dict.items%}
+                <li><input class="checkboxes" type="checkbox" value="{{ key }}" id="option{{ forloop.counter }}" name="foods"  onClick="change()" required/>
+                    <label for="option{{ forloop.counter }}"><img src="../../static/img/{{ value }}"/></label>
+                </li>
+            {% endfor %}
             </section>
 
         </form>
