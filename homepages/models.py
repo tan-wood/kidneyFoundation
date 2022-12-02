@@ -13,7 +13,7 @@ class Nutrient(models.Model):
         db_table = "nutrient"
 
 class Food(models.Model):
-    food_name = models.CharField(max_length=50)
+    food_name = models.CharField(max_length=150)
     nutrient = models.ManyToManyField(Nutrient, through='Nutrient_In_Food', blank=False)
 
     def __str__(self):
