@@ -14,6 +14,14 @@ input[type="checkbox"][id^="option"] {
     display: none;
 }
 
+.truncated {
+    display: block;
+    white-space: nowrap;
+    /* forces text to single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 label {
     color: #000000;
     background-color: #ffffff;
