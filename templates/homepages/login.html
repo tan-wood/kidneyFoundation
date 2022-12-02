@@ -42,16 +42,13 @@
         {% if errors == ""%}
         {%else%}
         {% for error in errors%}
-        <p style="color:red; text-align:center">{{ error }}</p>
+            <p style="color:red; text-align:center">{{ error }}</p>
         {% endfor %}
         {% endif %}
 
-        <div style="padding: 0 0 100px 0;">
+        <div>
             <form name="form" method="post" action="{%url 'login' method='form' %}">
                 {% csrf_token %}
-
-                <h4 style="padding: 10px 0 0 100px;">Personal Info</h4>
-
                 <div class="form-input-list">
                     <div class="form-input">
                         <label for="first_name">First name:</label>
@@ -70,17 +67,22 @@
 
                     <div class="form-input">
                         <label for="phone">Phone:</label>
-                        <input type="text" name="phone" id="phone" required minlength="10" maxlength="10" />
+                        <input type="text" name="phone" id="phone" required minlength = "10" maxlength = "10"/>
                     </div>
 
                     <div class="form-input">
-                        <label for="weight">Weight:</label>
+                        <label for="weight">Weight (lbs):</label>
                         <input type="number" name="weight" id="weight" required />
                     </div>
 
                     <div class="form-input">
-                        <label for="height">Height:</label>
-                        <input type="number" name="height" id="height" required />
+                        <label for="height_ft">Height-Feet:</label>
+                        <input type="number" name="height_ft" id="height_ft" required />
+                    </div>
+
+                    <div class="form-input">
+                        <label for="height_in">Height-Inches:</label>
+                        <input type="number" name="height_in" id="height_in" required />
                     </div>
 
                     <div class="form-input">
@@ -88,32 +90,16 @@
                         <input type="number" name="age" id="age" required />
                     </div>
 
-                </div>
-
-                <h4 style="padding: 10px 0 0 100px;">Comorbidities</h4>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 30px 100px 70px 100px;">
                     {% for condition in condition_data%}
-                    <div class="switch-field" style="display: grid; place-items: center;">
+                    <div class="switch-field">
                         <p>Do you have {{condition.description}}</p>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr;max-width: 300px;">
-                            <div>
-                                <label for="Yes">Yes</label>
-                                <input type="radio" name="{{condition.description}}" id="Yes" value="Yes" style="min-width: 30px;"/>
-                            </div>
-                            <div>
-                                <label for="No">No</label>
-                                <input type="radio" name="{{condition.description}}" id="No" value="No" style="min-width: 30px;" />
-                            </div>
-                        </div>
-
+                        <label for="Yes">Yes</label>
+                        <input type="radio" name="{{condition.description}}" id="Yes" value = "Yes" />
+                        <label for="No">No</label>
+                        <input type="radio" name="{{condition.description}}" id="No" value = "No"/>
                     </div>
                     {% endfor %}
-                </div>
 
-                <h4 style="padding: 10px 0 0 100px;">Create a username and password</h4>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 30px 200px 70px 200px;">
                     <div class="form-input">
                         <label for="username">User Name:</label>
                         <input type="text" name="username" id="username" required />
@@ -125,9 +111,9 @@
                     </div>
                 </div>
                 <div style="display: grid; place-items: center;">
-                    <button type="submit" class="login-submit-button">Create Account</button>
+                    <button type="submit" class="login-submit-button">Next</button>
                 </div>
-
+                
             </form><br>
             <div style="display: grid; place-items: center;">
                 <a href="{% url 'login' method='login' %}">
@@ -140,7 +126,7 @@
 
         {% if errors == ""%}
         {%else%}
-        <p>{{ errors }}</p>
+        <p style="color:red; text-align:center">{{ errors }}</p>
         {% endif %}
 
         <form method="post" action="{% url 'login' method='loginform' %}">
