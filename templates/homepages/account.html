@@ -26,7 +26,7 @@
                         <p>Last Name: {{patientData.last_name}}</p>
                         <p>Age: {{patientData.age}}</p>
                         <p>Weight: {{patientData.weight}} lbs</p>
-                        <p>Height: {{patientData.height}} inches</p>
+                        <p>Height: {{feet}} feet {{inches}} inches</p>
                         <p>Email: {{patientData.email}}</p>
                         <p>Phone Number: {{patientData.phone}}</p>
                         <p><b>Patient's Current Comorbidities</b></p>
@@ -94,9 +94,12 @@
                     <input type="text" name="weight" id="weight" value="{{patientData.weight}}" />
                     <br /><br />
             
-                    <label for="height">Height: </label>
-                    <input type="text" name="height" id="height" value="{{patientData.height}}" />
+                    <label for="height_ft">Height-Feet: </label>
+                    <input type="text" name="height_ft" id="height_ft" value="{{feet}}" />
                     <br /><br />
+
+                    <label for="height_in">Height-Inches: </label>
+                    <input type="text" name="height_in" id="height_in" value="{{inches}}" />
             
                     <label for="email">Email: </label>
                     <input type="text" name="email" id="email" value="{{patientData.email}}" />
