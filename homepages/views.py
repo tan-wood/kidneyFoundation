@@ -20,7 +20,7 @@ def indexPageView(request):
     Potassium, K                    3000 mg
     Carbohydrate, by difference     250 g
     Sodium, Na                      2300 mg
-    Water                           3700 mg
+    Water                           1800 g
     Phosphorus, P                   3500 mg
     Sugar                           30 g
     """
@@ -88,8 +88,8 @@ def indexPageView(request):
                 recMeasurement = "MG"
             elif nutrient.nutrient_name == "Water":
                 currentAmount = round(currentWaterAmount, 2)
-                recommendedAmount = 3700
-                recMeasurement = "MG"
+                recommendedAmount = 1800
+                recMeasurement = "G"
             elif nutrient.nutrient_name == "Phosphorus, P":
                 currentAmount = round(currentPhosphorusAmount, 2)
                 recommendedAmount = 1500
@@ -162,9 +162,15 @@ def indexPageView(request):
             favoriteFoods = Patient_Favorite_Food.objects.all()
             print(favoriteFoods)
             for favoriteFood in favoriteFoods :
+                print("\n----\nFavorite Food: " + str(favoriteFood.patient.first_name))
+                print(favoriteFood.patient.id, loggedInPatientId)
                 if favoriteFood.patient.id == loggedInPatientId :
                     for nutrient in allNutrientInFoodData:
+                        # print("Nutrient: " + str(nutrient))
+                        print(nutrient.food.food_name, nutrient.nutrient.nutrient_name, favoriteFood.food.food_name)
                         if nutrient.food.food_name == favoriteFood.food.food_name:
+                            print("HELLO")
+                            print(nutrient.food.food_name, favoriteFood.food.food_name)
                             if nutrient.nutrient.nutrient_name == str(nutriMaxName['nutrient']) :
                                 if nutrient.amount < favNutriMin :
                                     favFoodNutriMin = nutrient.food.food_name
@@ -178,6 +184,7 @@ def indexPageView(request):
             print(" ")
             print(" ")
             print(" ")
+            print("LoggedIn Username: " + str(loggedInUsername))
             print(" ")
             print(" ")
             print(" ")
