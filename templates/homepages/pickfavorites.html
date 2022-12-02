@@ -25,21 +25,31 @@
 
 
         <form method="POST" style="display: grid; place-items: center;">
+
+            <div style="padding: 20px;">
+                <button type="submit" class="continue-button-disabled" id="continue">
+                    <h4>Continue</h4>
+                </button>
+            </div>
+
+
             {% csrf_token %}
             <section class="option-grid">
                 {% for foodoption in food_list %}
-                <div class="option-card">
 
-                    <input class="checkboxes" type="checkbox" value="{{ foodoption }}" id="option{{ forloop.counter }}"
-                        name="foods" onClick="change()" required />
-                    <label for="option{{ forloop.counter }}"><img src="https://picsum.photos/seed/1/100" /></label>
-                    <h4>{{ foodoption }}</h4>
+                <input class="checkboxes" type="checkbox" value="{{ foodoption }}" id="option{{ forloop.counter }}"
+                    name="foods" onClick="change()" required />
+                <label for="option{{ forloop.counter }}"
+                    style="display: grid; grid-template-rows: 1fr 74px; gap: 10px;">
+                    <img src="https://picsum.photos/seed/1/100"
+                        style="border-radius: 6px 6px 0 0; width: 160px; height: 160px;" />
+                    <h4 style="padding: 10px;">{{ foodoption }}</h4>
+                </label>
 
-                </div>
+
                 {% endfor %}
             </section>
 
-            <button type="submit">Submit</button>
         </form>
 
 
@@ -60,15 +70,25 @@
             }
 
             function change() {
-                if (document.getElementsByClassName("checkedbox").length > 3) {
+                    if (document.getElementsByClassName("checkedbox").length > 3) {
                     const inputs = document.querySelectorAll('.checkboxes');
 
                     for (const input of inputs) {
-
                         input.removeAttribute('required');
                     }
+                    
+                    document.getElementById('continue').classList.add('continue-button');
 
+                    // can_continue = true;
+                    // if (document.getElementsByClassName("checkedbox").length < 3) {
+                    
+                    // document.getElementById('continue').classList.remove('continue-button');
+                    // can_continue = false
+
+                // }
                 }
+                
+                
 
                 console.log(document.getElementsByClassName("checkedbox").length)
             }
