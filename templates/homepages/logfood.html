@@ -2,6 +2,8 @@
 {% load static %}
 {% block content %}
 
+
+
 <section class="main-content">
     <section style="border: 1px solid #00000010; padding: 30px; display: grid; grid-template-columns: 180px 1fr 180px;">
         <div class="navbar-button">
@@ -24,17 +26,21 @@
             </form>
         </div>
 
-        {% if 'name' in request.GET %}
+        {% if 'name' in request.GET%}
         <div style="display: grid; place-items: start;">
             <form method="POST">
                 {% csrf_token %}
                 <section style="display: grid; grid-template-rows: auto auto auto; gap: 30px;">
                     <div style="display: grid; place-items: start;">
                         <h5>Food Name</h5>
+
                         <select name="food_names_options">
+
                             <option style="display:none">Select From Search:</option>
                             {% for food_name in food_names.values %}
+
                             <option value="{{ food_name }}" placeholder="Select From Search"> {{ food_name }}</option>
+                            
                             {% endfor %}
                         </select>
                     </div>
@@ -56,6 +62,50 @@
             </form>
         </div>
         {% endif %}
+
+        {% if display_chart %}
+            <div>
+                <canvas id="myChart" width="200" height="200"></canvas>
+                <script>
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    const myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [{% for nutrient, value in nutrient_info.items %} '{{nutrient}} in {{nutrient.unitName}}', {% endfor %}],
+                            datasets: [{
+                                label: 'Amount',
+                                data: [{% for nutrient in nutrient_info %} {{value}}, {% endfor %}],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.8)',
+                                    'rgba(54, 162, 235, 0.8)',
+                                    'rgba(255, 206, 86, 0.8)',
+                                    'rgba(75, 192, 192, 0.8)',
+                                    'rgba(153, 102, 255, 0.8)',
+                                    'rgba(255, 159, 64, 0.8)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        {% endif %}
     </section>
 </section>
+
 {% endblock %}
