@@ -1096,12 +1096,16 @@ def LogFoodPageView(request) :
     #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
-    food_dict = {
+    global loggedIn
+
+    if not loggedIn:
+        food_dict = {
         'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
         'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
         'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
         'Pear, raw': 'pear.jpg',   #1,4
-        'Caesar salad, with romaine, no dressing' : 'chickenCaeser.jpg', #1,5
+        'Fruit smoothie, light' : 'smoothie.jpg',
+        'Chicken or turkey caesar garden salad, chicken and/or turkey, lettuce, tomato, cheese, no dressing' : 'chickenCaeser.jpg', #1,5
         'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
         'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
         'Raspberries, raw' : 'raspberries.jpg',#1,8
@@ -1111,8 +1115,8 @@ def PickFavoritesPageView(request):
         'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
         'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
         'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
-        'Fruit smoothie, light' : 'smoothie.jpg', #1, 15
-        'Orange, raw' : 'orange.jpg' #1,16
+            #1, 15
+        'Orange, raw' : 'orange.jpg', #1,16
     }
 
 
