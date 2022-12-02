@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KidneyWatch</title>
     <link href="{% static 'css/landing.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/pickFav.css' %}" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -15,156 +16,43 @@
         rel="stylesheet">
 </head>
 
-<body>
+<body style="background-color: #eeeeee;">
     <section style="padding: 50px 0 0 0;">
         <div style="display: grid; place-items: center; padding: 20px;">
-            <h1 style="color: #ec995a">KidneyWatch</h1>
+            <h4 style="font-size: 22px;">Select at least 5</h4>
+            <h4 style="font-size: 22px;">favorite foods</h4>
         </div>
-        <style>
-            ul {
-                list-style-type: none;
-              }
-              
-              li {
-                display: inline-block;
-              }
-              
-              input[type="checkbox"][id^="option"] {
-                display: none;
-              }
-              
-              label {
-                border: 1px solid #fff;
-                padding: 10px;
-                display: block;
-                position: relative;
-                margin: 10px;
-                cursor: pointer;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-              }
-              
-              label::before {
-                background-color: white;
-                color: white;
-                content: " ";
-                display: block;
-                border-radius: 50%;
-                border: 1px solid grey;
-                position: absolute;
-                top: -5px;
-                left: -5px;
-                width: 25px;
-                height: 25px;
-                text-align: center;
-                line-height: 28px;
-                transition-duration: 0.4s;
-                transform: scale(0);
-              }
-              
-              label img {
-                height: 100px;
-                width: 100px;
-                transition-duration: 0.2s;
-                transform-origin: 50% 50%;
-              }
-              
-              :checked+label {
-                border-color: #ddd;
-              }
-              
-              :checked+label::before {
-                content: "✓";
-                background-color: grey;
-                transform: scale(1);
-              }
-              
-              :checked+label img {
-                transform: scale(0.9);
-                box-shadow: 0 0 5px #333;
-                z-index: -1;
-              }
-        </style>
 
-        <form method="POST">
+
+        <form method="POST" style="display: grid; place-items: center;">
             {% csrf_token %}
+            <section class="option-grid">
+                {% for foodoption in food_list %}
+                <div class="option-card">
 
-            {% for foodoption in food_list %}
-                <li><input class="checkboxes" type="checkbox" value="{{ foodoption }}" id="option{{ forloop.counter }}" name="foods"  onClick="change()" required/>
+                    <input class="checkboxes" type="checkbox" value="{{ foodoption }}" id="option{{ forloop.counter }}"
+                        name="foods" onClick="change()" required />
                     <label for="option{{ forloop.counter }}"><img src="https://picsum.photos/seed/1/100" /></label>
-                </li>
-            {% endfor %}
+                    <h4>{{ foodoption }}</h4>
 
-
-            {% comment %} <p>{{ food_list }}</p>
-            
-            <li><input class="checkboxes" type="checkbox" value="" id="option1" name="foods"  onClick="change()" required/>
-                <label for="option1"><img src="https://picsum.photos/seed/1/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option2" name="foods" onClick="change()" required/>
-                <label for="option2"><img src="https://picsum.photos/seed/2/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option3" name="foods" onClick="change()" required/>
-                <label for="option3"><img src="https://picsum.photos/seed/3/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option4" name="foods" onClick="change()" required/>
-                <label for="option4"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option5" name="foods" onClick="change()" required/>
-                <label for="option5"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option6" name="foods"  onClick="change()" required/>
-                <label for="option6"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option7" name="foods"  onClick="change()" required/>
-                <label for="option7"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option8" name="foods"  onClick="change()" required/>
-                <label for="option8"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option9" name="foods"  onClick="change()" required/>
-                <label for="option9"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option10" name="foods"  onClick="change()" required/>
-                <label for="option10"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option11" name="foods"  onClick="change()" required/>
-                <label for="option11"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option12" name="foods"  onClick="change()" required/>
-                <label for="option12"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option13" name="foods"  onClick="change()" required/>
-                <label for="option13"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option14" name="foods"  onClick="change()" required/>
-                <label for="option14"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option15" name="foods"  onClick="change()" required/>
-                <label for="option15"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li>
-            <li><input class="checkboxes" type="checkbox" value="" id="option16" name="foods"  onClick="change()" required/>
-                <label for="option16"><img src="https://picsum.photos/seed/4/100" /></label>
-            </li> {% endcomment %}
+                </div>
+                {% endfor %}
+            </section>
 
             <button type="submit">Submit</button>
-          </form>
+        </form>
 
 
         <script>
             const buttons = document.getElementsByClassName("checkboxes");
 
             const buttonPressed = e => {
-                if ( document.getElementById(`${e.target.id}`).className == "checkboxes") {
+                if (document.getElementById(`${e.target.id}`).className == "checkboxes") {
                     document.getElementById(`${e.target.id}`).className = "checkedbox";
                 } else {
                     document.getElementById(`${e.target.id}`).className = "checkboxes";
                 }
-                
+
             }
 
             for (let button of buttons) {
@@ -179,7 +67,7 @@
 
                         input.removeAttribute('required');
                     }
-                      
+
                 }
 
                 console.log(document.getElementsByClassName("checkedbox").length)
@@ -223,18 +111,13 @@
         <div id="four" class="notfaved"> Grapes </div>
         <div id="five" class="notfaved"> Cookies </div>
         <div id="six" class="notfaved"> Bananas </div> {% endcomment %}
-        
 
-
-        
-        
-        <div>These are my favorites!</div>
         <div>
 
         </div>
-        
 
-    
+
+
     </section>
 
 </body>
