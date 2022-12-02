@@ -6,10 +6,12 @@ import json
 from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food, Alert_Type
 from datetime import datetime as dt
 import random
+import time
 
 loggedIn = False
 loggedInUsername = ""
 loggedInPatientId = None
+save = False
 
 nutrientList = [
     'Protein',
@@ -37,42 +39,6 @@ def indexPageView(request):
     """
 
     if loggedInPatientId != None:
-
-        servings_found = False
-        measurement_datacheck = Measurement.objects.all()
-        for a_measurement in measurement_datacheck :
-            if a_measurement.description == "Servings":
-                servings_found = True
-                continue
-
-        if not servings_found :
-            preset_measurement_data = Measurement(
-                description = "Servings"
-            )
-            preset_measurement_data.save()
-
-        condition1_found = False
-        condition2_found = False
-
-        condition_datacheck = Condition.objects.all()
-        for a_condition in condition_datacheck :
-            if a_condition.description == "High Blood Pressure":
-                condition1_found = True
-            if a_condition.description == "Diabetes":
-                condition2_found = True
-
-        if not condition1_found :
-            preset_condition1_data = Condition(
-                description = "High Blood Pressure"
-            )
-            preset_condition1_data.save()
-
-        if not condition2_found :
-            preset_condition2_data = Condition(
-                description = "Diabetes"
-            )
-            preset_condition2_data.save()
-
 
         patientData = Patient.objects.get(id = loggedInPatientId)
         nutrientData = Nutrient.objects.all()
@@ -202,7 +168,7 @@ def indexPageView(request):
                 if favoriteFood.patient.id == loggedInPatientId :
                     random_food_list.append(favoriteFood.food.food_name)
         
-            if len(random_food_list) != 0 :
+            if len(random_food_list) > 2 :
                 randomSeed1 = random.randint(0, (len(random_food_list)-1))
                 randomSeed2 = random.randint(0, (len(random_food_list)-2))
 
@@ -448,6 +414,42 @@ def AccountPageView(request, method):
 
 def LandingPageView(request):
     global loggedIn
+
+    servings_found = False
+    measurement_datacheck = Measurement.objects.all()
+    for a_measurement in measurement_datacheck :
+        if a_measurement.description == "Servings":
+            servings_found = True
+            continue
+
+    if not servings_found :
+        preset_measurement_data = Measurement(
+            description = "Servings"
+        )
+        preset_measurement_data.save()
+
+    condition1_found = False
+    condition2_found = False
+
+    condition_datacheck = Condition.objects.all()
+    for a_condition in condition_datacheck :
+        if a_condition.description == "High Blood Pressure":
+            condition1_found = True
+        if a_condition.description == "Diabetes":
+            condition2_found = True
+
+    if not condition1_found :
+        preset_condition1_data = Condition(
+            description = "High Blood Pressure"
+        )
+        preset_condition1_data.save()
+
+    if not condition2_found :
+        preset_condition2_data = Condition(
+            description = "Diabetes"
+        )
+        preset_condition2_data.save()
+
     if not loggedIn:
         context = {
             "signedIn": False
@@ -989,6 +991,7 @@ def LogFoodPageView(request) :
     #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
+    
     food_dict = {
         'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
         'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
@@ -1007,13 +1010,15 @@ def PickFavoritesPageView(request):
         'Fruit smoothie, light' : 'smoothie.jpg', #1, 15
         'Orange, raw' : 'orange.jpg' #1,16
     }
-
+    
+    global save
 
     global nutrient_list
     food_nutrients = {}
     clicked_food = {}
 
     if request.method == 'POST':
+        global save
         favfoods = request.POST.getlist('foods')
         print(favfoods)
 
@@ -1120,7 +1125,9 @@ def PickFavoritesPageView(request):
 
             patient_favorite_food_data.save()
 
-            return indexPageView(request)
+            save = True
+
+        
 
      
     context = {
@@ -1128,8 +1135,11 @@ def PickFavoritesPageView(request):
     }
 
     
-
-    return render(request, 'homepages/pickfavorites.html', context)
+    if save :
+        time.sleep(10)
+        return indexPageView(request)
+    else:
+        return render(request, 'homepages/pickfavorites.html', context)
 
 def getUsername():
     global loggedInUsername
