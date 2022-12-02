@@ -439,7 +439,7 @@ def LoginPageView(request, method):
             loggedInPatientId = patient.id
             loggedInUsername = patient.username
             
-            return indexPageView(request)
+            return PickFavoritesPageView(request)
 
     elif request.method == 'POST' and method == "loginform":
         
@@ -522,383 +522,363 @@ def apiJSONView(request) :
 
 def LogFoodPageView(request) :
 
-    food_names = {}
-    current_date = dt.now().date()
-    formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
-    display_chart = False
-    food_nutrients = {}
-
-    nutrientList = [
-    'Protein',
-    'Potassium, K',
-    'Carbohydrate, by difference',
-    'Sodium, Na',
-    'Water',
-    'Phosphorus, P',
-    ]
-
-    if 'name' in request.GET:
-        name = request.GET['name']
-        response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=8&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
-        data = response.json()
-        searchedFoods = data['foods']
-
-        for idx, food in enumerate(searchedFoods) :
-            food_names['food_name' + str(idx+1)] = food['description']
-    
-
-    if request.method == "POST":
-        display_chart = True
-        post_form_data = request.POST
-        print(post_form_data['food_names_options'])
-        print(post_form_data['numServings'])
-        print(post_form_data['dateTime'])
-
-        all_form_data = {}
-        searched_food = {}
-        searched_food_data = {}
-        food_found = False
+    if loggedIn:
+        
+        food_names = {}
+        current_date = dt.now().date()
+        formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
+        display_chart = False
+        food_nutrients = {}
 
         nutrientList = [
-            'Protein',
-            'Potassium, K',
-            'Carbohydrate, by difference',
-            'Sodium, Na',
-            'Water',
-            'Phosphorus, P',
-            'Sugars, total including NLEA',
+        'Protein',
+        'Potassium, K',
+        'Carbohydrate, by difference',
+        'Sodium, Na',
+        'Water',
+        'Phosphorus, P',
         ]
 
-        # get the name of the food they typed in and send it call the api with it!
-        name = f"{post_form_data['food_names_options']}"
-        response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
-        # turn it into json to be able to deal with the info we get
-        data = response.json()
-        # keep just the info about the specific FOOD and from only the FIRST one returned
-        searched_food = data['foods'][0]
+        if 'name' in request.GET:
+            name = request.GET['name']
+            response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=8&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+            data = response.json()
+            searchedFoods = data['foods']
 
-        # the database food table accessible to us in a for loop
-        food_table = Food.objects.all()
+            for idx, food in enumerate(searchedFoods) :
+                food_names['food_name' + str(idx+1)] = food['description']
         
-        # the database nutrient table accessible to us in list (if/in)
-        nutrient_table = []
-        for a_nutrient in Nutrient.objects.all() :
-            # print(a_nutrient)
-            nutrient_table.append(f'{a_nutrient}')
 
-        # the database nutrient_in_food table accessible to us in list (if/in)
-        nutrient_in_food_table = []
-        for a_nutrient_in_food in Nutrient_In_Food.objects.all() :
-            # print(a_nutrient_in_food)
-            nutrient_in_food_table.append(f'{a_nutrient_in_food}')
+        if request.method == "POST":
+            display_chart = True
+            post_form_data = request.POST
+            print(post_form_data['food_names_options'])
+            print(post_form_data['numServings'])
+            print(post_form_data['dateTime'])
 
-        # the database measurement table accessible to us in list (if/in)
-        measurement_table = []
-        for a_measurement in Measurement.objects.all() :
-            # print(a_measurement)
-            measurement_table.append(f'{a_measurement}')
+            all_form_data = {}
+            searched_food = {}
+            searched_food_data = {}
+            food_found = False
 
+            nutrientList = [
+                'Protein',
+                'Potassium, K',
+                'Carbohydrate, by difference',
+                'Sodium, Na',
+                'Water',
+                'Phosphorus, P',
+                'Sugars, total including NLEA',
+            ]
 
-        # checking the database for the inputed food
-        food_found = False
-        for a_food in food_table :
-            if searched_food['description'] == a_food.food_name :
-                food_found = True
+            # get the name of the food they typed in and send it call the api with it!
+            name = f"{post_form_data['food_names_options']}"
+            response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+            # turn it into json to be able to deal with the info we get
+            data = response.json()
+            # keep just the info about the specific FOOD and from only the FIRST one returned
+            searched_food = data['foods'][0]
 
-        # load it up to be ready to save in the database if it's not found!
-        if not food_found: 
-            food_data = Food(
-                food_name = searched_food['description'],
-            )
-            # send it over to the database!
-            food_data.save()
+            # the database food table accessible to us in a for loop
+            food_table = Food.objects.all()
             
+            # the database nutrient table accessible to us in list (if/in)
+            nutrient_table = []
+            for a_nutrient in Nutrient.objects.all() :
+                # print(a_nutrient)
+                nutrient_table.append(f'{a_nutrient}')
 
-        # get all the nutrients from the searched foods and check if it's 
-        # nutrients that we care about
-        for nutrient in searched_food['foodNutrients'] :
-            if nutrient['nutrientName'] in nutrientList:
-                food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
-                # if they are not already in the database, load it up and send it over!
+            # the database nutrient_in_food table accessible to us in list (if/in)
+            nutrient_in_food_table = []
+            for a_nutrient_in_food in Nutrient_In_Food.objects.all() :
+                # print(a_nutrient_in_food)
+                nutrient_in_food_table.append(f'{a_nutrient_in_food}')
 
-                if not nutrient['unitName'] in measurement_table:
-                    measurement_data = Measurement(
-                        description = nutrient['unitName'],
+            # the database measurement table accessible to us in list (if/in)
+            measurement_table = []
+            for a_measurement in Measurement.objects.all() :
+                # print(a_measurement)
+                measurement_table.append(f'{a_measurement}')
+
+
+            # checking the database for the inputed food
+            food_found = False
+            for a_food in food_table :
+                if searched_food['description'] == a_food.food_name :
+                    food_found = True
+
+            # load it up to be ready to save in the database if it's not found!
+            if not food_found: 
+                food_data = Food(
+                    food_name = searched_food['description'],
+                )
+                # send it over to the database!
+                food_data.save()
+                
+
+            # get all the nutrients from the searched foods and check if it's 
+            # nutrients that we care about
+            for nutrient in searched_food['foodNutrients'] :
+                if nutrient['nutrientName'] in nutrientList:
+                    food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+                    # if they are not already in the database, load it up and send it over!
+
+                    if not nutrient['unitName'] in measurement_table:
+                        measurement_data = Measurement(
+                            description = nutrient['unitName'],
+                        )
+                        measurement_data.save()
+                        # adding the new things to our list - may be unneccessary...
+                        measurement_table.append(nutrient['unitName'])
+
+                    if not nutrient['nutrientName'] in nutrient_table:
+                        nutrient_data = Nutrient(
+                            # this will have some logic to decide if macro or micro
+                            # alsooo it doesn't like it?
+                            nutrient_name = nutrient['nutrientName'],
+                        )
+                        nutrient_data.save()
+                        # adding the new things to our list - may be unneccessary...
+                        nutrient_table.append(nutrient['nutrientName'])
+                        
+
+                    # check if the food/nutrient combination has already been recorded in the database
+                    # if not, load it up and send it over!
+                    if not f"{searched_food['description']}: {nutrient['nutrientName']}" in nutrient_in_food_table :
+                        nutrient_in_food_data = Nutrient_In_Food(
+                            nutrient = Nutrient.objects.get(nutrient_name= nutrient['nutrientName']),
+                            food = Food.objects.get(food_name= searched_food['description']),
+                            measurement = Measurement.objects.get(description= nutrient['unitName']),
+                            amount = nutrient['value'],
+                        )
+                        nutrient_in_food_data.save()
+                        # adding the new things to our list - may be unneccessary...
+                        nutrient_in_food_table.append(f"{searched_food['description']}: {nutrient['nutrientName']}")
+
+            patient_logs_food_data = Patient_Logs_Food(
+                food = Food.objects.get(food_name= searched_food['description']),
+                patient = Patient.objects.get(username= loggedInUsername),
+                measurement = Measurement.objects.get(description= "Servings"),
+                quantity = post_form_data['numServings'],
+                date_time = post_form_data['dateTime'],
+            )
+            patient_logs_food_data.save()
+
+            # thought i would need this data but didn't
+            # searched_food_form_data = Food.objects.all()
+            # measurement_form_data = Measurement.objects.all()
+            # nutrient_form_data = Nutrient.objects.all()
+            # nutrient_in_food_form_data = Nutrient_In_Food.objects.all()
+
+
+            # all_form_data = {
+            #     'food' : searched_food_form_data,
+            #     'measurement' : measurement_form_data,
+            #     'nutrient' : nutrient_form_data,
+            #     'nutrient_in_food' : nutrient_in_food_form_data
+            # }
+
+
+            # Create alerts
+            allNutrientInFoodData = Nutrient_In_Food.objects.all()
+            loggedFoods = Patient_Logs_Food.objects.all()
+            patientData = Patient.objects.get(id = loggedInPatientId)
+
+            currentProteinAmount = 0
+            currentPotassiumAmount = 0
+            currentCarbAmount = 0
+            currentSodiumAmount = 0
+            currentWaterAmount = 0
+            currentPhosphorusAmount = 0
+            currentSugarAmount = 0
+
+            for food in loggedFoods:
+                if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+                    num_servings = food.quantity
+                    for nutrient in allNutrientInFoodData:
+                        if nutrient.food.food_name == food.food.food_name:
+                            if nutrient.nutrient.nutrient_name == "Protein":
+                                currentProteinAmount += round(nutrient.amount * num_servings, 2)
+                            elif nutrient.nutrient.nutrient_name == "Potassium, K":
+                                currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
+                            elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
+                                currentCarbAmount += round(nutrient.amount * num_servings, 2)
+                            elif nutrient.nutrient.nutrient_name == "Sodium, Na":
+                                currentSodiumAmount += round(nutrient.amount * num_servings, 2)
+                            elif nutrient.nutrient.nutrient_name == "Water":
+                                currentWaterAmount += round(nutrient.amount * num_servings, 2)
+                            elif nutrient.nutrient.nutrient_name == "Phosphorus, P":
+                                currentPhosphorusAmount += round(nutrient.amount * num_servings, 2)
+                            elif nutrient.nutrient.nutrient_name == "Sugars, total including NLEA":
+                                currentSugarAmount += round(nutrient.amount * num_servings, 2)
+
+            patientKG = patientData.weight * 0.453592
+            proteinAmount = patientKG * 0.6
+
+            """
+            # Recommended Daily Amounts:
+            Protein                         0.6 g / kg
+            Potassium, K                    3000 mg
+            Carbohydrate, by difference     250 g
+            Sodium, Na                      2300 mg
+            Water                           3700 mg
+            Phosphorus, P                   3500 mg
+            Sugar                           30 g
+            """
+
+            if currentProteinAmount > proteinAmount:
+                alert_name = "High Protein Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your protein levels exceed the recommended amount"
                     )
-                    measurement_data.save()
-                    # adding the new things to our list - may be unneccessary...
-                    measurement_table.append(nutrient['unitName'])
+                    alert_type_object.save()
 
-                if not nutrient['nutrientName'] in nutrient_table:
-                    nutrient_data = Nutrient(
-                        # this will have some logic to decide if macro or micro
-                        # alsooo it doesn't like it?
-                        nutrient_name = nutrient['nutrientName'],
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
+                )
+                alert_object.save()
+
+            if currentPotassiumAmount > 3000:
+                alert_name = "High Potassium Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your potassium levels exceed the recommended amount"
                     )
-                    nutrient_data.save()
-                    # adding the new things to our list - may be unneccessary...
-                    nutrient_table.append(nutrient['nutrientName'])
-                    
+                    alert_type_object.save()
 
-                # check if the food/nutrient combination has already been recorded in the database
-                # if not, load it up and send it over!
-                if not f"{searched_food['description']}: {nutrient['nutrientName']}" in nutrient_in_food_table :
-                    nutrient_in_food_data = Nutrient_In_Food(
-                        nutrient = Nutrient.objects.get(nutrient_name= nutrient['nutrientName']),
-                        food = Food.objects.get(food_name= searched_food['description']),
-                        measurement = Measurement.objects.get(description= nutrient['unitName']),
-                        amount = nutrient['value'],
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
+                )
+                alert_object.save()
+
+            if currentCarbAmount > 250:
+                alert_name = "High Carb Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your carbohydrate levels exceed the recommended amount"
                     )
-                    nutrient_in_food_data.save()
-                    # adding the new things to our list - may be unneccessary...
-                    nutrient_in_food_table.append(f"{searched_food['description']}: {nutrient['nutrientName']}")
+                    alert_type_object.save()
 
-        patient_logs_food_data = Patient_Logs_Food(
-            food = Food.objects.get(food_name= searched_food['description']),
-            patient = Patient.objects.get(username= loggedInUsername),
-            measurement = Measurement.objects.get(description= "Servings"),
-            quantity = post_form_data['numServings'],
-            date_time = post_form_data['dateTime'],
-        )
-        patient_logs_food_data.save()
-
-        # thought i would need this data but didn't
-        # searched_food_form_data = Food.objects.all()
-        # measurement_form_data = Measurement.objects.all()
-        # nutrient_form_data = Nutrient.objects.all()
-        # nutrient_in_food_form_data = Nutrient_In_Food.objects.all()
-
-
-        # all_form_data = {
-        #     'food' : searched_food_form_data,
-        #     'measurement' : measurement_form_data,
-        #     'nutrient' : nutrient_form_data,
-        #     'nutrient_in_food' : nutrient_in_food_form_data
-        # }
-
-
-        # Create alerts
-        allNutrientInFoodData = Nutrient_In_Food.objects.all()
-        loggedFoods = Patient_Logs_Food.objects.all()
-        patientData = Patient.objects.get(id = loggedInPatientId)
-
-        currentProteinAmount = 0
-        currentPotassiumAmount = 0
-        currentCarbAmount = 0
-        currentSodiumAmount = 0
-        currentWaterAmount = 0
-        currentPhosphorusAmount = 0
-        currentSugarAmount = 0
-
-        for food in loggedFoods:
-            if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
-                num_servings = food.quantity
-                for nutrient in allNutrientInFoodData:
-                    if nutrient.food.food_name == food.food.food_name:
-                        if nutrient.nutrient.nutrient_name == "Protein":
-                            currentProteinAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Potassium, K":
-                            currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
-                            currentCarbAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Sodium, Na":
-                            currentSodiumAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Water":
-                            currentWaterAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Phosphorus, P":
-                            currentPhosphorusAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Sugars, total including NLEA":
-                            currentSugarAmount += round(nutrient.amount * num_servings, 2)
-
-        patientKG = patientData.weight * 0.453592
-        proteinAmount = patientKG * 0.6
-
-        """
-        # Recommended Daily Amounts:
-        Protein                         0.6 g / kg
-        Potassium, K                    3000 mg
-        Carbohydrate, by difference     250 g
-        Sodium, Na                      2300 mg
-        Water                           3700 mg
-        Phosphorus, P                   3500 mg
-        Sugar                           30 g
-        """
-
-        if currentProteinAmount > proteinAmount:
-            alert_name = "High Protein Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your protein levels exceed the recommended amount"
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
                 )
-                alert_type_object.save()
+                alert_object.save()
 
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
+            if currentSodiumAmount > 2300:
+                alert_name = "High Sodium Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your sodium levels exceed the recommended amount"
+                    )
+                    alert_type_object.save()
 
-        if currentPotassiumAmount > 3000:
-            alert_name = "High Potassium Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your potassium levels exceed the recommended amount"
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
                 )
-                alert_type_object.save()
+                alert_object.save()
 
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
+            if currentWaterAmount > 3700:
+                alert_name = "High Water Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your water levels exceed the recommended amount"
+                    )
+                    alert_type_object.save()
 
-        if currentCarbAmount > 250:
-            alert_name = "High Carb Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your carbohydrate levels exceed the recommended amount"
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
                 )
-                alert_type_object.save()
+                alert_object.save()
 
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
+            if currentPhosphorusAmount > 3500:
+                alert_name = "High Phosphorus Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your phosphorus levels exceed the recommended amount"
+                    )
+                    alert_type_object.save()
 
-        if currentSodiumAmount > 2300:
-            alert_name = "High Sodium Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your sodium levels exceed the recommended amount"
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
                 )
-                alert_type_object.save()
+                alert_object.save()
 
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
+            if currentSugarAmount > 30:
+                alert_name = "High Sugar Levels"
+                allAlertTypes = Alert_Type.objects.all()
+                alert_type_names = []
+                for alert_type in allAlertTypes:
+                    alert_type_names.append(alert_type.name)
+                if alert_name not in alert_type_names:
+                    alert_type_object = Alert_Type(
+                        name = alert_name,
+                        description = "Your sugar levels exceed the recommended amount"
+                    )
+                    alert_type_object.save()
 
-        if currentWaterAmount > 3700:
-            alert_name = "High Water Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your water levels exceed the recommended amount"
+                alert_object = Alert(
+                    date_time = dt.now(),
+                    unread = True,
+                    alert_type = Alert_Type.objects.get(name = alert_name),
+                    patient = Patient.objects.get(id = loggedInPatientId)
                 )
-                alert_type_object.save()
-
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
-
-        if currentPhosphorusAmount > 3500:
-            alert_name = "High Phosphorus Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your phosphorus levels exceed the recommended amount"
-                )
-                alert_type_object.save()
-
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
-
-        if currentSugarAmount > 30:
-            alert_name = "High Sugar Levels"
-            allAlertTypes = Alert_Type.objects.all()
-            alert_type_names = []
-            for alert_type in allAlertTypes:
-                alert_type_names.append(alert_type.name)
-            if alert_name not in alert_type_names:
-                alert_type_object = Alert_Type(
-                    name = alert_name,
-                    description = "Your sugar levels exceed the recommended amount"
-                )
-                alert_type_object.save()
-
-            alert_object = Alert(
-                date_time = dt.now(),
-                unread = True,
-                alert_type = Alert_Type.objects.get(name = alert_name),
-                patient = Patient.objects.get(id = loggedInPatientId)
-            )
-            alert_object.save()
+                alert_object.save()
 
 
-    return render (request, 'homepages/logfood.html', { "food_names": 
-    food_names, "display_chart": display_chart, "nutrient_info": food_nutrients} )
+        return render (request, 'homepages/logfood.html', { "food_names": 
+        food_names, "display_chart": display_chart, "nutrient_info": food_nutrients} )
+    else:
+        return LandingPageView(request)
 
-
-
-
-    # if request.method == "GET":
-    #     food_nutrients2 = {}
-    #     searched_food2 = {}
-
-    #     foodName = request.GET.get('passedFood')
-    #     response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={foodName}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
-    #     # turn it into json to be able to deal with the info we get
-    #     data = response.json()
-    #     # keep just the info about the specific FOOD and from only the FIRST one returned
-    #     searched_food2 = data['foods'][0]
-
-    #     for nutrient in searched_food2['foodNutrients'] :
-    #         if nutrient['nutrientName'] in nutrientList:
-    #             food_nutrients2[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
-        
-    #     context = {
-    #         "nutrient_info": food_nutrients2,
-    #         "formatted_date" : formatted_date
-    #     }
-
-    #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
     food_dict = {
@@ -966,6 +946,8 @@ def PickFavoritesPageView(request):
             )
 
             patient_favorite_food_data.save()
+
+            return indexPageView(request)
 
 
      
