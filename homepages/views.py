@@ -5,10 +5,21 @@ from django.conf import settings
 import json
 from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food, Alert_Type
 from datetime import datetime as dt
+import random
 
 loggedIn = False
 loggedInUsername = ""
 loggedInPatientId = None
+
+nutrientList = [
+    'Protein',
+    'Potassium, K',
+    'Carbohydrate, by difference',
+    'Sodium, Na',
+    'Water',
+    'Phosphorus, P',
+    'Sugars, total including NLEA',
+]
 
 def indexPageView(request):
     global loggedInPatientId
@@ -26,6 +37,43 @@ def indexPageView(request):
     """
 
     if loggedInPatientId != None:
+
+        servings_found = False
+        measurement_datacheck = Measurement.objects.all()
+        for a_measurement in measurement_datacheck :
+            if a_measurement.description == "Servings":
+                servings_found = True
+                continue
+
+        if not servings_found :
+            preset_measurement_data = Measurement(
+                description = "Servings"
+            )
+            preset_measurement_data.save()
+
+        condition1_found = False
+        condition2_found = False
+
+        condition_datacheck = Condition.objects.all()
+        for a_condition in condition_datacheck :
+            if a_condition.description == "High Blood Pressure":
+                condition1_found = True
+            if a_condition.description == "Diabetes":
+                condition2_found = True
+
+        if not condition1_found :
+            preset_condition1_data = Condition(
+                description = "High Blood Pressure"
+            )
+            preset_condition1_data.save()
+
+        if not condition2_found :
+            preset_condition2_data = Condition(
+                description = "Diabetes"
+            )
+            preset_condition2_data.save()
+
+
         patientData = Patient.objects.get(id = loggedInPatientId)
         nutrientData = Nutrient.objects.all()
         
@@ -125,6 +173,11 @@ def indexPageView(request):
         favFoodNutri2Min = ""
         favoriteFoods = ""
 
+        randomSeed1 = 0
+        randomSeed2 = 0
+
+        random_food_list = []
+
 
         max_nutrients_in_foods = {}
         
@@ -141,13 +194,34 @@ def indexPageView(request):
                 nutri2Max = nutrient_level
                 nutri2MaxName = a_nutrient
 
-        
+
+
         if nutriMax == 0 and nutri2Max == 0 :
-            print(favoriteFoods)
-            # suggested_food_one = 
-            # suggested_food_two = #random
-            desc_one = "From your favorites"
-            desc_two = "From your favorites"
+            favoriteFoods = Patient_Favorite_Food.objects.all()
+            for favoriteFood in favoriteFoods :
+                if favoriteFood.patient.id == loggedInPatientId :
+                    random_food_list.append(favoriteFood.food.food_name)
+        
+            if len(random_food_list) != 0 :
+                randomSeed1 = random.randint(0, (len(random_food_list)-1))
+                randomSeed2 = random.randint(0, (len(random_food_list)-2))
+
+                favFoodNutriMin = random_food_list[randomSeed1]
+                random_food_list.pop(randomSeed1)
+                favFoodNutri2Min = random_food_list[randomSeed2]
+
+
+            suggested_foods = {
+                "suggestion1" : favFoodNutriMin,
+                "nutrient_for_suggestion1" : "",
+                "nutrient_amount_in_suggestion1" : "",
+                "suggestion2" : favFoodNutri2Min,
+                "nutrient_for_suggestion2" : "",
+                "nutrient_amount_in_suggestion2" : "",
+                "desc" : "From your favorites"
+            }
+
+
 
         else :
 
@@ -189,14 +263,15 @@ def indexPageView(request):
             print(favNutri2Min)
 
 
-        suggested_foods = {
-            "suggestion1" : favFoodNutriMin,
-            "nutrient_for_suggestion1" : favNutriMinName,
-            "nutrient_amount_in_suggestion1" : favNutriMin,
-            "suggestion2" : favFoodNutri2Min,
-            "nutrient_for_suggestion2" : favNutri2MinName,
-            "nutrient_amount_in_suggestion2" : favNutri2Min,
-        }
+            suggested_foods = {
+                "suggestion1" : favFoodNutriMin,
+                "nutrient_for_suggestion1" : favNutriMinName,
+                "nutrient_amount_in_suggestion1" : favNutriMin,
+                "suggestion2" : favFoodNutri2Min,
+                "nutrient_for_suggestion2" : favNutri2MinName,
+                "nutrient_amount_in_suggestion2" : favNutri2Min,
+                "desc" : "Low in "
+            }
 
 
         context = {
@@ -550,15 +625,7 @@ def LogFoodPageView(request) :
         food_nutrients = {}
         food_found = False
 
-        nutrientList = [
-            'Protein',
-            'Potassium, K',
-            'Carbohydrate, by difference',
-            'Sodium, Na',
-            'Water',
-            'Phosphorus, P',
-            'Sugars, total including NLEA',
-        ]
+        global nutrient_list
 
         # get the name of the food they typed in and send it call the api with it!
         name = f"{post_form_data['food_names_options']}"
@@ -888,6 +955,10 @@ def PickFavoritesPageView(request):
     }
 
 
+    global nutrient_list
+    food_nutrients = {}
+    clicked_food = []
+
     if request.method == 'POST':
         favfoods = request.POST.getlist('foods')
         print(favfoods)
@@ -917,13 +988,74 @@ def PickFavoritesPageView(request):
                 # send it over to the database!
                 food_data.save()
 
-            # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
-            #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
-            # patient_favorite_food_table = Patient.objects.all()
-            # for a_patient_favorite_food in patient_favorite_food_table :
-            #     if a_patient_favorite_food.patient.id == loggedInPatientId :
-            #         print(f'{a_patient_favorite_food.patient.first_name}: {a_patient_favorite_food}')
-            #         patient_favorite_food_table.append(f'{a_patient_favorite_food}')
+
+            # the database food table accessible to us in a for loop
+            food_table = Food.objects.all()
+            
+            # the database nutrient table accessible to us in list (if/in)
+            nutrient_table = []
+            for a_nutrient in Nutrient.objects.all() :
+                # print(a_nutrient)
+                nutrient_table.append(f'{a_nutrient}')
+
+            # the database nutrient_in_food table accessible to us in list (if/in)
+            nutrient_in_food_table = []
+            for a_nutrient_in_food in Nutrient_In_Food.objects.all() :
+                # print(a_nutrient_in_food)
+                nutrient_in_food_table.append(f'{a_nutrient_in_food}')
+
+            # the database measurement table accessible to us in list (if/in)
+            measurement_table = []
+            for a_measurement in Measurement.objects.all() :
+                # print(a_measurement)
+                measurement_table.append(f'{a_measurement}')
+
+
+                # get all the nutrients from the searched foods and check if it's 
+            # nutrients that we care about
+            for nutrient in clicked_food['foodNutrients'] :
+                if nutrient['nutrientName'] in nutrientList:
+                    food_nutrients[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+                    # if they are not already in the database, load it up and send it over!
+
+                    if not nutrient['unitName'] in measurement_table:
+                        measurement_data = Measurement(
+                            description = nutrient['unitName'],
+                        )
+                        measurement_data.save()
+                        # adding the new things to our list - may be unneccessary...
+                        measurement_table.append(nutrient['unitName'])
+
+                    if not nutrient['nutrientName'] in nutrient_table:
+                        nutrient_data = Nutrient(
+                            # this will have some logic to decide if macro or micro
+                            # alsooo it doesn't like it?
+                            nutrient_name = nutrient['nutrientName'],
+                        )
+                        nutrient_data.save()
+                        # adding the new things to our list - may be unneccessary...
+                        nutrient_table.append(nutrient['nutrientName'])
+                        
+
+                    # check if the food/nutrient combination has already been recorded in the database
+                    # if not, load it up and send it over!
+                    if not f"{clicked_food['description']}: {nutrient['nutrientName']}" in nutrient_in_food_table :
+                        nutrient_in_food_data = Nutrient_In_Food(
+                            nutrient = Nutrient.objects.get(nutrient_name= nutrient['nutrientName']),
+                            food = Food.objects.get(food_name= clicked_food['description']),
+                            measurement = Measurement.objects.get(description= nutrient['unitName']),
+                            amount = nutrient['value'],
+                        )
+                        nutrient_in_food_data.save()
+                        # adding the new things to our list - may be unneccessary...
+                        nutrient_in_food_table.append(f"{clicked_food['description']}: {nutrient['nutrientName']}")
+                # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
+                #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
+                # patient_favorite_food_table = Patient.objects.all()
+                # for a_patient_favorite_food in patient_favorite_food_table :
+                #     if a_patient_favorite_food.patient.id == loggedInPatientId :
+                #         print(f'{a_patient_favorite_food.patient.first_name}: {a_patient_favorite_food}')
+                #         patient_favorite_food_table.append(f'{a_patient_favorite_food}')
 
             patient_favorite_food_data = Patient_Favorite_Food(
                 patient = Patient.objects.get(username= loggedInUsername),
