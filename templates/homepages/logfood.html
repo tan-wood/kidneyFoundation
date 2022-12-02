@@ -34,7 +34,7 @@
                     <div style="display: grid; place-items: start;">
                         <h5>Food Name</h5>
 
-                        <select onchange="showViz(this)" name="food_names_options">
+                        <select name="food_names_options">
 
                             <option style="display:none">Select From Search:</option>
                             {% for food_name in food_names.values %}
@@ -62,61 +62,50 @@
             </form>
         </div>
         {% endif %}
-        
-        <form id="hiddenForm" method="get" action="{% url 'logfood' %}">
-            <input type="hidden" id="passedFood" name="passedFood" value="" >
-        </form>
 
-        <div class = "col-md-8">
-            <canvas id="myChart" width="200" height="200"></canvas>
-            <script>
-                const ctx = document.getElementById('myChart').getContext('2d');
-                const myChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: [{% for nutrient in nutrient_info %} '{{nutrient.nutrientName}} in {{nutrient.nutrientName.unitName}}', {% endfor %}],
-                        datasets: [{
-                            label: 'Amount',
-                            data: [{% for nutrient in nutrient_info %} {{nutrient.nutrientName.value}}, {% endfor %}],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.8)',
-                                'rgba(54, 162, 235, 0.8)',
-                                'rgba(255, 206, 86, 0.8)',
-                                'rgba(75, 192, 192, 0.8)',
-                                'rgba(153, 102, 255, 0.8)',
-                                'rgba(255, 159, 64, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+        {% if display_chart %}
+            <div class = "col-md-8">
+                <canvas id="myChart" width="200" height="200"></canvas>
+                <script>
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    const myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [{% for nutrient in nutrient_info %} '{{nutrient}} in {{nutrient.nutrientName.unitName}}', {% endfor %}],
+                            datasets: [{9
+                                label: 'Amount',
+                                data: [{% for nutrient in nutrient_info %} {{nutrient.nutrientName.value}}, {% endfor %}],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.8)',
+                                    'rgba(54, 162, 235, 0.8)',
+                                    'rgba(255, 206, 86, 0.8)',
+                                    'rgba(75, 192, 192, 0.8)',
+                                    'rgba(153, 102, 255, 0.8)',
+                                    'rgba(255, 159, 64, 0.8)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
-                });
-            </script>
-        </div>
+                    });
+                </script>
+            </div>
+        {% endif %}
     </section>
 </section>
-<script>
 
-    function showViz(obj) {
-        food_name = obj.value
-        document.getElementById("myChart").style.display = "block";
-        document.getElementById("passedFood").value = food_name;
-        document.getElementById("hiddenForm").submit();
-    }
-
-</script>
 {% endblock %}

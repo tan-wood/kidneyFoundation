@@ -433,7 +433,7 @@ def apiJSONView(request) :
     return JsonResponse(response)
 
 
-def LogFoodPageView(request, method) :
+def LogFoodPageView(request) :
 
     food_names = {}
     current_date = dt.now().date()
@@ -448,7 +448,6 @@ def LogFoodPageView(request, method) :
     'Phosphorus, P',
     ]
 
-
     if 'name' in request.GET:
         name = request.GET['name']
         response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={name}&dataType=&pageSize=8&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
@@ -457,30 +456,6 @@ def LogFoodPageView(request, method) :
 
         for idx, food in enumerate(searchedFoods) :
             food_names['food_name' + str(idx+1)] = food['description']
-    
-
-
-    # if request.method == "GET":
-    #     food_nutrients2 = {}
-    #     searched_food2 = {}
-
-    #     foodName = request.GET.get('passedFood')
-    #     response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={foodName}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
-    #     # turn it into json to be able to deal with the info we get
-    #     data = response.json()
-    #     # keep just the info about the specific FOOD and from only the FIRST one returned
-    #     searched_food2 = data['foods'][0]
-
-    #     for nutrient in searched_food2['foodNutrients'] :
-    #         if nutrient['nutrientName'] in nutrientList:
-    #             food_nutrients2[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
-        
-    #     context = {
-    #         "nutrient_info": food_nutrients2,
-    #         "formatted_date" : formatted_date
-    #     }
-
-    #     return render (request, 'homepages/logfood.html', context)
     
 
     if request.method == "POST":
@@ -604,10 +579,36 @@ def LogFoodPageView(request, method) :
         #     'nutrient_in_food' : nutrient_in_food_form_data
         # }
 
+        return render (request, 'homepages/logfood.html', { "food_names": 
+        food_names, "formatted_date" : formatted_date, "display_chart": True, "nutrient_info": food_nutrients} )
+
     return render (request, 'homepages/logfood.html', { "food_names": 
     food_names, "formatted_date" : formatted_date} )
 
 
+
+
+    # if request.method == "GET":
+    #     food_nutrients2 = {}
+    #     searched_food2 = {}
+
+    #     foodName = request.GET.get('passedFood')
+    #     response=requests.get(f'https://api.nal.usda.gov/fdc/v1/foods/search?query={foodName}&dataType=&pageSize=1&pageNumber=1&sortBy=dataType.keyword&sortOrder=desc&api_key={settings.API_KEY}')
+    #     # turn it into json to be able to deal with the info we get
+    #     data = response.json()
+    #     # keep just the info about the specific FOOD and from only the FIRST one returned
+    #     searched_food2 = data['foods'][0]
+
+    #     for nutrient in searched_food2['foodNutrients'] :
+    #         if nutrient['nutrientName'] in nutrientList:
+    #             food_nutrients2[ nutrient['nutrientName'] ] = [{ 'value' : nutrient['value']}, {'unitName' : nutrient['unitName']}]
+        
+    #     context = {
+    #         "nutrient_info": food_nutrients2,
+    #         "formatted_date" : formatted_date
+    #     }
+
+    #     return render (request, 'homepages/logfood.html', context)
 
 def PickFavoritesPageView(request):
 
