@@ -132,10 +132,11 @@ class Diet(models.Model) :
 
 
 class Alert_Type(models.Model):
-    description = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, default="none")
+    description = models.CharField(max_length=70)
 
     def __str__(self):
-        return (self.description)
+        return (self.name)
     class Meta :
         db_table = 'alert_type'
 
