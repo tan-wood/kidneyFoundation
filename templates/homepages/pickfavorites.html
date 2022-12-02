@@ -159,7 +159,12 @@
             const buttons = document.getElementsByClassName("checkboxes");
 
             const buttonPressed = e => {
-                document.getElementById(`${e.target.id}`).className = "checkedbox";
+                if ( document.getElementById(`${e.target.id}`).className == "checkboxes") {
+                    document.getElementById(`${e.target.id}`).className = "checkedbox";
+                } else {
+                    document.getElementById(`${e.target.id}`).className = "checkboxes";
+                }
+                
             }
 
             for (let button of buttons) {

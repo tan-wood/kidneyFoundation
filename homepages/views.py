@@ -623,10 +623,10 @@ def PickFavoritesPageView(request):
                 # send it over to the database!
                 food_data.save()
 
-            # duplication prevention
+
             # patient_favorite_food_table = []
-            # for a_patient_favorite_food in Patient_Favorite_Food.objects.all() :
-            #     print(a_patient_favorite_food)
+            # for a_patient_favorite_food in Patient_Favorite_Food.objects.get(username= loggedInUsername) :
+            #     print(f'{a_patient_favorite_food.patient.first_name}{a_patient_favorite_food}')
             #     patient_favorite_food_table.append(f'{a_patient_favorite_food}')
 
             patient_favorite_food_data = Patient_Favorite_Food(
