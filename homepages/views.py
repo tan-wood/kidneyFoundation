@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 import json
-from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food
+from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food, Alert_Type
 from datetime import datetime as dt
 
 loggedIn = False
@@ -56,7 +56,7 @@ def indexPageView(request):
                             currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
                         elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
                             currentCarbAmount += round(nutrient.amount * num_servings, 2)
-                        elif nutrient.nutrient.nutrient_name == "Sodium, NA":
+                        elif nutrient.nutrient.nutrient_name == "Sodium, Na":
                             currentSodiumAmount += round(nutrient.amount * num_servings, 2)
                         elif nutrient.nutrient.nutrient_name == "Water":
                             currentWaterAmount += round(nutrient.amount * num_servings, 2)
@@ -82,7 +82,7 @@ def indexPageView(request):
                 currentAmount = round(currentCarbAmount, 2)
                 recommendedAmount = 250
                 recMeasurement = "G"
-            elif nutrient.nutrient_name == "Sodium, NA":
+            elif nutrient.nutrient_name == "Sodium, Na":
                 currentAmount = round(currentSodiumAmount, 2)
                 recommendedAmount = 2300
                 recMeasurement = "MG"
@@ -134,6 +134,9 @@ def AlertsPageView(request):
         for alert in data:
             if alert.patient.username == loggedInUsername:
                 user_alerts.append(alert)
+                a = Alert.objects.get(id=alert.id)
+                a.unread = False  # change field
+                a.save() # this will update only
         
         context = {
             "alerts": user_alerts,
@@ -569,6 +572,201 @@ def LogFoodPageView(request) :
         #     'nutrient' : nutrient_form_data,
         #     'nutrient_in_food' : nutrient_in_food_form_data
         # }
+
+
+        # Create alerts
+        allNutrientInFoodData = Nutrient_In_Food.objects.all()
+        loggedFoods = Patient_Logs_Food.objects.all()
+        patientData = Patient.objects.get(id = loggedInPatientId)
+
+        currentProteinAmount = 0
+        currentPotassiumAmount = 0
+        currentCarbAmount = 0
+        currentSodiumAmount = 0
+        currentWaterAmount = 0
+        currentPhosphorusAmount = 0
+        currentSugarAmount = 0
+
+        for food in loggedFoods:
+            if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+                num_servings = food.quantity
+                for nutrient in allNutrientInFoodData:
+                    if nutrient.food.food_name == food.food.food_name:
+                        if nutrient.nutrient.nutrient_name == "Protein":
+                            currentProteinAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Potassium, K":
+                            currentPotassiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Carbohydrate, by difference":
+                            currentCarbAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sodium, Na":
+                            currentSodiumAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Water":
+                            currentWaterAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Phosphorus, P":
+                            currentPhosphorusAmount += round(nutrient.amount * num_servings, 2)
+                        elif nutrient.nutrient.nutrient_name == "Sugars, total including NLEA":
+                            currentSugarAmount += round(nutrient.amount * num_servings, 2)
+
+        patientKG = patientData.weight * 0.453592
+        proteinAmount = patientKG * 0.6
+
+        """
+        # Recommended Daily Amounts:
+        Protein                         0.6 g / kg
+        Potassium, K                    3000 mg
+        Carbohydrate, by difference     250 g
+        Sodium, Na                      2300 mg
+        Water                           3700 mg
+        Phosphorus, P                   3500 mg
+        Sugar                           30 g
+        """
+
+        if currentProteinAmount > proteinAmount:
+            alert_name = "High Protein Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your protein levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentPotassiumAmount > 3000:
+            alert_name = "High Potassium Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your potassium levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentCarbAmount > 250:
+            alert_name = "High Carb Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your carbohydrate levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentSodiumAmount > 2300:
+            alert_name = "High Sodium Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your sodium levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentWaterAmount > 3700:
+            alert_name = "High Water Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your water levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentPhosphorusAmount > 3500:
+            alert_name = "High Phosphorus Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your phosphorus levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
+
+        if currentSugarAmount > 30:
+            alert_name = "High Sugar Levels"
+            allAlertTypes = Alert_Type.objects.all()
+            alert_type_names = []
+            for alert_type in allAlertTypes:
+                alert_type_names.append(alert_type.name)
+            if alert_name not in alert_type_names:
+                alert_type_object = Alert_Type(
+                    name = alert_name,
+                    description = "Your sugar levels exceed the recommended amount"
+                )
+                alert_type_object.save()
+
+            alert_object = Alert(
+                date_time = dt.now(),
+                unread = True,
+                alert_type = Alert_Type.objects.get(name = alert_name),
+                patient = Patient.objects.get(id = loggedInPatientId)
+            )
+            alert_object.save()
 
     return render (request, 'homepages/logfood.html', { "food_names": 
     food_names} )

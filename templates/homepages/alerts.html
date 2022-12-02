@@ -27,11 +27,11 @@
                 <div>
                     <div class="alert">
                         <div>
-                            <h2>{{ alert.alert_type }}</h2>
+                            <h2>{{ alert.alert_type.name }}</h2>
                         </div>
                         <div></div>
                         <div style="display: grid; grid-template-columns: auto 1fr auto">
-                            <h5 style="color: #00000050;">Description</h5>
+                            <h5 style="color: #00000050;">{{ alert.alert_type.description }}</h5>
                             <div></div>
                             <h5 style="color: #00000050;">{{ alert.date_time }}</h5>
                         </div>
