@@ -111,18 +111,57 @@ def indexPageView(request):
 
 
         # Food Suggestions
-
-        favoriteFoods = Patient_Favorite_Food.objects.all()
-        levels_list = []
+        # Step 1: Find the two nutrients that are closest to going over
+        #         the recommended amount
+        nutriMax = 0
+        nutriMaxName = ""
+        nutri2Max = 0
+        nutri2MaxName = ""
         
         for a_nutrient in nutrients :
             
-            print(a_nutrient['currentAmount'])
             nutrient_level = a_nutrient['currentAmount'] / a_nutrient['dailyAmount']
-            
-            levels_list.append(nutrient_level)
-            print("SUP DAWG")
 
+            if nutrient_level > nutriMax:
+                nutri2Max = nutriMax
+                nutri2MaxName = nutriMaxName
+                nutriMax = nutrient_level
+                nutriMaxName = a_nutrient
+            elif nutriMax > nutrient_level > nutri2Max:
+                nutri2Max = nutrient_level
+                nutri2MaxName = a_nutrient
+
+        
+        if nutriMax == 0 and nutri2Max == 0 :
+            print(favoriteFoods)
+            # suggested_food_one = 
+            # suggested_food_two = #random
+            desc_one = "From your favorites"
+            desc_two = "From your favorites"
+
+        # Print them out to see if it worked
+        print(nutriMaxName['nutrient'])
+        print (round((nutriMax),4))
+        print(nutri2MaxName['nutrient'])
+        print (round((nutri2Max),4))
+
+        # Step 2: Find which favorite food has the lowest in max nutrient 1
+        #         Find which favorite food has the lowest in max nutrient 2
+        favoriteFoods = Patient_Favorite_Food.objects.all()
+        print(favoriteFoods)
+        for favoriteFood in favoriteFoods :
+            if favoriteFood.patient.id == loggedInPatientId :
+                print('-----------')
+                print(favoriteFood.food.food_name)
+                for nutrient in allNutrientInFoodData:
+                    if nutrient.food.food_name == favoriteFood.food.food_name:
+
+                        print(nutrient.nutrient.nutrient_name)
+                        print(nutrient.amount)
+                        # nutrient_info = Nutrient_In_Food.objects.all()
+                        # print(allNutrientInFoodData)
+
+        suggested_foods = {}
 
         context = {
             'data' : allNutrientInFoodData,
@@ -840,10 +879,11 @@ def PickFavoritesPageView(request):
 
             # THIS IS FOR MAKING PATIENT FAVORITE FOOD NOT DUPLICATABLE
             #  BUT IT DO NOT BE WORKING I need to figure out how to access the current user and put the firstname into a string to check if it's already there
-            # patient_favorite_food_table = []
-            # for a_patient_favorite_food in Patient_Favorite_Food.objects.get(patient= Patient.objects.get(username= loggedInUsername)) :
-            #     print(f'{a_patient_favorite_food.patient.first_name}{a_patient_favorite_food}')
-            #     patient_favorite_food_table.append(f'{a_patient_favorite_food}')
+            # patient_favorite_food_table = Patient.objects.all()
+            # for a_patient_favorite_food in patient_favorite_food_table :
+            #     if a_patient_favorite_food.patient.id == loggedInPatientId :
+            #         print(f'{a_patient_favorite_food.patient.first_name}: {a_patient_favorite_food}')
+            #         patient_favorite_food_table.append(f'{a_patient_favorite_food}')
 
             patient_favorite_food_data = Patient_Favorite_Food(
                 patient = Patient.objects.get(username= loggedInUsername),
