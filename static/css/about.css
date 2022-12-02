@@ -1,4 +1,4 @@
-body {
+/* body {
     margin: 0;
 }
 
@@ -20,21 +20,162 @@ a {
     color: #000000;
 }
 
+p {
+    margin: 2px;
+}
+
 .header {
     background-color: #ffffff;
     min-height: 60px;
-    min-width: 93%;
+    min-width: 100%;
     position: fixed;
     top: 0;
     left: 0;
 
-    padding: 0 80px 0 20px;
+    padding: 0px;
 
     box-shadow: 0 10px 15px #00000020;
 
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 40px;
+    grid-template-columns: auto auto 1fr auto auto;
+
+    z-index: 9999999;
+}
+
+.header-cell {
+    background-color: #ffffff;
+    display: grid;
+    place-items: center;
+    padding: 0 15px 0 15px;
+    min-width: auto;
+    max-width: 300px;
+}
+
+.landing-text {
+    font-weight: 500;
+    position: absolute;
+    margin-top: 230px;
+    margin-left: 140px;
+    color:rgb(255, 255, 255);
+    font-size: 44px;
+}
+
+.landing-button {
+    position: absolute;
+    margin-top: 410px;
+    margin-left: 140px;
+    min-height: 60px;
+    min-width: 180px;
+    background-color: #ec995a;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+
+    transition: 0.1s ease-in-out;
+}
+
+.sign-up-button {
+    background-color: #ec995a;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    min-width: 180px;
+
+    transition: 0.1s ease-in-out;
+}
+
+.landing-button:hover {
+    transform: scale(1.05);
+}
+
+.sign-up-button:hover {
+    transform: scale(1.05);
+}
+
+.three-steps {
+    max-width: 260px;
+    max-height: 260px;
+}
+
+.main-landing {
+    background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(61, 61, 61, 0.4)),
+    url("../img/kidneyFoundationAbout1.jpeg");
+    background-color: #cccccc;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.button {
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+
+.button:hover {
+    background-color: #ec995a;
+    color: #ffffff;
+}
+
+.login-button {
+    background-color: #efefef;
+    border: 0 solid transparent;
+
+    min-width: 300px;
+    min-height: 50px;
+    max-width: 300px;
+    max-height: 50px;
+
+    color: #a8a8a8;
+    cursor: pointer;
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+} */
+
+body {
+    margin: 0;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+h3, h4, h5, p, button {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+p {
+    margin: 2px;
+}
+
+.header {
+    background-color: #ffffff;
+    min-height: 60px;
+    min-width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 0px;
+
+    box-shadow: 0 10px 15px #00000020;
+
+    display: grid;
+    grid-template-columns: auto auto 1fr auto auto;
+    /* gap: 40px; */
 
     z-index: 9999999;
 }
@@ -51,10 +192,7 @@ a {
 
 .landing-text {
     font-weight: 500;
-    position: absolute;
-    margin-top: 230px;
-    margin-left: 140px;
-    color:black;
+    color: #000000;
     font-size: 44px;
 }
 
@@ -105,10 +243,9 @@ a {
 } */
 
 .main-landing {
-    /* background-image: url("{% static 'img/family-dinner.jpg' %}"); */
-    background-image: url("../img/kidneyFoundationAbout1.jpeg");
-    /* background-image: url("../img/KidneyWatchFamily25.png"); */
-    /* background-image: url("../img/family-dinner.jpg"); */
+    background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(61, 61, 61, 0.4)),
+    url("../img/kidneyFoundationAbout1.jpeg");
     background-color: #cccccc; /* Used if the image is unavailable */
     background-position: center;
     background-repeat: no-repeat;
@@ -142,4 +279,59 @@ a {
 
     font-size: 13px;
     font-weight: 500;
+}
+
+.login-submit-button {
+    background-color: #ec995a;
+    border: 0 solid transparent;
+
+    min-width: 300px;
+    min-height: 50px;
+    max-width: 300px;
+    max-height: 50px;
+
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.form {
+    display: grid;
+    place-items: center;
+}
+
+.form-input-list {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    row-gap: 10px;
+    column-gap: 20px;
+    padding: 30px 100px 60px 100px;
+}
+
+input {
+    background-color: #eeeeee;
+    border: 0px solid transparent;
+    min-width: 280px;
+    min-height: 30px;
+    max-width: 300px;
+    max-height: 30px;
+
+    padding: 10px;
+
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+label {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #00000050;
+}
+
+.form-input {
+    display: grid;
+    grid-template-rows: auto auto;
+    place-items: center;
 }

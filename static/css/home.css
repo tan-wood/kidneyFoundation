@@ -72,14 +72,14 @@ a {
 }
 
 .log-food {
-    background-color: #e6e6e6;
+    background-color: #ec995a;
+    color: #ffffff;
 
     transition: 0.2s ease-in-out;
 }
 
 .log-food:hover {
-    background-color: #dbdbdb;
-    color: #00000065;
+    transform: scale(1.05);
 }
 
 .big-white-box {
@@ -192,10 +192,10 @@ a {
 
 .alert-container {
     display: grid;
-    grid-template-columns: 18px 1fr;
+    grid-template-columns: 1px 1fr;
     cursor: pointer;
 
-    padding: 0 18px 0 18px;
+    padding: 6px;
     border-radius: 6px;
 
     transition: 0.1s ease-in-out;

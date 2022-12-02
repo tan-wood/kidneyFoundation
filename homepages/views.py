@@ -116,8 +116,13 @@ def indexPageView(request):
         # Recommended Amounts
         patientKG = patientData.weight * 0.453592
         proteinAmount = patientKG * 0.6
+        
+
 
         for nutrient in nutrientData:
+            currentAmount = 0
+            recommendedAmount = 0
+            recMeasurement = ''
             if nutrient.nutrient_name == "Protein":
                 currentAmount = round(currentProteinAmount, 2)
                 recommendedAmount = round(proteinAmount, 0)
@@ -135,6 +140,10 @@ def indexPageView(request):
                 recommendedAmount = 2300
                 recMeasurement = "MG"
             elif nutrient.nutrient_name == "Water":
+                currentAmount = round(currentWaterAmount, 2)
+                recommendedAmount = 1800
+                recMeasurement = "G"
+            elif nutrient.nutrient_name == "Calcium":
                 currentAmount = round(currentWaterAmount, 2)
                 recommendedAmount = 1800
                 recMeasurement = "G"
@@ -182,7 +191,10 @@ def indexPageView(request):
         max_nutrients_in_foods = {}
         
         for a_nutrient in nutrients :
-            
+            print('-----')
+            print(a_nutrient['nutrient'])
+            print(a_nutrient['currentAmount'])
+            print(a_nutrient['dailyAmount'])
             nutrient_level = a_nutrient['currentAmount'] / a_nutrient['dailyAmount']
 
             if nutrient_level > nutriMax:
@@ -990,21 +1002,21 @@ def LogFoodPageView(request) :
 
 def PickFavoritesPageView(request):
     food_dict = {
-        'Muffin, wheat bran' : 'branMuffin.jpg', #1,1
-        'Oatmeal, multigrain': 'oatmeal.jpg', #1,2
-        'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3
-        'Pear, raw': 'pear.jpg',   #1,4
-        'Caesar salad, with romaine, no dressing' : 'chickenCaeser.jpg', #1,5
-        'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6
-        'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7
-        'Raspberries, raw' : 'raspberries.jpg',#1,8
-        'Fish, salmon, grilled': 'grilledSalmon.jpg', #1,9
-        'Mixed salad greens, raw': 'mixedGreens.jpg', #1, 10
-        'Peach, raw' : 'peach.jpg', #1, 11
-        'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12
+        'Muffin, wheat bran' : 'branMuffin.jpg', #1,1 done
+        'Oatmeal, multigrain': 'oatmeal.jpg', #1,2 done
+        'Fish, cod, baked or broiled' : 'bakedCod.jpg', #1,3 done
+        'Pear, raw': 'pear.jpg',   #1,4 done 
+        'Caesar salad, with romaine, no dressing' : 'chickenCaeser.jpg', #1,5 done
+        'Eggplant parmesan casserole, regular' : 'eggplant.jpg', #1,6 done
+        'Macaroni or pasta salad with shrimp' : 'shrimpPasta.jpg', #1,7 done
+        'Raspberries, raw' : 'raspberries.jpg',#1,8 done
+        'Fish, salmon, grilled': 'grilledSalmon.jpg', #1,9 done
+        'Mixed salad greens, raw': 'mixedGreens.jpg', #1, 10 done
+        'Peach, raw' : 'peach.jpg', #1, 11 done
+        'Bread, whole wheat, toasted': 'wheatToast.jpg', #1, 12 done
         'Chicken fillet, grilled' : 'grilledChicken.jpg', #1, 13
-        'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14
-        'Fruit smoothie, light' : 'smoothie.jpg', #1, 15
+        'Turkey or chicken burger, on wheat bun' : 'turkeyBurger.jpg', #1, 14 done
+        'Fruit smoothie, light' : 'smoothie.jpg', #1, 15 done
         'Orange, raw' : 'orange.jpg' #1,16
     }
 
