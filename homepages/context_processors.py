@@ -8,11 +8,18 @@
 #     }
 from homepages.models import Alert
 from datetime import datetime as dt
+from datetime import timedelta
 
 from homepages.views import getUsername
 
 def date_processor(request):
-    current_date = dt.now().date()
+    # print("Dt.now():")
+    # print(dt.now())
+    # print("Dt.now - timedelta 7 hours")
+    # print(dt.now() - timedelta(hours=7))
+    # print("Dt.now().date()")
+    # print(dt.now().date())
+    current_date = (dt.now() - timedelta(hours=7)).date()
     formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
 
     return {

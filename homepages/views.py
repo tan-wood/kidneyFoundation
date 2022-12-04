@@ -5,6 +5,7 @@ from django.conf import settings
 import json
 from homepages.models import Food, Nutrient, Patient, Alert, Nutrient_In_Food, Patient_Logs_Food, Measurement, Patient_Condition, Condition, Patient_Favorite_Food, Alert_Type
 from datetime import datetime as dt
+from datetime import timedelta
 import random
 import time
 
@@ -58,7 +59,7 @@ def indexPageView(request):
         currentSugarAmount = 0
 
         for food in loggedFoods:
-            if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+            if food.patient.username == loggedInUsername and food.date_time.date() == (dt.now()-timedelta(hours=7)).date() :
                 # The foods here will be from the right user and will be today
                 num_servings = food.quantity
                 for nutrient in allNutrientInFoodData:
@@ -329,7 +330,7 @@ def DiaryPageView(request):
 
                 food_object['nutrients'] = nutrient_list
 
-                if food.date_time.date() == dt.today().date():
+                if food.date_time.date() == (dt.now()-timedelta(hours=7)).date():
                     user_today_foods.append(food_object)
                 else:
                     user_past_foods.append(food_object)
@@ -632,7 +633,7 @@ def LogFoodPageView(request) :
     global nutrientList
 
     food_names = {}
-    current_date = dt.now().date()
+    current_date = (dt.now() - timedelta(hours=7)).date() 
     formatted_date = f'{current_date.strftime("%b")} {current_date.strftime("%d")}, {current_date.strftime("%Y")}'
     display_chart = False
     food_nutrients = {}
@@ -792,7 +793,7 @@ def LogFoodPageView(request) :
         currentSugarAmount = 0
 
         for food in loggedFoods:
-            if food.patient.username == loggedInUsername and food.date_time.date() == dt.today().date():
+            if food.patient.username == loggedInUsername and food.date_time.date() == (dt.now()-timedelta(hours=7)).date():
                 num_servings = food.quantity
                 for nutrient in allNutrientInFoodData:
                     if nutrient.food.food_name == food.food.food_name:
@@ -839,7 +840,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -860,7 +861,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -881,7 +882,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -902,7 +903,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -923,7 +924,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -944,7 +945,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -965,7 +966,7 @@ def LogFoodPageView(request) :
                 alert_type_object.save()
 
             alert_object = Alert(
-                date_time = dt.now(),
+                date_time = dt.now() - timedelta(hours=7) ,
                 unread = True,
                 alert_type = Alert_Type.objects.get(name = alert_name),
                 patient = Patient.objects.get(id = loggedInPatientId)
@@ -1217,7 +1218,7 @@ def DeleteItemPageView(request, item_id):
 
                 food_object['nutrients'] = nutrient_list
 
-                if food.date_time.date() == dt.today().date():
+                if food.date_time.date() == (dt.now()-timedelta(hours=7)).date():
                     user_today_foods.append(food_object)
                 else:
                     user_past_foods.append(food_object)
